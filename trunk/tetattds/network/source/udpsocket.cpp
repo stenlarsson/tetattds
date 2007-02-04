@@ -10,7 +10,7 @@ UdpSocket::UdpSocket()
 	INTERNAL->socket = ::socket(PF_INET, SOCK_DGRAM, 0);
 	if(INTERNAL->socket == -1) { NET_ERROR("socket"); }
 
-	unsigned long i = -1;
+	unsigned long i = (unsigned long) -1;
 	int result = ::ioctl(INTERNAL->socket, FIONBIO, &i);
 	if(result == -1) { NET_ERROR("ioctl"); }
 }
