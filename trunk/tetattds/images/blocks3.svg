@@ -1,0 +1,498 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="640"
+   height="480"
+   id="svg2153"
+   sodipodi:version="0.32"
+   inkscape:version="0.44"
+   version="1.0"
+   sodipodi:docbase="C:\Projects\tetattds\images"
+   sodipodi:docname="blocks3.svg"
+   inkscape:export-filename="/home/stonebone/projects/tetattds/images/blocks.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <defs
+     id="defs2155">
+    <linearGradient
+       id="linearGradient6458"
+       inkscape:collect="always">
+      <stop
+         id="stop6460"
+         offset="0"
+         style="stop-color:white;stop-opacity:0.76506025" />
+      <stop
+         id="stop6462"
+         offset="1"
+         style="stop-color:white;stop-opacity:0" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient8439"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.948949,0,0,0.948949,254.367,103.8353)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient1929"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.948949,0,0,0.948949,166.2103,2.244354)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient1993"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.948949,0,0,0.948949,274.6309,15.52688)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient2935"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.948949,0,0,0.948949,274.6309,15.52688)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient2943"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.788218,0,0,1.788218,471.5799,161.5076)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient2965"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.788218,0,0,1.788218,315.1998,7.756004)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient2103"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.788218,0,0,1.788218,158.8193,7.75597)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient2109"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.788218,0,0,1.788218,2.439086,161.5076)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient2126"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.788218,0,0,1.788218,158.8194,161.5075)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient2144"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.788218,0,0,1.788218,2.43894,8.75597)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient6458"
+       id="linearGradient2151"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.788218,0,0,1.788218,315.1995,161.5076)"
+       x1="46.920059"
+       y1="6.1885772"
+       x2="46.920059"
+       y2="40.196201" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1"
+     inkscape:cx="204.0648"
+     inkscape:cy="279.6156"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     width="640px"
+     height="480px"
+     inkscape:window-width="1024"
+     inkscape:window-height="719"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     showguides="true"
+     inkscape:guide-bbox="true" />
+  <metadata
+     id="metadata2158">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       ry="15"
+       rx="15"
+       y="16.188576"
+       x="15.15976"
+       height="142.36514"
+       width="142.36516"
+       id="rect1971"
+       style="fill:#2c5aa0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Projects\tetattds\images\block1.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       ry="13"
+       rx="13"
+       y="19.82251"
+       x="18.793694"
+       height="135.09727"
+       width="135.09729"
+       id="rect6024"
+       style="fill:url(#linearGradient2144);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Projects\tetattds\images\block1.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:white;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="M 120.04967,33.572714 C 110.64057,24.163612 98.631027,19.017898 86.632946,18.238216 C 92.098654,20.316066 97.252246,23.605415 101.70527,28.058441 C 117.71774,44.070911 118.45178,69.288496 103.34513,84.39515 C 88.238471,99.5018 62.983365,98.80529 46.970885,82.79281 C 42.544487,78.366416 39.309798,73.229484 37.230182,67.800021 C 38.03547,79.759154 43.144078,91.72111 52.522672,101.0997 C 72.2714,120.84842 103.40286,121.71599 122.03441,103.08444 C 140.66597,84.45289 139.7984,53.321435 120.04967,33.572714 z "
+       id="path1979"
+       inkscape:export-filename="C:\Projects\tetattds\images\block1.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       style="fill:#2ca02c;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5075"
+       width="142.36516"
+       height="142.36514"
+       x="171.5401"
+       y="15.188575"
+       rx="15"
+       ry="15"
+       inkscape:export-filename="C:\Projects\tetattds\images\block2.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       ry="13"
+       rx="13"
+       y="18.82251"
+       x="175.17404"
+       height="135.09727"
+       width="135.09729"
+       id="rect8417"
+       style="fill:url(#linearGradient2103);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Projects\tetattds\images\block2.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:white;fill-opacity:1;stroke:none;stroke-opacity:1"
+       d="M 243.26161,30.167654 C 237.99315,30.087514 232.6093,31.190497 227.51143,33.553209 C 214.21606,39.71522 206.45244,52.908143 206.56024,66.672761 C 204.59745,68.030145 202.71669,69.363185 201.01578,70.696174 C 196.75215,74.037519 193.34063,77.271881 190.90817,80.60749 C 188.47572,83.94313 186.7621,88.00274 188.40579,91.54923 C 190.0495,95.09572 194.24878,96.45028 198.3662,96.75023 C 202.48364,97.05017 207.14278,96.46998 212.44815,95.37637 C 214.55976,94.94111 216.82309,94.37483 219.12112,93.7572 C 229.55378,102.72371 244.64468,105.36197 257.93235,99.20351 C 271.22751,93.04159 279.04016,79.799292 278.9326,66.034903 C 280.86245,64.696882 282.70068,63.375798 284.37894,62.060557 C 288.64258,58.719201 292.15221,55.484851 294.58466,52.149224 C 297.01712,48.813597 298.63261,44.753995 296.9889,41.207506 C 295.34519,37.66102 291.195,36.355515 287.07756,36.055576 C 282.96014,35.755631 278.25196,36.286749 272.94655,37.380357 C 270.85329,37.811839 268.64689,38.388086 266.37171,38.999535 C 259.93546,33.450813 251.74364,30.296679 243.26161,30.167654 z M 281.72937,46.457568 C 282.41527,46.44042 282.98517,46.469439 283.49573,46.506634 C 284.42155,46.574071 284.82863,46.677544 285.06585,46.751965 C 284.96737,46.983674 284.82085,47.385269 284.28079,48.125811 C 283.08037,49.772005 280.61989,52.289632 277.11715,55.044119 C 276.68444,53.736721 276.13997,52.44721 275.54704,51.167904 C 274.96228,49.906167 274.29084,48.697543 273.5844,47.53702 C 276.86044,46.866564 279.68199,46.508751 281.72937,46.457568 z M 208.37567,77.761675 C 208.80501,79.052765 209.31107,80.32522 209.89671,81.58882 C 210.48291,82.85361 211.15095,84.05662 211.85936,85.21972 C 207.48818,86.11401 203.93259,86.44731 201.89896,86.29916 C 200.98484,86.23256 200.61837,86.07938 200.37791,86.00477 C 200.47445,85.77566 200.61603,85.43 201.16296,84.67999 C 202.36437,83.03252 204.8677,80.519 208.37567,77.761675 z "
+       id="path2880"
+       inkscape:export-filename="C:\Projects\tetattds\images\block2.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       style="fill:purple;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2767"
+       width="142.36545"
+       height="142.36543"
+       x="15.159759"
+       y="168.93988"
+       rx="15"
+       ry="15"
+       inkscape:export-filename="C:\Projects\tetattds\images\block4.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       ry="13"
+       rx="13"
+       y="172.57394"
+       x="18.793837"
+       height="135.09727"
+       width="135.09729"
+       id="rect8425"
+       style="fill:url(#linearGradient2109);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Projects\tetattds\images\block4.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       sodipodi:type="star"
+       style="fill:white;fill-opacity:1;stroke:none;stroke-width:0.5;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path6311"
+       sodipodi:sides="5"
+       sodipodi:cx="8.002964"
+       sodipodi:cy="1044.3593"
+       sodipodi:r1="6.6597533"
+       sodipodi:r2="2.4418416"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:arg2="-0.94247777"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 8.0029642,1037.6995 L 9.4382426,1042.3838 L 14.336766,1042.3013 L 10.325293,1045.1138 L 11.917469,1049.7471 L 8.002964,1046.8011 L 4.0884591,1049.7471 L 5.6806346,1045.1138 L 1.6691623,1042.3013 L 6.5676856,1042.3838 L 8.0029642,1037.6995 z "
+       transform="matrix(7.758106,-3.523479e-6,3.52348e-6,7.758104,24.25099,-7882.887)"
+       inkscape:export-filename="C:\Projects\tetattds\images\block4.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       style="fill:red;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2252"
+       width="142.36516"
+       height="142.36514"
+       x="171.54019"
+       y="168.94017"
+       rx="15"
+       ry="15"
+       inkscape:export-filename="C:\Projects\tetattds\images\block5.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       ry="13"
+       rx="13"
+       y="172.57408"
+       x="175.17413"
+       height="135.09727"
+       width="135.09729"
+       id="rect8429"
+       style="fill:url(#linearGradient2126);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Projects\tetattds\images\block5.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:white;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 224.68893,206.59944 L 224.68893,188.08683 L 236.46967,174.62312 C 236.46967,174.62312 242.38683,166.47102 248.2504,174.62312 L 260.03116,188.08683 L 260.03118,206.59944 L 263.81785,220.48388 L 283.59267,241.94168 L 283.59268,254.56391 L 256.34611,260.36662 L 256.34611,269.246 L 229.09954,269.246 L 229.09954,260.36662 L 201.85297,254.56391 L 201.9689,241.94168 L 219.21928,220.48388 L 224.68893,206.59944 z "
+       id="path6518"
+       sodipodi:nodetypes="ccccccccccccccccc"
+       inkscape:export-filename="C:\Projects\tetattds\images\block5.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       style="fill:#00aad4;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect4144"
+       width="142.36516"
+       height="142.36514"
+       x="327.9205"
+       y="168.94017"
+       rx="15"
+       ry="15"
+       inkscape:export-filename="C:\Projects\tetattds\images\block6.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       ry="13"
+       rx="13"
+       y="172.57411"
+       x="331.55441"
+       height="135.09727"
+       width="135.09729"
+       id="rect8433"
+       style="fill:url(#linearGradient2151);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Projects\tetattds\images\block6.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:white;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 358.89313,250.92955 L 441.19862,252.11394 C 441.19862,252.11394 457.44022,195.88799 434.61416,191.7112 C 411.63219,187.50585 415.95826,223.68911 415.95826,223.68911 C 415.95826,223.68911 428.57227,187.01677 399.49719,188.15809 C 369.32614,189.34246 386.30984,217.76728 386.32829,217.76728 C 386.32829,217.76728 379.73357,196.97868 359.99054,198.8174 C 341.337,200.55465 358.89313,250.92955 358.89313,250.92955 z "
+       id="path7417"
+       sodipodi:nodetypes="cczczczc"
+       inkscape:export-filename="C:\Projects\tetattds\images\block6.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       style="fill:black;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect7411"
+       width="142.36516"
+       height="142.36514"
+       x="484.30078"
+       y="168.94017"
+       rx="15"
+       ry="15"
+       inkscape:export-filename="C:\Projects\tetattds\images\block7.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       ry="13"
+       rx="13"
+       y="172.57411"
+       x="487.93469"
+       height="135.09727"
+       width="135.09729"
+       id="rect8437"
+       style="fill:url(#linearGradient2943);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Projects\tetattds\images\block7.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       style="fill:#fc0;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5105"
+       width="142.36516"
+       height="142.36514"
+       x="327.92047"
+       y="-157.55373"
+       rx="15"
+       ry="15"
+       transform="scale(1,-1)"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <rect
+       ry="13"
+       rx="13"
+       y="18.822508"
+       x="331.55438"
+       height="135.09727"
+       width="135.09729"
+       id="rect8421"
+       style="fill:url(#linearGradient2965);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:4.87425375;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       sodipodi:type="arc"
+       style="fill:white;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:8;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="path1936"
+       sodipodi:cx="207.19789"
+       sodipodi:cy="41.034298"
+       sodipodi:rx="17.730871"
+       sodipodi:ry="17.730871"
+       d="M 224.92876 41.034298 A 17.730871 17.730871 0 1 1  189.46702,41.034298 A 17.730871 17.730871 0 1 1  224.92876 41.034298 z"
+       transform="matrix(1.281198,0,0,1.281198,133.6413,13.79828)"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:white;stroke-width:12.50554657;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 367.82281,67.152975 L 349.60892,67.152975"
+       id="path1944"
+       sodipodi:nodetypes="cc"
+       inkscape:transform-center-y="0.41476778"
+       inkscape:transform-center-x="21.432216"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:white;stroke-width:12.50554657;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 376.43193,44.805499 L 363.55279,31.926335"
+       id="path1967"
+       sodipodi:nodetypes="cc"
+       inkscape:transform-center-y="-14.861582"
+       inkscape:transform-center-x="15.448151"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:white;stroke-width:12.50554657;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 398.32157,35.091022 L 398.32157,16.877136"
+       id="path1969"
+       sodipodi:nodetypes="cc"
+       inkscape:transform-center-y="-21.432218"
+       inkscape:transform-center-x="0.41476622"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:white;stroke-width:12.50554657;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 420.66907,43.700155 L 433.54825,30.82099"
+       id="path1971"
+       sodipodi:nodetypes="cc"
+       inkscape:transform-center-y="-15.448152"
+       inkscape:transform-center-x="-14.861589"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:white;stroke-width:12.50554657;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 430.38352,65.589783 L 448.59743,65.589783"
+       id="path1973"
+       sodipodi:nodetypes="cc"
+       inkscape:transform-center-y="-0.41476722"
+       inkscape:transform-center-x="-21.432214"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:white;stroke-width:12.50554657;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 421.77441,87.93726 L 434.65356,100.81642"
+       id="path1975"
+       sodipodi:nodetypes="cc"
+       inkscape:transform-center-y="14.861582"
+       inkscape:transform-center-x="-15.448149"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:white;stroke-width:12.50554657;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 377.53727,89.0426 L 364.65811,101.92177"
+       id="path1977"
+       sodipodi:nodetypes="cc"
+       inkscape:transform-center-y="15.448151"
+       inkscape:transform-center-x="14.861581"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+    <path
+       style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:white;stroke-width:12.50554657;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 399.88477,97.65173 L 399.88477,115.86562"
+       id="path1980"
+       sodipodi:nodetypes="cc"
+       inkscape:transform-center-y="21.432218"
+       inkscape:transform-center-x="-0.41476378"
+       inkscape:export-filename="C:\Projects\tetattds\images\block3.png"
+       inkscape:export-xdpi="9.4799995"
+       inkscape:export-ydpi="9.4799995" />
+  </g>
+</svg>
