@@ -1,0 +1,14 @@
+TODO:
+
+* Trolla fram snyggare hiscores.
+* Add different colored garbageblocks
+* Player changing level should be visible in the chat.
+* Perhaps add a chat sound.
+* Join/quit sounds?
+* Some kind of sleep mode when waiting in lobby?
+* Start game for ready players after a few seconds if ReadyPlayers>=2. Nice in case someone suddenly died =)
+* Show time after death
+* Show stop timer and/or death timer
+* Possibility to play while waiting for others to finish match
+* Places gets incorrect if someone disconnects in the middle of a match
+* Raise stack button on touchscreen gets activiated when dragging in on it
