@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #ifdef WIN32
 #define snprintf _snprintf
@@ -101,7 +102,7 @@ void Game::Tick()
 			BroadcastMessage(message, i);
 			
 			ChatMessage chat;
-			sprintf(chat.text, "%s disconnected.", players[i]->name);
+			sprintf(chat.text, "* %s disconnected.", players[i]->name);
 			BroadcastMessage(chat, i);
 			
 			PrintStatus("player %i disconnected", i);
@@ -150,7 +151,7 @@ void Game::Tick()
 			BroadcastMessage(message);
 
 			ChatMessage chat;
-			sprintf(chat.text, "Game started!");
+			sprintf(chat.text, "* Game started!");
 			BroadcastMessage(chat);
 
 			for(int i = 0; i < MAX_PLAYERS; i++)
@@ -158,6 +159,8 @@ void Game::Tick()
 				if(players[i] != NULL)
 					players[i]->state = PLAYERSTATE_ALIVE;
 			}
+
+			startTime = time(NULL);
 		}
 		break;
 		
@@ -177,7 +180,7 @@ void Game::Tick()
 				message.winner = lastPlayerAlive->playerNum;
 				PrintStatus("game over, winner is %s", lastPlayerAlive->name);
 				ChatMessage chat;
-				sprintf(chat.text, "%s wins!", lastPlayerAlive->name);
+				sprintf(chat.text, "* %s wins!", lastPlayerAlive->name);
 				BroadcastMessage(chat);
 			}
 			else
@@ -186,11 +189,16 @@ void Game::Tick()
 				PrintStatus( "game over, no winner" );
 				ChatMessage chat;
 				if(activePlayers == 1)
-					sprintf(chat.text, "Game Over.");
+					sprintf(chat.text, "* Game Over.");
 				else
-					sprintf(chat.text, "It's a tie!");
+					sprintf(chat.text, "* It's a tie!");
 				BroadcastMessage(chat);
 			}
+
+			int gameTime = time(NULL) - startTime - 3; // subtract countdown
+			ChatMessage chat;
+			sprintf(chat.text, "* The game lasted %i:%02i", gameTime/60, gameTime%60);
+			BroadcastMessage(chat);
 
 			BroadcastMessage( message );
 			for( int i = 0; i < MAX_PLAYERS; i++ )
@@ -281,8 +289,8 @@ void Game::mConnect(Connection* from, ConnectMessage* connect)
 	BroadcastMessage(pimessage);
 
 	ChatMessage chat;
-	sprintf(chat.text, "%s joined.", player->name);
-	BroadcastMessage(chat);
+	sprintf(chat.text, "* %s joined", player->name);
+	BroadcastMessage(chat, player->playerNum);
 
 	// gather info about the other players
 	for(int i = 0; i < MAX_PLAYERS; i++)
@@ -326,6 +334,25 @@ void Game::mSetInfo(Connection* from, SetInfoMessage* setInfo)
 {
 	Player* player = GetPlayer(from);
 
+	if(player->state != PLAYERSTATE_READY && setInfo->ready)
+	{
+		ChatMessage chat;
+		sprintf(chat.text, "* %s is ready!", player->name);
+		BroadcastMessage(chat, player->playerNum);
+	}
+	if(player->state == PLAYERSTATE_READY && !setInfo->ready)
+	{
+		ChatMessage chat;
+		sprintf(chat.text, "* %s is not ready", player->name);
+		BroadcastMessage(chat, player->playerNum);
+	}
+	if(player->level != setInfo->level)
+	{
+		ChatMessage chat;
+		sprintf(chat.text, "* %s selected level %i", player->name, setInfo->level+1);
+		BroadcastMessage(chat, player->playerNum);
+	}
+
 	player->level = setInfo->level;
 	player->state = setInfo->ready ? PLAYERSTATE_READY : PLAYERSTATE_CONNECTED;
 	player->typing = setInfo->typing;
@@ -333,13 +360,6 @@ void Game::mSetInfo(Connection* from, SetInfoMessage* setInfo)
 	PlayerInfoMessage pimessage;
 	player->FillPlayerInfoMessage(pimessage);
 	BroadcastMessage(pimessage);
-
-	if(setInfo->ready)
-	{
-		ChatMessage chat;
-		sprintf(chat.text, "%s is ready!", player->name);
-		BroadcastMessage(chat, player->playerNum);
-	}
 }
 
 Player* Game::GetPlayer(Connection* connection)

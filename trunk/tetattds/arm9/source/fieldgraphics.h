@@ -37,6 +37,7 @@ public:
 	void PrintScore(int score);
 	void PrintTime(int ticks);
 	void PrintCountdown(int count);
+	void PrintStopTime(int ticks);
 	void AddChat(char* text);
 	void ClearChat();
 

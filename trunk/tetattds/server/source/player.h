@@ -24,7 +24,7 @@ public:
 		playerNum(playerNum),
 		name(NULL),
 		place(0),
-		level(0),
+		level(4),
 		wins(0),
 		typing(false),
 		deadTime(0)

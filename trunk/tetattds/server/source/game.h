@@ -65,4 +65,6 @@ private:
 	int nextPlace;
 
 	GameState state;
+
+	int startTime;
 };

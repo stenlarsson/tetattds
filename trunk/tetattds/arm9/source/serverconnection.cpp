@@ -194,12 +194,6 @@ void ServerConnection::mPlayerInfo(Connection* from, PlayerInfoMessage* playerIn
 	{
 		player.fieldNum--;
 	}
-	if (player.level != playerInfo->level)
-	{
-		char buffer[24+sizeof(player.name)];
-		sprintf(buffer, "* %s selects level %d", player.name, playerInfo->level);
-		g_fieldGraphics->AddChat(buffer);
-	}
 	player.level = playerInfo->level;
 	player.wins = playerInfo->wins;
 	player.ready = playerInfo->ready;
