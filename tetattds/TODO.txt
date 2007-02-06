@@ -2,7 +2,6 @@ TODO:
 
 * Trolla fram snyggare hiscores.
 * Add different colored garbageblocks
-* Player changing level should be visible in the chat.
 * Perhaps add a chat sound.
 * Join/quit sounds?
 * Some kind of sleep mode when waiting in lobby?
