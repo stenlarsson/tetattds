@@ -54,7 +54,7 @@ private:
 	bool running;
 	int lastX;
 	int lastY;
-	bool firstTouch;
+	int touchedArea;
 	int level;
 	bool sendToSelf;
 	double scrollSpeed;

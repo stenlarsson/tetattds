@@ -53,7 +53,7 @@ Game::Game(int level,
 	field = NULL;
 	scanKeys();
 
-	firstTouch = true;
+	touchedArea = 0;
 	lastX = INT_MAX;
 	lastY = INT_MAX;
 
@@ -169,19 +169,21 @@ void Game::HandleInput()
 	
 			if(dx*dx + dy*dy < TOUCH_DELTA)
 			{
-				if(x >= 206 && x <= 247 &&
+				if (touchedArea != 2 &&
+					x >= 206 && x <= 247 &&
 					y >= 142 && y <= 183)
 				{
 					field->KeyInput(INPUT_RAISE);
+					touchedArea = 1;
 				}
-				else
+				else if (touchedArea != 1)
 				{
 					int col, row;
 					field->PixelsToColRow(x, y, col, row);
-					if(firstTouch)
+					if(touchedArea == 0)
 					{
 						field->TouchDown(col, row);
-						firstTouch = false;
+						touchedArea = 2;
 					}
 					else
 					{
@@ -193,7 +195,7 @@ void Game::HandleInput()
 		else if(keysUp() & KEY_TOUCH)
 		{
 			field->TouchUp();
-			firstTouch = true;
+			touchedArea = 0;
 			lastX = INT_MAX;
 			lastY = INT_MAX;
 		}
