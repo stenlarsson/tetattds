@@ -141,6 +141,7 @@ void PlayField::Draw()
 	
 	g_fieldGraphics->PrintScore(score);
 	g_fieldGraphics->PrintTime(timeTicks);
+	g_fieldGraphics->PrintStopTime(iScrollPause);
 
 	for(i = PF_FIRST_BLOCK_FIRST_VISIBLE_ROW; i < PF_NUM_BLOCKS; i++)
 	{//draw field

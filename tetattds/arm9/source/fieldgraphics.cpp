@@ -371,6 +371,13 @@ void FieldGraphics::PrintCountdown(int count)
 	PrintLarge(mainTextMap + COUNTDOWN_TEXT_OFFSET, str);
 }
 
+void FieldGraphics::PrintStopTime(int ticks)
+{
+	char str[9+1];
+	snprintf(str, sizeof(str), "%6i.%02i", ticks/60, ticks*100/60%100);
+	PrintLarge(mainTextMap + STOP_TIME_TEXT_OFFSET, str);
+}
+
 void FieldGraphics::PrintLarge(u16* cell, const char* text)
 {
 	ASSERT(cell != NULL);
@@ -387,6 +394,18 @@ void FieldGraphics::PrintLarge(u16* cell, const char* text)
 		else if(c == ':')
 		{
 			tile = TILE_LARGE_COLON;
+		}
+		else if(c == '\'')
+		{
+			tile = TILE_LARGE_TICK;
+		}
+		else if(c == '"')
+		{
+			tile = TILE_LARGE_DOUBLE_TICK;
+		}
+		else if(c == '.')
+		{
+			tile = TILE_LARGE_FULL_STOP;
 		}
 		else
 		{

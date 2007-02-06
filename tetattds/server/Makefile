@@ -25,12 +25,12 @@ DATA		:=  data
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CXXFLAGS	:=	$(INCLUDE) -g -Wall -fno-rtti -fno-exceptions
+CXXFLAGS	:=	$(INCLUDE) -g -Wall -fno-exceptions
 ifneq (,$(findstring CYGWIN,$(shell uname)))
 CXXFLAGS	+= -mno-cygwin
 endif
 
-LDFLAGS	=	-Wl,-Map,$(notdir $*.map)
+LDFLAGS	=	-g -Wl,-Map,$(notdir $*.map)
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project

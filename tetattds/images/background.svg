@@ -13,9 +13,9 @@
    height="192"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.44"
+   inkscape:version="0.44.1"
    version="1.0"
-   sodipodi:docbase="C:\Projects\tetattds\images"
+   sodipodi:docbase="/home/stonebone/projects/tetattds/tetattds/images"
    sodipodi:docname="background.svg"
    inkscape:export-filename="C:\Projects\tetattds\images\background.png"
    inkscape:export-xdpi="90"
@@ -158,9 +158,9 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="159"
-     inkscape:cy="16"
+     inkscape:zoom="2.219155"
+     inkscape:cx="116.09142"
+     inkscape:cy="77.091396"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      width="256px"
@@ -390,6 +390,35 @@
            d="M 237.25961,152.30718 L 235.3264,158.94869 L 239.19283,158.94869 L 237.25961,152.30718 z "
            id="path5968" />
       </g>
+    </g>
+    <g
+       style="opacity:1;display:inline"
+       id="g2123"
+       transform="translate(-9.629883,69.00488)">
+      <text
+         sodipodi:linespacing="125%"
+         id="text2125"
+         y="18.87793"
+         x="25.321289"
+         style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;opacity:1;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;display:inline;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           style="font-size:10px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:black;fill-opacity:1;font-family:Arial Black"
+           y="18.87793"
+           x="25.321289"
+           id="tspan2127"
+           sodipodi:role="line">Stop</tspan></text>
+      <text
+         sodipodi:linespacing="125%"
+         id="text2129"
+         y="17.87793"
+         x="24.321289"
+         style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           style="font-size:10px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:white;fill-opacity:1;font-family:Arial Black"
+           y="17.87793"
+           x="24.321289"
+           sodipodi:role="line"
+           id="tspan2131">Stop</tspan></text>
     </g>
   </g>
 </svg>
