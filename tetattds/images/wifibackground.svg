@@ -13,11 +13,11 @@
    height="192"
    id="svg3058"
    sodipodi:version="0.32"
-   inkscape:version="0.44"
+   inkscape:version="0.44.1"
    version="1.0"
-   sodipodi:docbase="C:\Projects\tetattds\images"
+   sodipodi:docbase="/home/stonebone/projects/tetattds/tetattds/images"
    sodipodi:docname="wifibackground.svg"
-   inkscape:export-filename="C:\Projects\tetattds\images\wifibackground.png"
+   inkscape:export-filename="wifibackground.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90">
   <defs
@@ -86,15 +86,15 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1"
-     inkscape:cx="142.24255"
-     inkscape:cy="75.231278"
+     inkscape:zoom="1.9739583"
+     inkscape:cx="128"
+     inkscape:cy="96"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      width="256px"
      height="192px"
      inkscape:window-width="900"
-     inkscape:window-height="578"
+     inkscape:window-height="588"
      inkscape:window-x="0"
      inkscape:window-y="26" />
   <metadata
@@ -119,20 +119,6 @@
        height="192"
        x="0"
        y="0" />
-    <g
-       id="g2877">
-      <path
-         id="rect2870"
-         d="M 6 86 C 4.892 86 4 86.892 4 88 L 4 186 C 4 187.108 4.892 188 6 188 L 58 188 C 59.108 188 60 187.108 60 186 L 60 88 C 60 86.892 59.108 86 58 86 L 6 86 z M 8 90 L 56 90 L 56 184 L 8 184 L 8 90 z "
-         style="fill:black;fill-opacity:1;stroke:none;stroke-width:1.20299995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-      <rect
-         y="90"
-         x="8"
-         height="94"
-         width="48"
-         id="rect3093"
-         style="fill:black;fill-opacity:0.49803922;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
-    </g>
     <g
        id="g5120">
       <rect
@@ -256,48 +242,62 @@
          style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:white;stroke-width:12.50554466;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <g
-       id="g2881"
+       id="g2245">
+      <path
+         id="rect2870"
+         d="M 6 84 C 4.892 84 4 84.901524 4 86.03125 L 4 185.96875 C 4 187.09848 4.892 188 6 188 L 58 188 C 59.108 188 60 187.09848 60 185.96875 L 60 86.03125 C 60 84.901525 59.108 84 58 84 L 6 84 z M 8 88 L 56 88 L 56 88.09375 L 56 183.90625 L 56 184 L 8 184 L 8 183.90625 L 8 88.09375 L 8 88 z "
+         style="fill:black;fill-opacity:1;stroke:none;stroke-width:1.20299995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <rect
+         y="88"
+         x="8"
+         height="96"
+         width="48"
+         id="rect3093"
+         style="fill:black;fill-opacity:0.49803922;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <g
+       id="g2249"
        transform="translate(64,0)">
       <path
-         id="path2883"
-         d="M 6,86 C 4.892,86 4,86.892 4,88 L 4,186 C 4,187.108 4.892,188 6,188 L 58,188 C 59.108,188 60,187.108 60,186 L 60,88 C 60,86.892 59.108,86 58,86 L 6,86 z M 8,90 L 56,90 L 56,184 L 8,184 L 8,90 z "
+         id="path2251"
+         d="M 6,84 C 4.892,84 4,84.901524 4,86.03125 L 4,185.96875 C 4,187.09848 4.892,188 6,188 L 58,188 C 59.108,188 60,187.09848 60,185.96875 L 60,86.03125 C 60,84.901525 59.108,84 58,84 L 6,84 z M 8,88 L 56,88 L 56,88.09375 L 56,183.90625 L 56,184 L 8,184 L 8,183.90625 L 8,88.09375 L 8,88 z "
          style="fill:black;fill-opacity:1;stroke:none;stroke-width:1.20299995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <rect
-         y="90"
+         y="88"
          x="8"
-         height="94"
+         height="96"
          width="48"
-         id="rect2885"
+         id="rect2253"
          style="fill:black;fill-opacity:0.49803922;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <g
-       id="g2887"
+       id="g2255"
        transform="translate(128,0)">
       <path
-         id="path2889"
-         d="M 6,86 C 4.892,86 4,86.892 4,88 L 4,186 C 4,187.108 4.892,188 6,188 L 58,188 C 59.108,188 60,187.108 60,186 L 60,88 C 60,86.892 59.108,86 58,86 L 6,86 z M 8,90 L 56,90 L 56,184 L 8,184 L 8,90 z "
+         id="path2257"
+         d="M 6,84 C 4.892,84 4,84.901524 4,86.03125 L 4,185.96875 C 4,187.09848 4.892,188 6,188 L 58,188 C 59.108,188 60,187.09848 60,185.96875 L 60,86.03125 C 60,84.901525 59.108,84 58,84 L 6,84 z M 8,88 L 56,88 L 56,88.09375 L 56,183.90625 L 56,184 L 8,184 L 8,183.90625 L 8,88.09375 L 8,88 z "
          style="fill:black;fill-opacity:1;stroke:none;stroke-width:1.20299995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <rect
-         y="90"
+         y="88"
          x="8"
-         height="94"
+         height="96"
          width="48"
-         id="rect2891"
+         id="rect2259"
          style="fill:black;fill-opacity:0.49803922;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
     <g
-       id="g2896"
+       id="g2261"
        transform="translate(192,0)">
       <path
-         id="path2898"
-         d="M 6,86 C 4.892,86 4,86.892 4,88 L 4,186 C 4,187.108 4.892,188 6,188 L 58,188 C 59.108,188 60,187.108 60,186 L 60,88 C 60,86.892 59.108,86 58,86 L 6,86 z M 8,90 L 56,90 L 56,184 L 8,184 L 8,90 z "
+         id="path2263"
+         d="M 6,84 C 4.892,84 4,84.901524 4,86.03125 L 4,185.96875 C 4,187.09848 4.892,188 6,188 L 58,188 C 59.108,188 60,187.09848 60,185.96875 L 60,86.03125 C 60,84.901525 59.108,84 58,84 L 6,84 z M 8,88 L 56,88 L 56,88.09375 L 56,183.90625 L 56,184 L 8,184 L 8,183.90625 L 8,88.09375 L 8,88 z "
          style="fill:black;fill-opacity:1;stroke:none;stroke-width:1.20299995;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <rect
-         y="90"
+         y="88"
          x="8"
-         height="94"
+         height="96"
          width="48"
-         id="rect2900"
+         id="rect2265"
          style="fill:black;fill-opacity:0.49803922;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     </g>
   </g>
