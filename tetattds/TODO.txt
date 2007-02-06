@@ -11,4 +11,3 @@ TODO:
 * Show stop timer and/or death timer
 * Possibility to play while waiting for others to finish match
 * Places gets incorrect if someone disconnects in the middle of a match
-* Raise stack button on touchscreen gets activiated when dragging in on it
