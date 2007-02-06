@@ -81,6 +81,13 @@ void Game::ConnectionTimeout(Connection* connection)
 
 	Player* player = GetPlayer(connection);
 	PrintStatus("player %s timed out", player->name);
+
+	if(player->state == PLAYERSTATE_ALIVE)
+	{
+		// without this fix, nobody will be "2nd"
+		nextPlace--;
+	}
+
 	player->state = PLAYERSTATE_DISCONNECTED;
 }
 

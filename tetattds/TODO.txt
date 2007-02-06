@@ -7,4 +7,3 @@ TODO:
 * Some kind of sleep mode when waiting in lobby?
 * Start game for ready players after a few seconds if ReadyPlayers>=2. Nice in case someone suddenly died =)
 * Possibility to play while waiting for others to finish match
-* Places gets incorrect if someone disconnects in the middle of a match
