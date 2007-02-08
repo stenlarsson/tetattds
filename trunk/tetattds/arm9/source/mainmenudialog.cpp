@@ -6,8 +6,8 @@
 
 using namespace FwGui;
 
-MainMenuDialog::MainMenuDialog(bool enableReset)
-:	Dialog("SELECT MODE", 6),
+MainMenuDialog::MainMenuDialog()
+:	Dialog("SELECT MODE", 5),
 	selection(MMSEL_NONE)
 {
 	endlessButton = new Button(27, 46, 200, 24, "Endless");
@@ -20,10 +20,6 @@ MainMenuDialog::MainMenuDialog(bool enableReset)
 	AddControl(highscoresButton);
 	versionLabel = new Label(5, 158, 246, 32, VERSION_STRING "\n" ABOUT_STRING);
 	AddControl(versionLabel);
-	closeButton = new ImageButton(232, 0, STDIMG_CLOSE);
-	AddControl(closeButton);
-	if(!enableReset)
-		closeButton->SetEnabled(false);
 }
 
 MainMenuDialog::~MainMenuDialog()
@@ -33,7 +29,6 @@ MainMenuDialog::~MainMenuDialog()
 	delete wifiButton;
 	delete highscoresButton;
 	delete versionLabel;
-	delete closeButton;
 }
 
 void MainMenuDialog::ControlClicked(Control* control)
@@ -53,9 +48,5 @@ void MainMenuDialog::ControlClicked(Control* control)
 	else if(control == highscoresButton)
 	{
 		selection = MMSEL_HIGHSCORES;
-	}
-	else if(control == closeButton)
-	{
-		selection = MMSEL_QUIT;
 	}
 }

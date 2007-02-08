@@ -15,14 +15,13 @@ enum MainMenuSelection
 	MMSEL_ENDLESS,
 	MMSEL_VS_SELF,
 	MMSEL_WIFI,
-	MMSEL_HIGHSCORES,
-	MMSEL_QUIT
+	MMSEL_HIGHSCORES
 };
 
 class MainMenuDialog : public FwGui::Dialog
 {
 public:
-	MainMenuDialog(bool enableReset);
+	MainMenuDialog();
 	virtual ~MainMenuDialog();
 
 	virtual void ControlClicked(FwGui::Control* control);
@@ -35,5 +34,4 @@ private:
 	FwGui::Button* wifiButton;
 	FwGui::Button* highscoresButton;
 	FwGui::Label* versionLabel;
-	FwGui::ImageButton* closeButton;
 };

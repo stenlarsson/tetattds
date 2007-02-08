@@ -46,7 +46,7 @@ void Settings::SetServerAddress(const char* address)
 void Settings::Load()
 {
 	// map gba cartridge to arm9
-	WAIT_CR &= ~0x80;
+	REG_POWERCNT &= ~0x80;
 
 	u8* ptr = SRAM;
 	
@@ -65,7 +65,7 @@ void Settings::Load()
 void Settings::Save()
 {
 	// map gba cartridge to arm9
-	WAIT_CR &= ~0x80;
+	REG_POWERCNT &= ~0x80;
 
 	u8* ptr = SRAM;
 	
