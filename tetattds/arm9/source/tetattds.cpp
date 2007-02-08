@@ -4,7 +4,6 @@
 #include <nds/arm9/console.h>
 
 #include <fat.h>
-#include <cartreset.h>
 
 #include <driver.h>
 #include <theme.h>
@@ -115,10 +114,7 @@ public:
 class MainMenuState : public State {
 public:
 	virtual void Enter() {
-		if(supportsFat)
-			dialog = new MainMenuDialog(cartSupportReset(DEVICE_TYPE_AUTO));
-		else
-			dialog = new MainMenuDialog(false);
+		dialog = new MainMenuDialog();
 
 		gui->SetActiveDialog(dialog);
 
@@ -149,23 +145,11 @@ public:
 		case MMSEL_HIGHSCORES:
 			nextState = highscoreState;
 			break;
-		
-		case MMSEL_QUIT:
-			if(cartSetMenuMode(DEVICE_TYPE_AUTO))
-			{
-				passmeloopEnter();
-			}
-			else
-			{
-				dialog->selection = MMSEL_NONE;
-				printf("setmenuFAIL\n");
-			}
-			break;
 		}
 	}
 	virtual void Exit() {
 		// to get a random field every time
-		srand(IPC->heartbeat);
+		srand(currentTime);
 
 		printf("\e[2J");
 

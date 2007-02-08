@@ -37,29 +37,27 @@ export PATH := $(TOPDIR)/tools:$(TOPDIR)/../fwgui/tools:$(PATH)
 #---------------------------------------------------------------------------------
 ARCH	:=	-mthumb -mthumb-interwork
 
-# note: arm9tdmi isn't the correct CPU arch, but anything newer and LD
-# *insists* it has a FPU or VFP, and it won't take no for an answer!
 CFLAGS	:=	-g -Wall -O2\
-			-mcpu=arm9tdmi -mtune=arm9tdmi -fomit-frame-pointer\
+			-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
 			-ffast-math \
 			$(ARCH)
 
 CFLAGS	+=	$(INCLUDE) -DARM9  -DVERSION_STRING="\"$(VERSION_STRING)\"" -DABOUT_STRING="\"$(ABOUT_STRING)\""
 CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions
 
-ASFLAGS	:=	-g $(ARCH)
+ASFLAGS	:=	-g $(ARCH) -march=armv5te -mtune=arm946e-s
 LDFLAGS	=	-specs=ds_arm9.specs -g $(ARCH) -mno-fpu -Wl,-Map,$(notdir $*.map)
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS	:= -lfat -lcartreset9 -lmikmod9 -lfwgui -lnds9 -ldswifi9
+LIBS	:= -lfat -lmikmod9 -lfwgui -lnds9 -ldswifi9
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=	$(TOPDIR)/libcartreset $(TOPDIR)/../mikmod $(TOPDIR)/../fwgui $(LIBNDS)
+LIBDIRS	:=	$(TOPDIR)/../mikmod $(TOPDIR)/../fwgui $(LIBNDS)
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional

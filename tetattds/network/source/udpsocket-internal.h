@@ -17,7 +17,10 @@ typedef int socklen_t;
 #include <netinet/in.h>
 #include <netdb.h>
 #include <errno.h>
-#include <unistd.h>
+static int close(int s)
+{
+	return closesocket(s);
+}
 #else
 #include <sys/socket.h>
 #include <netinet/in.h>

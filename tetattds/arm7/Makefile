@@ -34,15 +34,15 @@ CXXFLAGS	:=	$(CFLAGS) -fno-rtti -fno-exceptions
 
 
 ASFLAGS	:=	-g $(ARCH)
-LDFLAGS	=	-specs=ds_arm7.specs -g $(ARCH) -mno-fpu -Wl,-Map,$(notdir $*).map
+LDFLAGS	=	-specs=ds_arm7.specs -g $(ARCH) -Wl,-Map,$(notdir $*).map
 
-LIBS	:=	-lcartreset7 -lmikmod7 -lnds7 -ldswifi7
+LIBS	:=	-lmikmod7 -lnds7 -ldswifi7
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=	$(TOPDIR)/libcartreset $(TOPDIR)/../mikmod $(LIBNDS)
+LIBDIRS	:= $(TOPDIR)/../mikmod $(LIBNDS)
  
   
 #---------------------------------------------------------------------------------

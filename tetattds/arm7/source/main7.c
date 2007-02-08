@@ -8,8 +8,6 @@
 
 #include <mikmod7.h>
 
-#include <cartreset.h>
-
 #include "../../arm9/source/constants.h"
 
 void SetupWifi();
@@ -68,90 +66,86 @@ s32 getFreeSoundChannel()
 	return -1;
 }
  
- 
-void irqVblank()
-{
-	static int heartbeat = 0;
- 
-	uint16 but=0, x=0, y=0, xpx=0, ypx=0, z1=0, z2=0, batt=0, aux=0;
-	int t1=0, t2=0;
-	uint32 temp=0;
-	uint8 ct[sizeof(IPC->curtime)];
- 
-	// Update the heartbeat
-	heartbeat++;
- 
-	// Read the touch screen
- 
+int vcount;
+touchPosition first,tempPos;
+
+//---------------------------------------------------------------------------------
+void VcountHandler() {
+//---------------------------------------------------------------------------------
+	static int lastbut = -1;
+	
+	uint16 but=0, x=0, y=0, xpx=0, ypx=0, z1=0, z2=0;
+
 	but = REG_KEYXY;
- 
-	if (!(but & (1<<6))) {
- 
-		touchPosition tempPos = touchReadXY();
 
-		x = tempPos.x;
-		y = tempPos.y;
-		xpx = tempPos.px;
-		ypx = tempPos.py;
+	if (!( (but ^ lastbut) & (1<<6))) {
+ 
+		tempPos = touchReadXY();
+
+		if ( tempPos.x == 0 || tempPos.y == 0 ) {
+			but |= (1 <<6);
+			lastbut = but;
+		} else {
+			x = tempPos.x;
+			y = tempPos.y;
+			xpx = tempPos.px;
+			ypx = tempPos.py;
+			z1 = tempPos.z1;
+			z2 = tempPos.z2;
+		}
+		
+	} else {
+		lastbut = but;
+		but |= (1 <<6);
 	}
- 
-	z1 = touchRead(TSC_MEASURE_Z1);
-	z2 = touchRead(TSC_MEASURE_Z2);
- 
- 
-	batt = touchRead(TSC_MEASURE_BATTERY);
-	aux  = touchRead(TSC_MEASURE_AUX);
- 
-	// Read the time
-	rtcGetTime((uint8 *)ct);
-	BCDToInteger((uint8 *)&(ct[1]), 7);
- 
-	// Read the temperature
-	temp = touchReadTemperature(&t1, &t2);
- 
-	IPC->mailBusy = 1;
-	// Update the IPC struct
-	IPC->heartbeat	= heartbeat;
+
+	if ( vcount == 80 ) {
+		first = tempPos;
+	} else {
+		if (	abs( xpx - first.px) > 10 || abs( ypx - first.py) > 10 ||
+				(but & ( 1<<6)) ) {
+
+			but |= (1 <<6);
+			lastbut = but;
+
+		} else { 	
+			IPC->mailBusy = 1;
+			IPC->touchX			= x;
+			IPC->touchY			= y;
+			IPC->touchXpx		= xpx;
+			IPC->touchYpx		= ypx;
+			IPC->touchZ1		= z1;
+			IPC->touchZ2		= z2;
+			IPC->mailBusy = 0;
+		}
+	}
 	IPC->buttons		= but;
-	IPC->touchX			= x;
-	IPC->touchY			= y;
-	IPC->touchXpx		= xpx;
-	IPC->touchYpx		= ypx;
-	IPC->touchZ1		= z1;
-	IPC->touchZ2		= z2;
-	IPC->battery		= batt;
-	IPC->aux			= aux;
-	IPC->mailBusy = 0;
- 
-	{
-		int i;
-		for(i=0; i<sizeof(ct); i++)
-			IPC->curtime[i] = ct[i];
-	}
+	vcount ^= (80 ^ 130);
+	SetYtrigger(vcount);
 
-	IPC->temperature = temp;
-	IPC->tdiode1 = t1;
-	IPC->tdiode2 = t2;
- 
+}
+
+//---------------------------------------------------------------------------------
+void VblankHandler(void) {
+//---------------------------------------------------------------------------------
+
+	u32 i;
+
 
 	//sound code  :)
 	TransferSound *snd = IPC->soundData;
 	IPC->soundData = 0;
- 
-	if(snd != 0)
-	{
-		int i;
-		for(i=0; i<snd->count; i++)
-		{
+
+	if (0 != snd) {
+
+		for (i=0; i<snd->count; i++) {
 			s32 chan = getFreeSoundChannel();
- 			if (chan >= 0)
-			{
+
+			if (chan >= 0) {
 				startSound(snd->data[i].rate, snd->data[i].data, snd->data[i].len, chan, snd->data[i].vol, snd->data[i].pan, snd->data[i].format);
 			}
 		}
 	}
- 
-	Wifi_Update();
 }
 
 void SendFifo(u32 data)
@@ -197,20 +191,20 @@ int main(int argc, char ** argv)
 	IPC->mailData=0;
 	IPC->mailSize=0;
 
-	// reset the clock if needed
+	// Reset the clock if needed
 	rtcReset();
- 
-	// enable sound
+
+	//enable sound
 	powerON(POWER_SOUND);
-	SOUND_CR = SOUND_ENABLE | SOUND_VOL(0x7f);
+	SOUND_CR = SOUND_ENABLE | SOUND_VOL(0x7F);
 	IPC->soundData = 0;
-	IPC->mailBusy = 0;
 
-	// setup irq
 	irqInit();
-
-	irqSet(IRQ_VBLANK, irqVblank);
-	irqEnable(IRQ_VBLANK);
+	irqSet(IRQ_VBLANK, VblankHandler);
+	SetYtrigger(80);
+	vcount = 80;
+	irqSet(IRQ_VCOUNT, VcountHandler);
+	irqEnable(IRQ_VBLANK | IRQ_VCOUNT);
 
 	// we would like to react to fifo irq but that is unreliable
 	// since interrupts are sometimes disabled in wifi lib
@@ -222,9 +216,7 @@ int main(int argc, char ** argv)
 	{
 		swiWaitForVBlank();
 		
-		if(passmeloopQuery())	// libcartreset
-			cartExecute();
-		
+		Wifi_Update();
 		FIFOHandler();
 	}
 }
