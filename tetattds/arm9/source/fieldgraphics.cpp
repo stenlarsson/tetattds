@@ -37,7 +37,7 @@ void FieldGraphics::InitMainScreen()
 	// 128K
 	vramSetBankA(VRAM_A_MAIN_BG);
 	// 128K
-	vramSetBankB(VRAM_B_MAIN_SPRITE);
+	vramSetBankB(VRAM_B_MAIN_SPRITE_0x6400000);
 
 	// black background
 	BG_PALETTE[0] = RGB15(0,0,0);
