@@ -11,10 +11,10 @@ class Settings
 {
 public:
 	Settings();
-	~Settings();
+	virtual ~Settings();
 
-	void Load();
-	void Save();
+	virtual void Load() = 0;
+	virtual void Save() = 0;
 	
 	void GetHighscore(int mode, int level, const char* & name, int & score);
 	void UpdateHighscore(int mode, int level, char* name, int score);
@@ -22,10 +22,33 @@ public:
 	const char* GetServerAddress();
 	void SetServerAddress(const char* address);
 	
+protected:
+	InternalSettings* settings;
+};
+
+class SramSettings : public Settings
+{
+public:
+	SramSettings();
+	virtual ~SramSettings();
+
+	virtual void Load();
+	virtual void Save();
+	
 private:
 	void MemCopy(void* dest, const void* src, size_t size);
 	int MemCompare(void* dest, const void* src, size_t size);
 	void ZeroMemory(void* dest, size_t size);
+};
+
+class FatSettings : public Settings
+{
+public:
+	FatSettings();
+	virtual ~FatSettings();
+
+	virtual void Load();
+	virtual void Save();
 	
-	InternalSettings* settings;
+private:
 };

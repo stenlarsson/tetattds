@@ -8,9 +8,13 @@ struct InternalSettings
 	char serverAddress[MAX_SERVER_ADDRESS_LENGTH];
 };
 
+/* Settings *****************************************************************/
+
 Settings::Settings()
 :	settings(new InternalSettings)
 {
+	memset(settings, 0, sizeof(InternalSettings));
+	strcpy(settings->serverAddress, "ted.getmyip.com");
 }
 
 Settings::~Settings()
@@ -43,7 +47,18 @@ void Settings::SetServerAddress(const char* address)
 	strncpy(settings->serverAddress, address, MAX_SERVER_ADDRESS_LENGTH);
 }
 
-void Settings::Load()
+
+/* SramSettings *************************************************************/
+
+SramSettings::SramSettings()
+{
+}
+
+SramSettings::~SramSettings()
+{
+}
+
+void SramSettings::Load()
 {
 	// map gba cartridge to arm9
 	REG_POWERCNT &= ~0x80;
@@ -52,8 +67,6 @@ void Settings::Load()
 	
 	if(MemCompare(ptr, "TETATTDS1", 9) != 0)
 	{
-		ZeroMemory(settings, sizeof(InternalSettings));
-		strcpy(settings->serverAddress, "ted.getmyip.com");
 		PrintStatus("No saved settings found.\n");
 		return;
 	}
@@ -62,7 +75,7 @@ void Settings::Load()
 	MemCopy(settings, ptr, sizeof(InternalSettings));
 }
 
-void Settings::Save()
+void SramSettings::Save()
 {
 	// map gba cartridge to arm9
 	REG_POWERCNT &= ~0x80;
@@ -79,7 +92,7 @@ void Settings::Save()
 /**
  * A memcpy that copies one byte at a time.
  */
-void Settings::MemCopy(void* dest, const void* src, size_t size)
+void SramSettings::MemCopy(void* dest, const void* src, size_t size)
 {
 	u8* destPtr = (u8*)dest;
 	u8* srcPtr = (u8*)src;
@@ -92,7 +105,7 @@ void Settings::MemCopy(void* dest, const void* src, size_t size)
 /**
  * A memcmp that compares one byte at a time.
  */
-int Settings::MemCompare(void* dest, const void* src, size_t size)
+int SramSettings::MemCompare(void* dest, const void* src, size_t size)
 {
 	u8* destPtr = (u8*)dest;
 	u8* srcPtr = (u8*)src;
@@ -117,11 +130,45 @@ int Settings::MemCompare(void* dest, const void* src, size_t size)
 /**
  * A memset that sets one byte to zero at a time.
  */
-void Settings::ZeroMemory(void* dest, size_t size)
+void SramSettings::ZeroMemory(void* dest, size_t size)
 {
 	u8* destPtr = (u8*)dest;
 	for(size_t i = 0; i < size; i++)
 	{
 		*destPtr++ = 0;
 	}
+}
+
+/* FatSettings **************************************************************/
+
+FatSettings::FatSettings()
+{
+}
+
+FatSettings::~FatSettings()
+{
+}
+
+void FatSettings::Load()
+{
+	FILE* f = fopen("tetattds.dat", "rb");
+	if(f == NULL) {
+		printf("Failed to open tetattds.dat for reading.\n");
+		return;
+	}
+	
+	fread(settings, sizeof(InternalSettings), 1, f);
+	fclose(f);
+}
+
+void FatSettings::Save()
+{
+	FILE* f = fopen("tetattds.dat", "wb");
+	if(f == NULL) {
+		printf("Failed to open tetattds.dat for writing.\n");
+		return;
+	}
+	
+	fwrite(settings, sizeof(InternalSettings), 1, f);
+	fclose(f);
 }

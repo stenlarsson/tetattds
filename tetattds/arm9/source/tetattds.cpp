@@ -572,9 +572,6 @@ public:
 		// load music
 		Sound::InitMusic();
 		Sound::LoadMusic();
-		
-		// init fatLib
-		supportsFat = fatInitDefault();
 	}
 	
 	void Tick() {
@@ -593,7 +590,14 @@ public:
 			swiWaitForVBlank();
 		}
 		
-		settings = new Settings();
+		// init fatLib
+		supportsFat = fatInitDefault();
+		
+		if(supportsFat)
+			settings = new FatSettings();
+		else
+			settings = new SramSettings();
+		
 		settings->Load();
 	}
 };
