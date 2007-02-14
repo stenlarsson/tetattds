@@ -16,7 +16,7 @@ void arm9_synctoarm7()
 	SendFifo(FIFO_SYNC_WIFI);
 }
 
-bool SetupWifi()
+void SetupWifi()
 {
 	// send fifo message to initialize the arm7 wifi
 	u32 Wifi_pass= Wifi_Init(WIFIINIT_OPTION_USELED);
@@ -44,46 +44,5 @@ bool SetupWifi()
 	}
 
 	// wifi init complete - wifi lib can now be used!
-
-	PrintStatus("Connecting to access point...\n");
 	Wifi_AutoConnect();
-
-	WIFI_ASSOCSTATUS status = ASSOCSTATUS_DISCONNECTED;
-
-	char* statusMessages[] = {
-		"disconnected",
-		"searching",
-		"authenticating",
-		"associating",
-		"acquiring dhcp",
-		"associated",
-		"cannot connect"
-	};
-
-	while(true)
-	{
-		if(status != Wifi_AssocStatus())
-		{
-			status = (WIFI_ASSOCSTATUS)Wifi_AssocStatus();
-			if(status <= 6)
-				PrintStatus("...%s\n", statusMessages[status]);
-			else
-				PrintStatus("...???\n");
-
-			switch(status)
-			{
-			case ASSOCSTATUS_ASSOCIATED:
-				return true;
-
-			case ASSOCSTATUS_CANNOTCONNECT:
-				return false;
-
-			default:
-				break;
-			}
-		}
-
-		PrintSpinner();
-		swiWaitForVBlank();
-	}
 }
