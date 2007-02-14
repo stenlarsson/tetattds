@@ -4,6 +4,7 @@
 #include <nds/arm9/console.h>
 
 #include <fat.h>
+#include <dswifi9.h>
 
 #include <driver.h>
 #include <theme.h>
@@ -33,6 +34,7 @@
 #include "sound.h"
 #include "fifo.h"
 #include "playfield.h"
+#include "statusdialog.h"
 
 #include "serverconnection.h"
 #include "connectionmanager.h"
@@ -73,6 +75,7 @@ State* endlessGameState;
 State* vsSelfGameState;
 State* wifiState;
 State* wifiHostEntryState;
+State* setupWifiState;
 State* wifiMenuState;
 State* wifiLevelState;
 State* wifiChatEntryState;
@@ -236,7 +239,7 @@ private:
 class WifiHostEntryState : public TextEntryState {
 public:
 	WifiHostEntryState()
-		: TextEntryState("SERVER ADDRESS", wifiState, mainMenuState) {
+		: TextEntryState("SERVER ADDRESS", setupWifiState, mainMenuState) {
 	}
 	virtual void Enter() {
 		TextEntryState::Enter();
@@ -454,11 +457,19 @@ private:
 class WaitForServerState : public State {
 public:
 	WaitForServerState(ServerState desiredState, State* acceptState)
-		: desiredState(desiredState), acceptState(acceptState) {
+		: dialog(NULL), desiredState(desiredState), acceptState(acceptState) {
 	}
 	virtual void Enter() {
+		dialog = new StatusDialog("PLEASE WAIT");
+		gui->SetActiveDialog(dialog);
+		dialog->SetStatus("Waiting for server...");
 	}
 	virtual void Tick() {
+		if (dialog->abort) {
+			dialog->abort = false;
+			connection->Shutdown();
+		}
+		
 		if(connection->GetState() == desiredState) {
 			nextState = acceptState;
 		}
@@ -466,22 +477,74 @@ public:
 	virtual void Exit() {
 	}
 private:
+	StatusDialog* dialog;
 	ServerState desiredState;
 	State* acceptState;
+};
+
+class SetupWifiState : public State {
+public:
+	SetupWifiState() 
+		: dialog(NULL) {
+	}
+	virtual void Enter() {
+		FieldGraphics::InitSubScreen(true);
+		g_fieldGraphics->ClearChat();
+
+		dialog = new StatusDialog("PLEASE WAIT");
+		gui->SetActiveDialog(dialog);
+		if(hasSetupWifi) {
+			nextState = wifiState;
+			return;
+		}
+		SetupWifi();
+		status = ASSOCSTATUS_DISCONNECTED;
+	}
+	virtual void Tick() {
+		if (dialog->abort) {
+			nextState = mainMenuState;
+			return;
+		}
+		
+		WIFI_ASSOCSTATUS newStatus = (WIFI_ASSOCSTATUS)Wifi_AssocStatus();
+		if(status != newStatus) {
+			status = newStatus;
+			static const char* statusMessages[] = {
+				"Disconnected",
+				"Searching...",
+				"Authenticating...",
+				"Associating...",
+				"Acquiring DHCP...",
+				"Associated",
+				"Cannot connect"
+			};
+			char statusString[1024];
+			sprintf(
+				statusString,
+				"Connecting to Access Point\n%s",
+				(status <= 6) ? statusMessages[status] : "???");
+			dialog->SetStatus(statusString);
+				
+			if(status == ASSOCSTATUS_ASSOCIATED) {
+				hasSetupWifi = true;
+				nextState = wifiState;
+			}
+		}
+	}
+
+	virtual void Exit() {
+		gui->SetActiveDialog(NULL);
+		delete dialog;
+		dialog = NULL;
+	}
+private:
+	StatusDialog* dialog;
+	WIFI_ASSOCSTATUS status;
 };
 
 class WifiState : public State {
 	virtual void Enter() {
 		currentSubState = NULL;
-		if(!hasSetupWifi && !SetupWifi()) {
-			nextState = mainMenuState;
-			return;
-		}
-		hasSetupWifi = true;
-
-		FieldGraphics::InitSubScreen(true);
-		g_fieldGraphics->ClearChat();
-		PrintStatus("Connecting to server...\n");
 
 		connection = new ServerConnection(name);
 		connectionManager = new ConnectionManager(1, new UdpSocket(), connection);
@@ -631,6 +694,7 @@ void InitStates()
 	endlessGameState = new EndlessGameState;
 	vsSelfGameState = new VsSelfGameState;
 	wifiState = new WifiState;
+	setupWifiState = new SetupWifiState;
 	wifiHostEntryState = new WifiHostEntryState;
 	wifiMenuState = new WifiMenuState;
 	wifiChatEntryState = new WifiChatEntryState;
