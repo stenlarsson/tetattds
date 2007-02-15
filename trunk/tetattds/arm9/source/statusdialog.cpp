@@ -1,5 +1,5 @@
 #include "tetattds.h"
-#include "StatusDialog.h"
+#include "statusdialog.h"
 #include <imagebutton.h>
 #include <label.h>
 

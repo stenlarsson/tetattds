@@ -5,7 +5,7 @@
 #define DEBUGVERBOSE(...)
 #endif
 
-#define VERSION 1200
+#define VERSION 2000
 
 #define MAX_PLAYERS 5
 #define SEND_FIELDSTATE_INTERVAL 60

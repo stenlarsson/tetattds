@@ -5,7 +5,7 @@
 
 #define MAX_PLAYERS 5
 
-#define VERSION 1200
+#define VERSION 2000
 
 #define DEAD_RETURN_TO_MENU_TIME 180
 
