@@ -1,5 +1,7 @@
 #pragma once
 
+#include "netval.h"
+
 #define CONNECTION_KEEPALIVE_TIME 2
 #define CONNECTION_TIMEOUT 10
 #define RESEND_PACKET_TIMEOUT 1
@@ -26,6 +28,8 @@
 #define MESSAGE_PLAYER_DIED 205
 #define MESSAGE_PLAYER_DISCONNECTED 206
 
+#pragma pack(1)
+
 struct MessageHeader
 {
 	MessageHeader(unsigned char packetType, unsigned char messageId, unsigned int sequence)
@@ -37,7 +41,7 @@ struct MessageHeader
 
 	unsigned char packetType;
 	unsigned char messageId;
-	unsigned int sequence;
+	unsigned netval<int> sequence;
 };
 
 struct PingMessage
@@ -50,16 +54,16 @@ struct GarbageMessage
 {
 	static const unsigned char packetType = PACKET_TYPE_ORDERED;
 	static const unsigned char messageId = MESSAGE_GARBAGE;
-	int num;
-	int player;
-	int type;
+	netval<int> num;
+	netval<int> player;
+	netval<int> type;
 };
 
 struct FieldStateMessage
 {
 	static const unsigned char packetType = PACKET_TYPE_UNRELIABLE;
 	static const unsigned char messageId = MESSAGE_FIELDSTATE;
-	int playerNum;
+	netval<int> playerNum;
 	char field[12*6];
 };
 
@@ -74,7 +78,7 @@ struct ConnectMessage
 {
 	static const unsigned char packetType = PACKET_TYPE_ORDERED;
 	static const unsigned char messageId = MESSAGE_CONNECT;
-	int version;
+	netval<int> version;
 	char name[64];
 };
 
@@ -94,16 +98,16 @@ struct SetInfoMessage
 {
 	static const unsigned char packetType = PACKET_TYPE_ORDERED;
 	static const unsigned char messageId = MESSAGE_SET_INFO;
-	int level;
-	bool ready;
-	bool typing;
+	netval<int> level;
+	netval<bool> ready;
+	netval<bool> typing;
 };
 
 struct AcceptedMessage
 {
 	static const unsigned char packetType = PACKET_TYPE_ORDERED;
 	static const unsigned char messageId = MESSAGE_ACCEPTED;
-	int playerNum;
+	netval<int> playerNum;
 };
 
 struct DisconnectMessage
@@ -123,32 +127,34 @@ struct GameEndMessage
 {
 	static const unsigned char packetType = PACKET_TYPE_ORDERED;
 	static const unsigned char messageId = MESSAGE_GAMEEND;
-	int winner;
+	netval<int> winner;
 };
 
 struct PlayerInfoMessage
 {
 	static const unsigned char packetType = PACKET_TYPE_ORDERED;
 	static const unsigned char messageId = MESSAGE_PLAYER_INFO;
-	int playerNum;
+	netval<int> playerNum;
 	char name[64];
-	int level;
-	int wins;
-	bool ready;
-	bool typing;
+	netval<int> level;
+	netval<int> wins;
+	netval<bool> ready;
+	netval<bool> typing;
 };
 
 struct PlayerDiedMessage
 {
 	static const unsigned char packetType = PACKET_TYPE_ORDERED;
 	static const unsigned char messageId = MESSAGE_PLAYER_DIED;
-	int playerNum;
-	int place;
+	netval<int> playerNum;
+	netval<int> place;
 };
 
 struct PlayerDisconnectedMessage
 {
 	static const unsigned char packetType = PACKET_TYPE_ORDERED;
 	static const unsigned char messageId = MESSAGE_PLAYER_DISCONNECTED;
-	int playerNum;
+	netval<int> playerNum;
 };
+
+#pragma pack()

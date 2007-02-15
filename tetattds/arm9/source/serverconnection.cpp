@@ -95,7 +95,7 @@ void ServerConnection::mGarbage(Connection* from, GarbageMessage* garbage)
 	g_game->AddGarbage(
 		garbage->num,
 		garbage->player,
-		(GarbageType)garbage->type);
+		(GarbageType)(int)garbage->type);
 }
 
 void ServerConnection::mFieldState(Connection* from, FieldStateMessage* fieldState)

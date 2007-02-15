@@ -85,6 +85,7 @@ public:
 	template<typename MessageT>
 	bool SendMessage(const MessageT& message)
 	{
+#pragma pack(1)
 		struct Packet {
 			Packet(
 				unsigned char packetType,
@@ -99,6 +100,7 @@ public:
 			MessageHeader header;
 			MessageT message;
 		};
+#pragma pack()
 
 		Packet packet(MessageT::packetType, MessageT::messageId, outgoingSequence, message);
 

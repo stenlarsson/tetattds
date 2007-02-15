@@ -264,12 +264,12 @@ void Game::mConnect(Connection* from, ConnectMessage* connect)
 	if(connect->version < VERSION)
 	{
 		sprintf(dm.message, "Client version too old!\nPlease upgrade.\nv1.2 is the latest.\n");
-		PrintStatus("Client with old version(%d) tried to join.", connect->version);
+		PrintStatus("Client with old version(%d) tried to join.", (int)connect->version);
 	}
 	else if(connect->version > VERSION)
 	{
 		sprintf(dm.message, "Server version too old!\n");
-		PrintStatus("Client with newer version(%d) tried to join. Please upgrade the server.", connect->version);
+		PrintStatus("Client with newer version(%d) tried to join. Please upgrade the server.", (int)connect->version);
 	}
 	if(connect->version != VERSION)
 	{
