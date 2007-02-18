@@ -1,5 +1,7 @@
 #ifdef ARM9
 #include <sys/socket.h>
+#elif WIN32
+#include <winsock2.h>
 #else
 #include <arpa/inet.h>
 #endif
