@@ -28,8 +28,6 @@
 #define MESSAGE_PLAYER_DIED 205
 #define MESSAGE_PLAYER_DISCONNECTED 206
 
-#pragma pack(1)
-
 struct MessageHeader
 {
 	MessageHeader(unsigned char packetType, unsigned char messageId, unsigned int sequence)
@@ -41,7 +39,7 @@ struct MessageHeader
 
 	unsigned char packetType;
 	unsigned char messageId;
-	unsigned netval<int> sequence;
+	netval<unsigned int> sequence;
 };
 
 struct PingMessage
@@ -156,5 +154,3 @@ struct PlayerDisconnectedMessage
 	static const unsigned char messageId = MESSAGE_PLAYER_DISCONNECTED;
 	netval<int> playerNum;
 };
-
-#pragma pack()

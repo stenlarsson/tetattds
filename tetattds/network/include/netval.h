@@ -8,6 +8,16 @@ template <typename T>
 class netval;
  
 template <>
+struct netval<unsigned int> {
+	netval() {}
+  	netval(unsigned int i) : val(htonl(i)) {}
+	void operator =(unsigned int i) { val = htonl(i); }
+  	operator unsigned int() const { return ntohl(val); }
+private:
+	unsigned int val;
+};
+ 
+template <>
 struct netval<int> {
 	netval() {}
   	netval(int i) : val(htonl(i)) {}
@@ -21,8 +31,8 @@ template <>
 struct netval<bool> {
 	netval() {}
   	netval(bool i) : val(htonl(i)) {}
-	void operator =(int i) { val = htonl(i); }
-  	operator int() const { return ntohl(val); }
+	void operator =(bool i) { val = htonl(i); }
+  	operator bool() const { return ntohl(val); }
 private:
 	bool val;
 };
