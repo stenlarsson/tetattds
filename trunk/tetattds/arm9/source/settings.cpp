@@ -14,7 +14,7 @@ Settings::Settings()
 :	settings(new InternalSettings)
 {
 	memset(settings, 0, sizeof(InternalSettings));
-	strcpy(settings->serverAddress, "ted.getmyip.com");
+	strcpy(settings->serverAddress, "wallbraker.ath.cx");
 }
 
 Settings::~Settings()
