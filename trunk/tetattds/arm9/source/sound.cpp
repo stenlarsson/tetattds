@@ -157,8 +157,8 @@ void Sound::PlayChainEndEffect(Chain* chain)
 		break;
 		
 	default:
-		sound.data = fanfare1_bin;
-		sound.len = fanfare1_bin_size;
+		sound.data = fanfare2_bin;
+		sound.len = fanfare2_bin_size;
 		break;
 	}
 	sound.rate = 22050;
