@@ -39,7 +39,7 @@ To play this mode you need to have a wireless accesspoint supported by
 dswifi. You also need to have entered wifi settings in a game like
 Mario Kart DS.
 
-You can connect to our official server att ted.getmyip.com, but
+You can connect to our official server att wallbraker.ath.cx, but
 you could also run your own server on a PC. You might need
 to open up port 13687 (UDP) in your firewall.
 
@@ -54,7 +54,6 @@ directory.
 Known problems
 --------------
 * The different levels needs to be balanced.
-* The music and sound effects are "borrowed" from Tetris Attack
 
 
 Changelog
@@ -78,6 +77,15 @@ Changelog
   * A new server gui written in C++/CLI (needs .NET Framework 2.0)
   * Close button added to keyboard dialog and others
 
+2.0 (20070218)
+  * New graphics!
+  * New sound and music!
+  * Now saves highscores to FAT if available (otherwise it uses SRAM)
+  * Server now works on ppc
+  * Bug fixes
+  * Improved building from source
+  * Built with latest devkitpro
+
 
 Credits
 -------
@@ -85,16 +93,14 @@ Programing:
 Thomas Ericsson
 Sten Larsson
 Jakob Bornecrantz
+Gustav Munkby
 
 Graphics:
 Sten Larsson
 Jakob Bornecrantz
 
-Music:
+Sound and Music:
 Fredrik Hultin
-
-Special Thanks:
-Gustav Munkby
 
 
 Acknowledgments
