@@ -7,3 +7,15 @@ TODO:
 * Some kind of sleep mode when waiting in lobby?
 * Start game for ready players after a few seconds if ReadyPlayers>=2. Nice in case someone suddenly died =)
 * Possibility to play while waiting for others to finish match
+* The tile bouncing animation should start only once the blocks are 1 row away from hitting the ceiling.
+* Ability to load custom graphics and sound
+* Add vs AI mode.
+* No sound when you swap blocks
+* Effect when you clear 3 of the "space invader" blocks.
+* Pause screen.
+* A way to return to the menu.
+* Enter sleep mode when lid is closed.
+* Turn off top screen in single player.
+* Sound effect when you match 3 blocks.
+* Fix server crashes
+* Support vibration cart
