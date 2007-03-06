@@ -1,4 +1,8 @@
 #ifdef ARM9
+// Gah, silence the malicous warnings of sys/socket
+#ifdef FD_SETSIZE
+#undef FD_SETSIZE
+#endif
 #include <sys/socket.h>
 #elif WIN32
 #include <winsock2.h>

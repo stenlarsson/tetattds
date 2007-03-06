@@ -1,4 +1,5 @@
 #include "tetattds.h"
+#include "ds.h"
 #include "wifi.h"
 #include <dswifi9.h>
 

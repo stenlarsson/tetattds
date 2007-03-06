@@ -8,7 +8,7 @@
 
 #include <mikmod7.h>
 
-#include "../../arm9/source/constants.h"
+#include "../../arm9/source/ds.h"
 
 void SetupWifi();
 
