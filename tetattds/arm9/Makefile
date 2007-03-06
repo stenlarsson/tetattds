@@ -15,8 +15,8 @@ include $(DEVKITARM)/ds_rules
 # all directories are relative to this makefile
 #---------------------------------------------------------------------------------
 BUILD		:=	build
-SOURCES		:=	source ../network/source 
-INCLUDES	:=	include ../network/include
+SOURCES		:=	source ../network/source ../source
+INCLUDES	:=	../network/include ../source source
 DATA		:=  data
 IMAGES      :=  ../images
 MUSIC       :=  ../music
