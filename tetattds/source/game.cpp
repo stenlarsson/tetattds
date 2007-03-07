@@ -57,7 +57,7 @@ Game::Game(int level,
 	lastX = INT_MAX;
 	lastY = INT_MAX;
 
-	field = new PlayField();
+	field = new PlayField(g_fieldGraphics->GetEffectHandler());
 	field->Init(88, 0);
 	scrollSpeed = levelData[level].scrollSpeed;
 	paused = false;
@@ -218,7 +218,7 @@ void Game::Tick()
 
 void Game::Draw()
 {
-	field->Draw();
+	g_fieldGraphics->Draw(field);
 }
 
 void Game::AddGarbage(int num, int player, GarbageType type)

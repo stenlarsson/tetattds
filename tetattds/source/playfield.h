@@ -1,6 +1,5 @@
 #pragma once
 
-#include "marker.h"
 #include "chain.h"
 #include "garbagehandler.h"
 
@@ -27,14 +26,13 @@ enum PFState
 class PlayField
 {
   public:
-	PlayField();
+	PlayField(EffectHandler *effects);
 	~PlayField();
 
 	void Init(int xOffset, int yOffset);
 	void RandomizeField();
 	void Start();
 	void Tick();
-	void Draw();
 	void KeyInput(Input input);
 	void TouchDown(int col, int row);
 	void TouchHeld(int col, int row);
@@ -59,6 +57,13 @@ class PlayField
 
 	void GetFieldState(char* dest);
 
+	int GetMarkerPos() { return markerPos; }
+	int GetTouchPos() { return ColRowToPos(touchCol, touchRow); }
+	float GetScrollOffset() { return scrollOffset; }
+	int GetTimeTicks() { return timeTicks; }
+	int GetScrollPause() { return iScrollPause; }
+	ControlMode GetControlMode() { return controlMode; }
+
   private:
 	void RandomizeRow(int row);
 	void ScrollField();
@@ -73,8 +78,6 @@ class PlayField
 	int fieldX[PF_WIDTH*PF_HEIGHT];
 	int fieldY[PF_WIDTH*PF_HEIGHT];
 	int fieldHeight[PF_WIDTH];
-	Marker marker;
-	Marker touchMarker;
 	int markerPos;
 	Popper* popper;
 
@@ -82,7 +85,7 @@ class PlayField
 	double scrollOffset;
 	int iScrollPause;
 
-	EffectHandler* eh;
+	EffectHandler* effects;
 
 	int iSwapTimer;
 
