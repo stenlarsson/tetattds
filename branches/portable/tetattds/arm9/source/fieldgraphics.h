@@ -1,8 +1,11 @@
 #pragma once
 
 #include "protocol.h"
+#include "marker.h"
+#include "effecthandler.h"
 
 class BaseBlock;
+class PlayField;
 
 struct PlayerInfo
 {
@@ -32,16 +35,18 @@ public:
 	void ClearPlayer(PlayerInfo* player);
 	void ClearSmallField(int fieldNum);
 
-	void DrawBlock(BaseBlock* block, int x, int y, bool shaded);
-	void Clear(int x, int y);
-	void PrintScore(int score);
-	void PrintTime(int ticks);
+	void Draw(PlayField *pf);
 	void PrintCountdown(int count);
-	void PrintStopTime(int ticks);
 	void AddChat(char* text);
 	void ClearChat();
+	
+	EffectHandler *GetEffectHandler() { return &effects; }
 
 private:
+	void PrintScore(int score);
+	void PrintTime(int ticks);
+	void PrintStopTime(int ticks);
+
 	static void CreateShadedPalette(u16* dest, u16* src);
 	void PrintSmall(u16* startCell, const char* text);
 	void PrintLarge(u16* startCell, const char* text);
@@ -53,7 +58,9 @@ private:
 	u16* subBlockMap;
 	u16* mainTextMap;
 	u16* subTextMap;
-	int scrollOffset;
+	EffectHandler effects;
+	Marker marker;
+	Marker touchMarker;
 	
 	char chatBuffer[MAX_CHAT_LINES][32+1];
 	int lastChatLine;

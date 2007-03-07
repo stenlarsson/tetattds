@@ -12,12 +12,10 @@
 #include "game.h"
 #include "sound.h"
 
-PlayField::PlayField()
-:	marker(true),
-	touchMarker(false)
+PlayField::PlayField(EffectHandler *effects)
+:	effects(effects)
 {
 	gh = new GarbageHandler(this);
-	eh = NULL;
 	popper = NULL;
 	markerPos = PF_MARKER_START;
 	scrollOffset = 0;
@@ -44,7 +42,6 @@ PlayField::~PlayField()
 		DEL(field[i]);
 	}
 
-	DEL(eh);
 	DEL(gh);
 	DEL(popper);
 	Sound::StopMusic();
@@ -72,8 +69,7 @@ void PlayField::Init(int xOffset, int yOffset)
 		field[i] = NULL;
 	}
 
-	eh = new EffectHandler();
-	popper = new Popper(this, eh);
+	popper = new Popper(this, effects);
 }
 
 void PlayField::RandomizeField()
@@ -128,68 +124,11 @@ void PlayField::Start()
 {
 	state = PFS_START;
 	stateDelay = 150;
-	eh->Add(new EffReady());
+	effects->Add(new EffReady());
 	Sound::PlayMusic(false);
 	bMusicNormal = true;
 }
 
-void PlayField::Draw()
-{
-	int i;
-
-	g_fieldGraphics->SetScrollOffset((int)scrollOffset);
-	
-	g_fieldGraphics->PrintScore(score);
-	g_fieldGraphics->PrintTime(timeTicks);
-	g_fieldGraphics->PrintStopTime(iScrollPause);
-
-	for(i = PF_FIRST_BLOCK_FIRST_VISIBLE_ROW; i < PF_NUM_BLOCKS; i++)
-	{//draw field
-		if(field[i] != NULL && field[i]->GetState() != BST_MOVING)
-		{
-			bool shaded = i >= PF_FIRST_BLOCK_LAST_ROW;
-			if(state == PFS_DEAD)
-			{
-				shaded = true;
-			}
-			g_fieldGraphics->DrawBlock(
-				field[i],
-				fieldX[i],
-				fieldY[i] + (int)scrollOffset,
-				shaded); // shade last row
-		}
-		else
-		{
-			g_fieldGraphics->Clear(
-				fieldX[i],
-				fieldY[i] + (int)scrollOffset);
-		}
-	}
-
-	//draw effects
-	eh->Draw();
-
-	//and finally draw marker
-	if(state == PFS_PLAY || state == PFS_START)
-	{
-		switch(controlMode)
-		{
-		case MM_NONE:
-			marker.Hide();
-			touchMarker.Hide();
-			break;
-		case MM_KEY:
-			marker.Draw(fieldX[markerPos], fieldY[markerPos] + (int)scrollOffset);
-			touchMarker.Hide();
-			break;
-		case MM_TOUCH:
-			marker.Hide();
-			int pos = ColRowToPos(touchCol, touchRow);
-			touchMarker.Draw(fieldX[pos], fieldY[pos] + (int)scrollOffset);
-			break;
-		}
-	}
-	}
 
 void PlayField::Tick()
 {
@@ -244,8 +183,8 @@ void PlayField::Tick()
 		}
 	}
 
-	DEBUGVERBOSE("PlayField: eh.tick\n");
-	eh->Tick();
+	DEBUGVERBOSE("PlayField: effects.tick\n");
+	effects->Tick();
 }
 
 void PlayField::KeyInput(Input input)
@@ -394,7 +333,7 @@ bool PlayField::SwapBlocks(int pos)
 		field[pos] = field[pos+1];
 		field[pos+1] = NULL;
 		field[pos]->Move();
-		eh->Add(new EffMoveBlock(DIR_LEFT, field[pos], fieldX[pos+1], fieldY[pos+1]+(int)scrollOffset));
+		effects->Add(new EffMoveBlock(DIR_LEFT, field[pos], fieldX[pos+1], fieldY[pos+1]+(int)scrollOffset));
 		return true;
 	}
 	else if(field[pos+1] == NULL)
@@ -409,7 +348,7 @@ bool PlayField::SwapBlocks(int pos)
 		field[pos+1] = field[pos];
 		field[pos] = NULL;
 		field[pos+1]->Move();
-		eh->Add(new EffMoveBlock(DIR_RIGHT, field[pos+1], fieldX[pos], fieldY[pos]+(int)scrollOffset));
+		effects->Add(new EffMoveBlock(DIR_RIGHT, field[pos+1], fieldX[pos], fieldY[pos]+(int)scrollOffset));
 		return true;
 	}
 
@@ -418,8 +357,8 @@ bool PlayField::SwapBlocks(int pos)
 	field[pos+1] = tmp;
 	field[pos]->Move();
 	field[pos+1]->Move();
-	eh->Add(new EffMoveBlock(DIR_LEFT,  field[pos], fieldX[pos+1], fieldY[pos+1]+(int)scrollOffset));
-	eh->Add(new EffMoveBlock(DIR_RIGHT,  field[pos+1], fieldX[pos], fieldY[pos]+(int)scrollOffset));
+	effects->Add(new EffMoveBlock(DIR_LEFT,  field[pos], fieldX[pos+1], fieldY[pos+1]+(int)scrollOffset));
+	effects->Add(new EffMoveBlock(DIR_RIGHT,  field[pos+1], fieldX[pos], fieldY[pos]+(int)scrollOffset));
 	return true;
 }
 
@@ -498,7 +437,6 @@ void PlayField::ScrollField()
 		//scrollOffset = 0;
 		if(++iDieTimer > 50)
 		{
-			marker.Hide();
 			state = PFS_DIE;
 			stateDelay = DEATH_DURATION;
 			//Sound::StopMusic();
@@ -507,7 +445,7 @@ void PlayField::ScrollField()
 	}
 
 	// TODO: do we need this?
-	//eh->SetOffset(xOffset, yOffset + scrollOffset);
+	//effects->SetOffset(xOffset, yOffset + scrollOffset);
 }
 
 void PlayField::DropBlocks()
@@ -686,7 +624,7 @@ void PlayField::CheckForPops()
 			if(field[i]->GetState() == BST_POP2)//but we want to check if we need to 'pop' it
 			{
 				if(i/PF_WIDTH >= PF_FIRST_VISIBLE_ROW)// only if it's onscreen
-					eh->Add(new EffPop(fieldX[i], fieldY[i]+(int)scrollOffset, 0));
+					effects->Add(new EffPop(fieldX[i], fieldY[i]+(int)scrollOffset, 0));
 				Sound::PlayPopEffect(field[i]->GetChain());
 			}
 			continue;
@@ -699,7 +637,7 @@ void PlayField::CheckForPops()
 			{
 				score += 10;  //add score
 				if(i/PF_WIDTH >= PF_FIRST_VISIBLE_ROW)// only if it's onscreen
-					eh->Add(new EffPop(fieldX[i], fieldY[i]+(int)scrollOffset, field[i]->GetChain()->length));//pop-effect
+					effects->Add(new EffPop(fieldX[i], fieldY[i]+(int)scrollOffset, field[i]->GetChain()->length));//pop-effect
 				Sound::PlayPopEffect(field[i]->GetChain());
 			}
 			continue;

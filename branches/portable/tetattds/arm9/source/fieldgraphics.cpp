@@ -1,6 +1,7 @@
 #include "tetattds.h"
 #include "fieldgraphics.h"
 #include "baseblock.h"
+#include "playfield.h"
 #include "util.h"
 #include "sprite.h"
 
@@ -104,7 +105,6 @@ void FieldGraphics::InitMainScreen()
 	// sprites
 	Decompress(SPRITE_GFX, sprites_bin);
 	Decompress(SPRITE_PALETTE, sprites_pal_bin);
-	Sprite::InitSprites();
 }
 
 void FieldGraphics::InitSubScreen(bool wifi)
@@ -203,6 +203,9 @@ FieldGraphics::FieldGraphics()
 	subBlockMap((u16*)BG_MAP_RAM_SUB(BLOCKS_MAP_BASE)),
 	mainTextMap((u16*)BG_MAP_RAM(TEXT_MAP_BASE)),
 	subTextMap((u16*)BG_MAP_RAM_SUB(TEXT_MAP_BASE)),
+	effects(),
+	marker(true),
+	touchMarker(false),
 	lastChatLine(-1)
 {
 	memset(chatBuffer,0,sizeof(chatBuffer));
@@ -212,43 +215,72 @@ FieldGraphics::~FieldGraphics()
 {
 }
 
-void FieldGraphics::SetScrollOffset(int scrollOffset)
+void FieldGraphics::Draw(PlayField *pf)
 {
-	this->scrollOffset = scrollOffset;
+	int scrollOffset = (int)pf->GetScrollOffset();
 	BG1_Y0 = -scrollOffset;
-}
+	
+	PrintScore(*pf->GetScore());
+	PrintTime(pf->GetTimeTicks());
+	PrintStopTime(pf->GetScrollPause());
+	PFState state = pf->GetState();
 
-void FieldGraphics::DrawBlock(BaseBlock* block, int x, int y, bool shaded)
-{
-	y -= scrollOffset;
-	ASSERT(block != NULL);
-	ASSERT(x >= 0);
-	ASSERT(x < 256);
-	ASSERT(y >= 0);
-	ASSERT(y < 256);
-	u16 tile = block->GetTile() * 4;
-	if(shaded)
-		tile |= (1 << 12);
-	u16* cell = mainBlockMap + x/8 + y/8 * BLOCKMAP_STRIDE;
-	cell[0] = tile;
-	cell[1] = tile+1;
-	cell[BLOCKMAP_STRIDE] = tile+2;
-	cell[BLOCKMAP_STRIDE+1] = tile+3;
-}
+	// draw field
+	for(int i = PF_FIRST_BLOCK_FIRST_VISIBLE_ROW; i < PF_NUM_BLOCKS; i++)
+	{
+		BaseBlock* block = *pf->GetField(i);
+		int x = pf->GetFieldX(i), y = pf->GetFieldY(i);
+		u16 tile;
+		if(block != NULL && block->GetState() != BST_MOVING)
+		{
+			tile = block->GetTile() * 4;
+			if((i >= PF_FIRST_BLOCK_LAST_ROW) || (state == PFS_DEAD))
+				// Change palette for shaded blocks
+				tile |= (1 << 12);
+		}
+		else
+		{
+			tile = TILE_BLANK * 4;
+		}
+		u16* cell = mainBlockMap + x/8 + y/8 * BLOCKMAP_STRIDE;
+		cell[0] = tile;
+		cell[1] = tile+1;
+		cell[BLOCKMAP_STRIDE] = tile+2;
+		cell[BLOCKMAP_STRIDE+1] = tile+3;
+	}
 
-void FieldGraphics::Clear(int x, int y)
-{
-	y -= scrollOffset;
-	ASSERT(x >= 0);
-	ASSERT(x < 256);
-	ASSERT(y >= 0);
-	ASSERT(y < 256);
-	int tile = TILE_BLANK * 4;
-	u16* cell = mainBlockMap + x/8 + y/8 * BLOCKMAP_STRIDE;
-	cell[0] = tile;
-	cell[1] = tile+1;
-	cell[BLOCKMAP_STRIDE] = tile+2;
-	cell[BLOCKMAP_STRIDE+1] = tile+3;
+	effects.Draw();
+
+	//and finally draw marker
+	if(state == PFS_PLAY || state == PFS_START)
+	{
+		switch(pf->GetControlMode())
+		{
+		case MM_NONE:
+			marker.Hide();
+			touchMarker.Hide();
+			break;
+		case MM_KEY:
+			{
+				int markerPos = pf->GetMarkerPos();
+				marker.Draw(pf->GetFieldX(markerPos), pf->GetFieldY(markerPos) + scrollOffset);
+				touchMarker.Hide();
+			}
+			break;
+		case MM_TOUCH:
+		  {
+				int touchPos = pf->GetTouchPos();
+				marker.Hide();
+				touchMarker.Draw(pf->GetFieldX(touchPos), pf->GetFieldY(touchPos) + scrollOffset);
+			}
+			break;
+		}
+	}
+	else
+	{
+		marker.Hide();
+		touchMarker.Hide();
+	}
 }
 
 void FieldGraphics::DrawSmallField(int fieldNum, char* field, bool shaded)

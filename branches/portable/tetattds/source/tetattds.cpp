@@ -755,6 +755,7 @@ int main(void)
 	GetName();
 	
 	InitConsole();
+	Sprite::InitSprites();
 	g_fieldGraphics = new FieldGraphics();
 
 	gui = new FwGui::Driver();
