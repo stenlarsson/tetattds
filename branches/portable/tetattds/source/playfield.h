@@ -47,7 +47,7 @@ class PlayField
 
 	int GetFieldX(int i) { return fieldX[i]; }
 	int GetFieldY(int i) { return fieldY[i]; }
-	BaseBlock** GetField(int i) { return &field[i]; }
+	BaseBlock* GetField(int i) { return field[i]; }
 	PFState GetState() { return state; }
 	void SetState(PFState state) { this->state = state; }
 

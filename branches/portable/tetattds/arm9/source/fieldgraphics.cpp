@@ -228,7 +228,7 @@ void FieldGraphics::Draw(PlayField *pf)
 	// draw field
 	for(int i = PF_FIRST_BLOCK_FIRST_VISIBLE_ROW; i < PF_NUM_BLOCKS; i++)
 	{
-		BaseBlock* block = *pf->GetField(i);
+		BaseBlock* block = pf->GetField(i);
 		int x = pf->GetFieldX(i), y = pf->GetFieldY(i);
 		u16 tile;
 		if(block != NULL && block->GetState() != BST_MOVING)
