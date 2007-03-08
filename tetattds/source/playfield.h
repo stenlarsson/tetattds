@@ -63,6 +63,20 @@ class PlayField
 	int GetTimeTicks() { return timeTicks; }
 	int GetScrollPause() { return iScrollPause; }
 	ControlMode GetControlMode() { return controlMode; }
+	
+	// TODO: Should really have row here and not position x
+	bool IsLineOfFieldEmpty(int x);
+
+	/**
+	 * Insert the garbage corresponding to the block B starting
+	 * on the field position X, and adding the corresponding
+	 * number of field blocks. If leftAlign is passed then the
+	 * last inserted field block will be on the left side.
+	 * If there is no room for the garbage, nothing is inserted
+	 * and false is returned.
+	 */
+	// TODO: Should really have row here and not position for x
+	bool InsertGarbage(int x, GarbageBlock *b, bool leftAlign);
 
   private:
 	void RandomizeRow(int row);

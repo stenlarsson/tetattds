@@ -67,9 +67,9 @@ void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
 		}
 		else if(num >= 7)	// For cases 7-10
 		{
-			int mod = num%2;	// Magic to get (3,4) (4,4) (4,5) (5,5)
-			AddGarbage(num/2, player, GARBAGE_COMBO); // Add small block first
-			AddGarbage(num/2+mod, player, GARBAGE_COMBO);	// Add larger block
+			int half = num / 2; // Divide into (3,4) (4,4) (4,5) (5,5)
+			AddGarbage(half, player, GARBAGE_COMBO); // Add small block first
+			AddGarbage(num-half, player, GARBAGE_COMBO);	// Add larger block
 		}
 		else	// Cases 3-6 (well, and 1-2, which shouldn't happen...)
 		{
@@ -102,7 +102,6 @@ void GarbageHandler::DropGarbage()
 	int curBlock = 0;
 	int curField = 0;
 	bool bLeftAlign = true;
-	bool bOk = false;
 
 	if(numBlocks == 0)
 		return;
@@ -110,102 +109,41 @@ void GarbageHandler::DropGarbage()
 	if(fieldHeight > 14)
 		startField = PF_NUM_BLOCKS - fieldHeight*PF_WIDTH - 1;
 
+	// Get the position where we should start inserting
 	curField = startField;
+	while (curField >=2*PF_WIDTH-1 && !pf->IsLineOfFieldEmpty(curField))
+		curField -= PF_WIDTH;
 
+	// Process all chains except the garbage chains
 	for(curBlock = 0;curBlock < MAX_GARBAGE;curBlock++)
 	{
 		if(bDropBlock[curBlock] == false)
 			continue;
 		if(Blocks[curBlock]->GetType() == GARBAGE_CHAIN)
 			continue;
-		
-		bOk = false;
-		while(curField >= 2*PF_WIDTH-1 && !bOk)
-		{
-			bOk = true;
-			for(int i = 0;i<PF_WIDTH;i++)
-			{
-				if(*pf->GetField(curField-i) != NULL)
-				{
-					curField -= PF_WIDTH;
-					bOk = false;
-					break;
-				}
-			}
-		}
-		
-		if( (curField - Blocks[curBlock]->GetNum()) < PF_WIDTH )
-		{
-#ifdef DEBUG
-			printf("Out of space to drop blocks.\n"); // DEBUG
-#endif
+				
+		if (!pf->InsertGarbage(curField, Blocks[curBlock], bLeftAlign))
 			break;
-		}
-		
+
+		bLeftAlign = !bLeftAlign;
+		curField -= PF_WIDTH;
 		Blocks[curBlock]->SetGraphic();
-		if(bLeftAlign)
-		{
-			curField -= PF_WIDTH - Blocks[curBlock]->GetNum();
-		}
-		for(int i = Blocks[curBlock]->GetNum()-1;i >= 0;i--)
-		{
-#ifdef DEBUG
-			if( *pf->GetField(curField) != NULL)
-				printf("Fanfanfan!"); // DEBUG
-#endif
-			*pf->GetField(curField) = Blocks[curBlock]->GetBlock(i);
-			curField--;
-		}
-		if(bLeftAlign)
-			bLeftAlign = false;
-		else
-		{
-			bLeftAlign = true;
-			curField -= 6-Blocks[curBlock]->GetNum();
-		}
+
 		bDropped[curBlock] = true;
 		bDropBlock[curBlock] = false;
 		numBlocks--;
 	}
 
+	// Now process the delayed garbage chains
 	for(curBlock = 0;curBlock < MAX_GARBAGE;curBlock++)
 	{
 		if(bDropBlock[curBlock] == false)
 			continue;
 		
-		bOk = false;
-		while(curField >= 2*PF_WIDTH-1 && !bOk)
-		{
-			bOk = true;
-			for(int i = 0;i<PF_WIDTH;i++)
-			{
-				if(*pf->GetField(curField-i) != NULL)
-				{
-					curField -= PF_WIDTH;
-					bOk = false;
-					break;
-				}
-			}
-		}
-		
-		if( (curField - Blocks[curBlock]->GetNum()) < PF_WIDTH )
-		{
-#ifdef DEBUG
-			printf("Out of space to drop blocks.\n"); // DEBUG
-#endif
+		if (!pf->InsertGarbage(curField, Blocks[curBlock], false))
 			break;
-		}
-		
+
 		Blocks[curBlock]->SetGraphic();
-		for(int i = Blocks[curBlock]->GetNum()-1;i >= 0;i--)
-		{
-#ifdef DEBUG
-			if( *pf->GetField(curField) != NULL)
-				printf("Skitskitskit!"); // DEBUG
-#endif
-			*pf->GetField(curField) = Blocks[curBlock]->GetBlock(i);
-			curField--;
-		}
 		bDropped[curBlock] = true;
 		bDropBlock[curBlock] = false;
 		numBlocks--;
