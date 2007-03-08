@@ -1011,3 +1011,36 @@ void PlayField::GetFieldState(char* dest)
 		dest++;
 	}
 }
+
+bool PlayField::IsLineOfFieldEmpty(int x) {
+	for(int i = 0;i<PF_WIDTH;i++)
+	{
+		if(field[x-i] != NULL)
+			return false;
+	}
+	return true;
+}
+
+bool PlayField::InsertGarbage(int x, GarbageBlock *b, bool leftAlign) {
+	if( (x - b->GetNum()) < PF_WIDTH )
+	{
+#ifdef DEBUG
+		printf("Out of space to drop blocks.\n");
+#endif
+		return false;
+	}
+	
+	if (leftAlign)
+		x -= PF_WIDTH - b->GetNum();
+	for(int i = b->GetNum()-1; i >= 0; i--,x--)
+	{
+#ifdef DEBUG
+		if( field[x] != NULL)
+			printf("Fanfanfan!");
+#endif
+		field[x] = b->GetBlock(i);
+	}
+	
+	return true;
+}
+
