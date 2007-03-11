@@ -4,7 +4,7 @@
 #include <driver.h>
 #include <textentrydialog.h>
 
-int main()
+int main(int,char **)
 {
 	if(SDL_Init(SDL_INIT_VIDEO) == -1) {
 		fprintf(stderr, "Unable to init SDL: %s\n", SDL_GetError());
@@ -38,4 +38,6 @@ int main()
 	delete gui;
 
 	SDL_Quit();
+	
+	return 0;
 }
