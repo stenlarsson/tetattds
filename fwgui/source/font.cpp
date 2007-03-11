@@ -7,9 +7,9 @@ namespace FwGui
 	Font* Font::VERA_11;
 	
 	Font::Font(const void* fontdata)
-	:	fontdata((const u8*)fontdata),
+	:	fontdata((const uint8_t*)fontdata),
 		header((const FontFileHeader*)fontdata),
-		glyphs((const Glyph*)((const u8*)fontdata + sizeof(FontFileHeader)))
+		glyphs((const Glyph*)((const uint8_t*)fontdata + sizeof(FontFileHeader)))
 	{
 		FWGUI_ASSERT(header->type == FONT_SIGNATURE);
 	}
@@ -42,7 +42,7 @@ namespace FwGui
 		return glyphs + (character - header->startChar);
 	}
 	
-	const u8* Font::GetBitmapBuffer(const Glyph* glyph) const
+	const uint8_t* Font::GetBitmapBuffer(const Glyph* glyph) const
 	{
 		return fontdata + glyph->offset;
 	}

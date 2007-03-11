@@ -103,7 +103,7 @@ namespace FwGui
 				SetKeys();
 			}
 			
-			playSound(keyClickSound);
+			//playSound(keyClickSound);
 			
 			Repaint();
 		}

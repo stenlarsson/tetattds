@@ -4,7 +4,7 @@
 namespace FwGui
 {
 	extern Color backgroundColor;
-	extern u16* backgroundImage;
+	extern uint16_t* backgroundImage;
 	extern Color titleBackgroundColor;
 	extern Color titleTextColor;
 	extern Color enabledButtonColor;
@@ -16,5 +16,5 @@ namespace FwGui
 	extern Color disabledEditBoxColor;
 	extern Color editBoxOutlineColor;
 	extern Color editBoxTextColor;
-	extern struct ::sTransferSoundData* keyClickSound;
+	extern void* keyClickSound;
 }

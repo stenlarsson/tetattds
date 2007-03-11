@@ -2,11 +2,12 @@
 .SUFFIXES:
 #---------------------------------------------------------------------------------
 
-ifeq ($(strip $(DEVKITARM)),)
-$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
-endif
+export CXX	:=	g++
+export LD	:=	g++
 
-include $(DEVKITARM)/ds_rules
+#---------------------------------------------------------------------------------
+%.o: %.cpp
+	$(CXX) -MMD -MP -MF $(DEPSDIR)/$*.d $(CXXFLAGS) -c $< -o $@
 
 #---------------------------------------------------------------------------------
 # TARGET is the name of the output
@@ -15,39 +16,28 @@ include $(DEVKITARM)/ds_rules
 # DATA is a list of directories containing data files
 # INCLUDES is a list of directories containing header files
 #---------------------------------------------------------------------------------
-TARGET		:=	lib/lib$(shell basename $(CURDIR))
+TARGET		:=	../lib/libfwgui_sdl
 BUILD		:=	build
-SOURCES		:=	source
-DATA		:=	data
-INCLUDES	:=	include
+SOURCES		:=	source ../source
+DATA		:=	../data
+INCLUDES	:=	../include
 
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
-ARCH	:=	-mthumb -mthumb-interwork
 
-CFLAGS	:=	-g -Wall -O2\
- 		-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
-		-ffast-math \
-		$(ARCH)
+CXXFLAGS	:=	$(INCLUDE) -g -Wall -fno-exceptions $(shell sdl-config --cflags)
+ifneq (,$(findstring CYGWIN,$(shell uname)))
+CXXFLAGS	+= -mno-cygwin
+endif
 
-CFLAGS	+=	$(INCLUDE) -DARM9
-CXXFLAGS	:= $(CFLAGS) -fno-rtti -fno-exceptions
-
-ASFLAGS	:=	-g $(ARCH) -march=armv5te -mtune=arm946e-s
-LDFLAGS	=	-specs=ds_arm9.specs -g $(ARCH) -mno-fpu -Wl,-Map,$(notdir $*.map)
-
-#---------------------------------------------------------------------------------
-# any extra libraries we wish to link with the project
-#---------------------------------------------------------------------------------
-LIBS	:= -lnds9
-
+LDFLAGS	=	-g -Wl,-Map,$(notdir $*.map) $(shell sdl-config --libs)
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing
 # include and lib
 #---------------------------------------------------------------------------------
-LIBDIRS	:=	$(LIBNDS)
+LIBDIRS	:=
 
 #---------------------------------------------------------------------------------
 # no real need to edit anything past this point unless you need to add additional
@@ -105,9 +95,6 @@ clean:
 	@echo clean ...
 	@rm -fr $(BUILD) $(TARGET).a
 
-run:
-	wmb -data $(OUTPUT).nds
-
 
 #---------------------------------------------------------------------------------
 else
@@ -126,7 +113,10 @@ $(OUTPUT).a	:	$(OFILES)
 %.bin.o	:	%.bin
 #---------------------------------------------------------------------------------
 	@echo $(notdir $<)
-	@$(bin2o)
+	bin2s $< | $(AS) $(ARCH) -o $(@)
+	echo "extern const uint8_t" `(echo $(<F) | sed -e 's/^\([0-9]\)/_\1/' | tr . _)`"_end[];" > `(echo $(<F) | tr . _)`.h
+	echo "extern const uint8_t" `(echo $(<F) | sed -e 's/^\([0-9]\)/_\1/' | tr . _)`"[];" >> `(echo $(<F) | tr . _)`.h
+	echo "extern const uint32_t" `(echo $(<F) | sed -e 's/^\([0-9]\)/_\1/' | tr . _)`_size";" >> `(echo $(<F) | tr . _)`.h
 
 
 -include $(DEPENDS)
