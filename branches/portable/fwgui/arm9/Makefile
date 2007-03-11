@@ -21,6 +21,12 @@ SOURCES		:=	source ../source
 DATA		:=	../data
 INCLUDES	:=	../include
 
+# applications
+BIN2C := bin2c
+
+# other stuff
+export PATH := ../../tools:$(PATH)
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
@@ -123,13 +129,14 @@ $(OUTPUT).a	:	$(OFILES)
 	@echo built ... $(notdir $@)
 
 #---------------------------------------------------------------------------------
-%.bin.o	:	%.bin
-#---------------------------------------------------------------------------------
+%.bin.o : %.bin.c
+	@gcc -c -o $@ $<
+
+%.bin.c %_bin.h	:	%.bin
 	@echo $(notdir $<)
-	bin2s $< | $(AS) $(ARCH) -o $(@)
-	echo "extern const uint8_t" `(echo $(<F) | sed -e 's/^\([0-9]\)/_\1/' | tr . _)`"_end[];" > `(echo $(<F) | tr . _)`.h
-	echo "extern const uint8_t" `(echo $(<F) | sed -e 's/^\([0-9]\)/_\1/' | tr . _)`"[];" >> `(echo $(<F) | tr . _)`.h
-	echo "extern const uint32_t" `(echo $(<F) | sed -e 's/^\([0-9]\)/_\1/' | tr . _)`_size";" >> `(echo $(<F) | tr . _)`.h
+	@$(BIN2C) -h $(notdir $*)_bin > $(notdir $*)_bin.h
+	@$(BIN2C) $(notdir $*)_bin < $< > $(notdir $*).bin.c
+#---------------------------------------------------------------------------------
 
 
 -include $(DEPENDS)
