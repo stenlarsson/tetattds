@@ -16,13 +16,13 @@ namespace FwGui
 	class ImageButton : public Control
 	{
 	public:
-		ImageButton(int x, int y, int width, int height, const u8* bitmap);
+		ImageButton(int x, int y, int width, int height, const uint8_t* bitmap);
 		ImageButton(int x, int y, StandardImage image);
 		virtual ~ImageButton();
 	
 		virtual void Paint(Graphics* graphics);
 	
 	private:
-		const u8* bitmap;
+		const uint8_t* bitmap;
 	};
 }

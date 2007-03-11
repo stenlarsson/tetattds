@@ -3,6 +3,9 @@
 #include "control.h"
 #include "graphics.h"
 
+#define KEY_B 0
+#define KEY_START 1
+
 namespace FwGui
 {
 	class Dialog
@@ -32,7 +35,6 @@ namespace FwGui
 	protected:
 		void AddControl(Control* control);
 		void AddControl(Control* control, int defaultButton);
-		int ButtonToArray(int button);
 	
 		bool repaint;
 		char* title;

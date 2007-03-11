@@ -17,7 +17,7 @@ namespace FwGui
 	private:
 		void InitGraphics();
 	
-		unsigned short* framebuffer;
+		void* framebuffer;
 		Dialog* dialog;
 		int lastX;
 		int lastY;

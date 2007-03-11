@@ -5,7 +5,7 @@
 
 namespace FwGui
 {
-	Graphics::Graphics(u16* screenBuffer, int screenWidth, int screenHeight)
+	Graphics::Graphics(uint16_t* screenBuffer, int screenWidth, int screenHeight)
 	:	screenBuffer(screenBuffer),
 		screenWidth(screenWidth),
 		screenHeight(screenHeight),
@@ -89,7 +89,7 @@ namespace FwGui
 		int r = penColor.r >> 3;
 		int g = penColor.g >> 3;
 		int b = penColor.b >> 3;
-		u16 color = RGB1555(r,g,b);
+		uint16_t color = RGB1555(r,g,b);
 	
 		int beginCol = getLowerLimit(x);
 		int beginRow = getLowerLimit(y);
@@ -134,8 +134,8 @@ namespace FwGui
 				int cx = x + col;
 				int cy = y + row;
 	
-				u16* ptr = screenBuffer + cx + cy * screenWidth;
-				u16 pixel = *ptr;
+				uint16_t* ptr = screenBuffer + cx + cy * screenWidth;
+				uint16_t pixel = *ptr;
 	
 				unsigned int b = (pixel >> 10) & 0x1F;
 				unsigned int g = (pixel >>  5) & 0x1F;
@@ -151,7 +151,7 @@ namespace FwGui
 		}
 	}
 	
-	void Graphics::BlitAlpha(int x, int y, int width, int height, const u8* bitmap)
+	void Graphics::BlitAlpha(int x, int y, int width, int height, const uint8_t* bitmap)
 	{
 		int beginCol = getLowerLimit(x);
 		int beginRow = getLowerLimit(y);
@@ -165,9 +165,9 @@ namespace FwGui
 				int cx = x + col;
 				int cy = y + row;
 	
-				u16* ptr = screenBuffer + cx + cy * screenWidth;
+				uint16_t* ptr = screenBuffer + cx + cy * screenWidth;
 	
-				u16 pixel = *ptr;
+				uint16_t pixel = *ptr;
 				unsigned int b = (pixel >> 10) & 0x1F;
 				unsigned int g = (pixel >>  5) & 0x1F;
 				unsigned int r = (pixel >>  0) & 0x1F;
@@ -182,7 +182,7 @@ namespace FwGui
 		}
 	}
 	
-	void Graphics::Blit(int x, int y, int width, int height, const u16* bitmap)
+	void Graphics::Blit(int x, int y, int width, int height, const uint16_t* bitmap)
 	{
 		int beginCol = getLowerLimit(x);
 		int beginRow = getLowerLimit(y);
@@ -196,7 +196,7 @@ namespace FwGui
 				int cx = x + col;
 				int cy = y + row;
 	
-				u16* ptr = screenBuffer + cx + cy * screenWidth;
+				uint16_t* ptr = screenBuffer + cx + cy * screenWidth;
 	
 				*ptr = *bitmap++;
 			}

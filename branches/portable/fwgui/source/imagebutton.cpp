@@ -12,9 +12,9 @@ namespace FwGui
 {
 	static int widths[] = {20, 20, 24, 37, 26};
 	static int heights[] = {20, 20, 24, 20, 20};
-	static const u8* bitmaps[] = {up_bin, down_bin, close_bin, backspace_bin, shift_bin};
+	static const uint8_t* bitmaps[] = {up_bin, down_bin, close_bin, backspace_bin, shift_bin};
 	
-	ImageButton::ImageButton(int x, int y, int width, int height, const u8* bitmap)
+	ImageButton::ImageButton(int x, int y, int width, int height, const uint8_t* bitmap)
 	:	Control(x, y, width, height),
 		bitmap(bitmap)
 	{

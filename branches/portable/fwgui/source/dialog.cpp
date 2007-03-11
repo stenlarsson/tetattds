@@ -64,8 +64,8 @@ namespace FwGui
 	
 		controls[nextcontrol] = control;
 		
-		FWGUI_ASSERT(defaultControl[ButtonToArray(defaultButton)] == -1);
-		defaultControl[ButtonToArray(defaultButton)] = nextcontrol;
+		FWGUI_ASSERT(defaultControl[defaultButton] == -1);
+		defaultControl[defaultButton] = nextcontrol;
 		
 		nextcontrol++;
 	}
@@ -92,7 +92,7 @@ namespace FwGui
 	
 	void Dialog::KeyB()
 	{
-		int control = defaultControl[ButtonToArray(KEY_B)];
+		int control = defaultControl[KEY_B];
 		if(control != -1)
 		{	
 			if(controls[control]->IsEnabled())
@@ -104,7 +104,7 @@ namespace FwGui
 	
 	void Dialog::KeyStart()
 	{
-		int control = defaultControl[ButtonToArray(KEY_START)];
+		int control = defaultControl[KEY_START];
 		if(control != -1)
 		{	
 			if(controls[control]->IsEnabled())
@@ -239,17 +239,5 @@ namespace FwGui
 	
 	void Dialog::TouchUp(int x, int y)
 	{
-	}
-	
-	int Dialog::ButtonToArray(int button)
-	{
-		int num = 0;
-		for(num = 0;num<14;num++)
-		{
-			if(button & BIT(0))
-				break;
-			button = button>>1;
-		}
-		return num;
 	}
 }
