@@ -32,7 +32,7 @@ ifneq (,$(findstring CYGWIN,$(shell uname)))
 CXXFLAGS	+= -mno-cygwin
 endif
 
-LDFLAGS	=	-g -Wl,-Map,$(notdir $*.map)
+LDFLAGS	=	-g
 LDFLAGS +=  $(shell sdl-config --libs)
 
 #---------------------------------------------------------------------------------
