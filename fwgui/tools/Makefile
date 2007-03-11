@@ -6,7 +6,7 @@ CFLAGS+=-mno-cygwin
 endif
 CXXFLAGS=$(CFLAGS)
 
-all: bmp15bit bmp2raw fontconvert
+all: bmp15bit bmp2raw fontconvert bin2c
 
 fontconvert: fontconvert.cpp
 	$(CXX) $(CXXFLAGS) `freetype-config --cflags --libs` -I../include $^ -o $@
