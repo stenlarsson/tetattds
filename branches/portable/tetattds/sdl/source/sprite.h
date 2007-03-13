@@ -27,7 +27,7 @@ public:
 	void GetPos(int& x, int& y) { x = this->x; y = this->y; }
 
 private:
-	static Sprite* sprites;
+	static Sprite* sprites_data;
 	static Sprite* firstFreeSprite;
 	int spriteIndex;
 	Sprite* nextFreeSprite;
@@ -39,7 +39,8 @@ private:
 	int x;
 	int y;
 	int tile;
-	int attr0;
-	int attr1;
-	int attr2;
+	int priority;
+	SpriteSize size;
+	bool flipX;
+	bool flipY;
 };

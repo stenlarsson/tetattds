@@ -10,5 +10,5 @@ public:
 };
 
 void InitStates();
-bool StateTick();
+void StateTick();
 

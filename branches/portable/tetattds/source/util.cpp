@@ -2,36 +2,6 @@
 #include "util.h"
 #include <stdarg.h>
 
-void* Decompress(const void* source, int* size)
-{
-	u32 header = *(u32*)source;
-	ASSERT((header & 0xFF) == 0x10);
-
-	int uncompressedSize = header >> 8;
-
-	void* temp = malloc(uncompressedSize);
-
-	swiDecompressLZSSWram((void*)source, temp);
-
-	*size = uncompressedSize;
-	return temp;
-}
-
-void Decompress(void* destination, const void* source)
-{
-	u32 header = *(u32*)source;
-	ASSERT((header & 0xFF) == 0x10);
-
-	int uncompressedSize = header >> 8;
-	
-	void* temp = malloc(uncompressedSize);
-
-	swiDecompressLZSSWram((void*)source, temp);
-
-	memcpy(destination, temp, uncompressedSize);
-	free(temp);
-}
-
 void PrintSpinner()
 {
 	static int frame = 0;

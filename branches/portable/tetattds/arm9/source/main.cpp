@@ -4,10 +4,6 @@
 #include <nds/arm9/console.h>
 
 #include <fat.h>
-#include <dswifi9.h>
-
-#include <driver.h>
-#include <theme.h>
 
 #include "menubackground_bin.h"
 
@@ -15,28 +11,22 @@
 #include "splash2_map_bin.h"
 #include "splash2_pal_bin.h"
 
-#include "menu1_bin.h"
-#include "menu2_bin.h"
-
-#include "wifi.h"
 #include "fieldgraphics.h"
 #include "util.h"
 #include "settings.h"
-#include "sound.h"
+#include "sramsettings.h"
 #include "fifo.h"
 #include "statusdialog.h"
 #include "state.h"
 
 #define BLEND_SRC_ALL 0x003F
 
-unsigned int currentTime = 0;
+static unsigned int currentTime = 0;
 
-static bool hasSetupWifi = false;
 static bool supportsFat = false;
 
 char name[10];
 Settings* settings = NULL;
-FwGui::Driver* gui = NULL;
 
 // used in network lib
 unsigned int GetTime()
@@ -44,136 +34,71 @@ unsigned int GetTime()
 	return currentTime/60;
 }
 
-extern State *nextState, *wifiState, *mainMenuState;
-State* setupWifiState;
-State* splashScreenState;
+void SeedRandom()
+{
+	srand(currentTime);
+}
 
-class SetupWifiState : public State {
-public:
-	SetupWifiState() 
-		: dialog(NULL) {
-	}
-	virtual void Enter() {
-		FieldGraphics::InitSubScreen(true);
-		g_fieldGraphics->ClearChat();
+void ShowSplashScreen()
+{
+	swiWaitForVBlank();
+	lcdMainOnBottom();
+	
+	// main screen
+	videoSetMode(
+		MODE_0_2D |
+		DISPLAY_BG0_ACTIVE);
+	// 128K
+	vramSetBankA(VRAM_A_MAIN_BG);
 
-		dialog = new StatusDialog("PLEASE WAIT");
-		gui->SetActiveDialog(dialog);
-		if(hasSetupWifi) {
-			nextState = wifiState;
-			return;
-		}
-		SetupWifi();
-		status = ASSOCSTATUS_DISCONNECTED;
-	}
-	virtual void Tick() {
-		if (dialog->abort) {
-			nextState = mainMenuState;
-			return;
-		}
-		
-		WIFI_ASSOCSTATUS newStatus = (WIFI_ASSOCSTATUS)Wifi_AssocStatus();
-		if(status != newStatus) {
-			status = newStatus;
-			static const char* statusMessages[] = {
-				"Disconnected",
-				"Searching...",
-				"Authenticating...",
-				"Associating...",
-				"Acquiring DHCP...",
-				"Associated",
-				"Cannot connect"
-			};
-			char statusString[1024];
-			sprintf(
-				statusString,
-				"Connecting to Access Point\n%s",
-				(status <= 6) ? statusMessages[status] : "???");
-			dialog->SetStatus(statusString);
-				
-			if(status == ASSOCSTATUS_ASSOCIATED) {
-				hasSetupWifi = true;
-				nextState = wifiState;
-			}
-		}
-	}
+	// palette
+	Decompress(BG_PALETTE, splash2_pal_bin);
 
-	virtual void Exit() {
-		gui->SetActiveDialog(NULL);
-		delete dialog;
-		dialog = NULL;
-	}
-private:
-	StatusDialog* dialog;
-	WIFI_ASSOCSTATUS status;
-};
-
-class SplashScreenState : public State {
-public:
-	virtual void Enter() {
+	// splashscreen
+	BG0_CR =
+		BG_32x32 |
+		BG_TILE_BASE(BACKGROUND_TILE_BASE) |
+		BG_MAP_BASE(BACKGROUND_MAP_BASE) |
+		BG_PRIORITY(BACKGROUND_PRIORITY) |
+		BG_256_COLOR;
+	Decompress((void*)BG_TILE_RAM(BACKGROUND_TILE_BASE), splash2_bin);
+	Decompress((void*)BG_MAP_RAM(BACKGROUND_MAP_BASE), splash2_map_bin);
+	
+	// fade in
+	for(int i = 31; i >= 0; i--)
+	{
+		BLEND_Y = i>>1;
+		SUB_BLEND_Y = i>>1;
 		swiWaitForVBlank();
-		lcdMainOnBottom();
-		
-		// main screen
-		videoSetMode(
-			MODE_0_2D |
-			DISPLAY_BG0_ACTIVE);
-		// 128K
-		vramSetBankA(VRAM_A_MAIN_BG);
+	}
+}
+	
+void HideSplashScreen()
+{
+	// fade out
+	BLEND_CR = BLEND_FADE_BLACK | BLEND_SRC_ALL;
+	SUB_BLEND_CR = BLEND_FADE_BLACK | BLEND_SRC_ALL;
+	
+	for(int i = 0; i < 32; i++)
+	{
+		BLEND_Y = i>>1;
+		SUB_BLEND_Y = i>>1;
+		swiWaitForVBlank();
+	}
+}
 
-		// palette
-		Decompress(BG_PALETTE, splash2_pal_bin);
+void InitSettings()
+{		
+	// init fatLib
+	supportsFat = fatInitDefault();
 	
-		// splashscreen
-		BG0_CR =
-			BG_32x32 |
-			BG_TILE_BASE(BACKGROUND_TILE_BASE) |
-			BG_MAP_BASE(BACKGROUND_MAP_BASE) |
-			BG_PRIORITY(BACKGROUND_PRIORITY) |
-			BG_256_COLOR;
-		Decompress((void*)BG_TILE_RAM(BACKGROUND_TILE_BASE), splash2_bin);
-		Decompress((void*)BG_MAP_RAM(BACKGROUND_MAP_BASE), splash2_map_bin);
-		
-		// fade in
-		for(int i = 31; i >= 0; i--)
-		{
-			BLEND_Y = i>>1;
-			SUB_BLEND_Y = i>>1;
-			swiWaitForVBlank();
-		}
-		
-		// load music
-		Sound::InitMusic();
-		Sound::LoadMusic();
-	}
+	if(supportsFat)
+		settings = new FatSettings();
+	else
+		settings = new SramSettings();
 	
-	void Tick() {
-		nextState = mainMenuState;
-	}
-	
-	void Exit() {
-		// fade out
-		BLEND_CR = BLEND_FADE_BLACK | BLEND_SRC_ALL;
-		SUB_BLEND_CR = BLEND_FADE_BLACK | BLEND_SRC_ALL;
-		
-		for(int i = 0; i < 32; i++)
-		{
-			BLEND_Y = i>>1;
-			SUB_BLEND_Y = i>>1;
-			swiWaitForVBlank();
-		}
-		
-		// init fatLib
-		supportsFat = fatInitDefault();
-		
-		if(supportsFat)
-			settings = new FatSettings();
-		else
-			settings = new SramSettings();
-		
-		settings->Load();
-	}
-};
+	settings->Load();
+}
 
 void GetName()
 {
@@ -233,6 +158,9 @@ void VBlankHandler()
 	currentTime++;
 }
 
+// TODO: Move this someplace else
+void InitGui();
+
 int main(void)
 {
 	setExceptionHandler(myExceptionHandler);
@@ -247,47 +175,51 @@ int main(void)
 	InitConsole();
 	Sprite::InitSprites();
 	g_fieldGraphics = new FieldGraphics();
-
-	gui = new FwGui::Driver();
-	int imageSize;
-	u16* image = (u16*)Decompress(menubackground_bin, &imageSize);
-	FwGui::backgroundImage = image;
-	FwGui::selectedColor = FwGui::Color(255, 255, 255);
-	FwGui::labelTextColor = FwGui::Color(0, 0, 0);
-	FwGui::enabledButtonColor = FwGui::Color(0, 0, 0, 190);
-	FwGui::disabledButtonColor = FwGui::Color(171, 171, 171, 190);
-	FwGui::buttonTextColor = FwGui::Color(255, 255, 255);
-	FwGui::enabledEditBoxColor = FwGui::Color(255, 255, 255, 190);
-	TransferSoundData keySound;
-	keySound.data = menu1_bin;
-	keySound.len = menu1_bin_size;
-	keySound.rate = 22050;
-	keySound.vol = 64;
-	keySound.pan = 64;
-	keySound.format = 2;
-	FwGui::keyClickSound = &keySound;
-	
-	TransferSoundData menuSound;
-	menuSound.data = menu2_bin;
-	menuSound.len = menu2_bin_size;
-	menuSound.rate = 22050;
-	menuSound.vol = 64;
-	menuSound.pan = 64;
-	menuSound.format = 2;
-	
-	setupWifiState = new SetupWifiState;
-	splashScreenState = new SplashScreenState;
+	InitGui();
 	InitStates();
 	
 	while(true)
 	{
-		if (StateTick())
-			playSound(&menuSound);
-
-		gui->Tick();
-		Sound::UpdateMusic();
+		StateTick();
 		swiWaitForVBlank();
 	}
 
 	return 0;
 }
+
+void* GetMenuBackground()
+{
+	int imageSize;
+	return Decompress(menubackground_bin, &imageSize);
+}
+
+void* Decompress(const void* source, int* size)
+{
+	u32 header = *(u32*)source;
+	ASSERT((header & 0xFF) == 0x10);
+
+	int uncompressedSize = header >> 8;
+
+	void* temp = malloc(uncompressedSize);
+
+	swiDecompressLZSSWram((void*)source, temp);
+
+	*size = uncompressedSize;
+	return temp;
+}
+
+void Decompress(void* destination, const void* source)
+{
+	u32 header = *(u32*)source;
+	ASSERT((header & 0xFF) == 0x10);
+
+	int uncompressedSize = header >> 8;
+	
+	void* temp = malloc(uncompressedSize);
+
+	swiDecompressLZSSWram((void*)source, temp);
+
+	memcpy(destination, temp, uncompressedSize);
+	free(temp);
+}
+

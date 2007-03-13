@@ -33,7 +33,7 @@ void Sprite::InitSprites()
 /**
  * Return next free sprite, or NULL if no free are available.
  */
-Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, int flip)
+Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, bool flipX, bool flipY)
 {
 	Sprite* sprite = firstFreeSprite;
 
@@ -70,7 +70,10 @@ Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, int flip)
 	}
 
 	sprite->attr0 |= ATTR0_COLOR_256;
-	sprite->attr1 |= flip;
+	if(flipX)
+		sprite->attr1 |= ATTR1_FLIP_X;
+	if(flipY)
+		sprite->attr1 |= ATTR1_FLIP_Y;
 	sprite->attr2 |= ATTR2_PRIORITY(priority);
 
 	sprite->anim = NULL;
