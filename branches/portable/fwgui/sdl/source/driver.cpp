@@ -7,6 +7,7 @@
 #include "gunship_12_bin.h"
 #include "vera_11_bin.h"
 #include "dialog.h"
+#include "theme.h"
 
 #define TOUCH_DELTA 100
 
@@ -115,6 +116,23 @@ namespace FwGui
 
 		if(dialog->NeedsRepaint())
 		{
+			if(backgroundImage == NULL)
+			{
+				SDL_FillRect(
+					surface,
+					NULL,
+					SDL_MapRGB(
+						surface->format,
+						backgroundColor.r,
+						backgroundColor.g,
+						backgroundColor.b));
+			}
+			else
+			{
+				SDL_BlitSurface(
+					(SDL_Surface*)backgroundImage, NULL, surface, NULL);
+			}
+			
 			Graphics* graphics = new Graphics((uint16_t*)surface->pixels, 256, 192);
 			dialog->Paint(graphics);
 			delete graphics;
