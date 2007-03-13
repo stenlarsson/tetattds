@@ -12,7 +12,7 @@ EffCombo::EffCombo(int x, int y, int type)
 
 	XOffset = x;
 	YOffset = y;
-	sign = Sprite::GetSprite(x, y, COMBO_COUNTER_PRIORITY, SSIZE_16x16, 0);
+	sign = Sprite::GetSprite(x, y, COMBO_COUNTER_PRIORITY, SSIZE_16x16, false, false);
 	Anim anim;
 	anim.Init(1, ANIM_STATIC);
 	anim.AddFrame(type, 1);
@@ -24,7 +24,7 @@ EffCombo::EffCombo(int x, int y, int type)
 	anim.AddFrame(TILE_EGG, 1);
 	for(int i = 0; i < COMBO_NUM_EGGS; i++)
 	{
-		eggs[i] = Sprite::GetSprite(x, y, COMBO_EGG_PRIORITY, SSIZE_16x16, 0);
+		eggs[i] = Sprite::GetSprite(x, y, COMBO_EGG_PRIORITY, SSIZE_16x16, false, false);
 		eggs[i]->SetAnim(&anim);
 	}
 	eggRad = COMBO_EGG_RADIUS;

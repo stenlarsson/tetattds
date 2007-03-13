@@ -44,16 +44,16 @@ EffPop::EffPop(int x, int y, int /*strength*/)
 
 	int off = BLOCKSIZE>>1; // Offset
 	
-	spriteA = Sprite::GetSprite(x - off, y - off, 1, SSIZE_16x16, 0);
+	spriteA = Sprite::GetSprite(x - off, y - off, 1, SSIZE_16x16, false, false);
 	spriteA->SetAnim(&anim);
 	
-	spriteB = Sprite::GetSprite(x + off, y - off, 1, SSIZE_16x16, ATTR1_FLIP_X);
+	spriteB = Sprite::GetSprite(x + off, y - off, 1, SSIZE_16x16, true, false);
 	spriteB->SetAnim(&anim);
 
-	spriteC = Sprite::GetSprite(x - off, y + off, 1, SSIZE_16x16, ATTR1_FLIP_Y);
+	spriteC = Sprite::GetSprite(x - off, y + off, 1, SSIZE_16x16, false, true);
 	spriteC->SetAnim(&anim);
 
-	spriteD = Sprite::GetSprite(x + off, y + off, 1, SSIZE_16x16, ATTR1_FLIP_X | ATTR1_FLIP_Y);
+	spriteD = Sprite::GetSprite(x + off, y + off, 1, SSIZE_16x16, true, true);
 	spriteD->SetAnim(&anim);
 
 	mov = 3;

@@ -3,52 +3,68 @@
 #include <stdio.h>
 
 #include <driver.h>
+#include <theme.h>
 
-#include "singlebackground_bin.h"
-#include "singlebackground_map_bin.h"
-#include "singlebackground_pal_bin.h"
+#if 0
+#include "menu1_bin.h"
+#include "menu2_bin.h"
+#endif
 
 #include "game.h"
+#include "wifi.h"
 #include "mainmenudialog.h"
 #include "leveldialog.h"
 #include "wifimenudialog.h"
 #include <textentrydialog.h>
+#include "util.h"
 #include "settings.h"
+#include "sound.h"
 #include "statusdialog.h"
+#include "playfield.h"
 
 #include "serverconnection.h"
 #include "connectionmanager.h"
 #include "state.h"
 
-extern unsigned int currentTime;
+// TODO: Put these prototypes someplace else
+void ShowSplashScreen();
+void HideSplashScreen();
+void InitSettings();
+void SeedRandom();
+void* GetMenuBackground();
 
+static bool hasSetupWifi = false;
 static ConnectionManager* connectionManager = NULL;
 static ServerConnection* connection = NULL;
 
 static int level = 4;
 extern char name[10];
 extern Settings* settings;
-extern FwGui::Driver* gui;
+static FwGui::Driver* gui;
+#if 0
+static TransferSoundData keySound;
+static TransferSoundData menuSound;
+#endif
 
-State* highscoreState;
-State* mainMenuState;
-State* endlessLevelState;
-State* vsSelfLevelState;
-State* endlessGameState;
-State* vsSelfGameState;
-State* wifiState;
-State* wifiHostEntryState;
-extern State* setupWifiState;
-State* wifiMenuState;
-State* wifiLevelState;
-State* wifiChatEntryState;
-State* wifiGameState;
-extern State* splashScreenState;
-State* waitForServerAcceptState;
-State* waitForGameEndState;
+static State* highscoreState;
+static State* mainMenuState;
+static State* endlessLevelState;
+static State* vsSelfLevelState;
+static State* endlessGameState;
+static State* vsSelfGameState;
+static State* wifiState;
+static State* wifiHostEntryState;
+static State* setupWifiState;
+static State* wifiMenuState;
+static State* wifiLevelState;
+static State* wifiChatEntryState;
+static State* wifiGameState;
+static State* splashScreenState;
+static State* waitForServerAcceptState;
+static State* waitForGameEndState;
 
-State* currentState = NULL;
-State* nextState = NULL;
+static State* currentState = NULL;
+static State* nextState = NULL;
 
 class HighscoreState : public State {
 public:
@@ -76,7 +92,6 @@ public:
 	}
 };
 
-
 class MainMenuState : public State {
 public:
 	virtual void Enter() {
@@ -88,9 +103,6 @@ public:
 		FieldGraphics::InitSubScreen(false);
 	}
 	virtual void Tick() {
-		// turn off blending here, because this is after gui has been drawn
-		BLEND_Y = 0;
-		SUB_BLEND_Y = 0;
 
 		switch (dialog->selection) {
 		case MMSEL_NONE:
@@ -115,7 +127,7 @@ public:
 	}
 	virtual void Exit() {
 		// to get a random field every time
-		srand(currentTime);
+		SeedRandom();
 
 		printf("\e[2J");
 
@@ -139,13 +151,6 @@ public:
 	virtual void Tick() {
 		if (dialog->level >= 0) {
 			level = dialog->level;
-			if (connection != NULL) {
-				SetInfoMessage message;
-				message.level = level;
-				message.ready = false;
-				message.typing = false;
-				connection->SendMessage(message);
-			}
 			nextState = acceptState;
 		} else if (dialog->level == -2) {
 			nextState = cancelState;
@@ -222,21 +227,7 @@ public:
 		: TextEntryState("CHAT MESSAGE", wifiMenuState, wifiMenuState) {
 	}
 
-	virtual void Enter() {
-		TextEntryState::Enter();
-		SetInfoMessage message;
-		message.level = level;
-		message.ready = false;
-		message.typing = true;
-		connection->SendMessage(message);
-	}
-
 	virtual void Exit() {
-		SetInfoMessage message;
-		message.level = level;
-		message.ready = false;
-		message.typing = false;
-		connection->SendMessage(message);
 		const char *text = GetText();
 		if(strlen(text) != 0) {
 			ChatMessage message;
@@ -298,7 +289,14 @@ public:
 			break;
 			
 		case WMSEL_MESSAGE:
-			nextState = wifiChatEntryState;
+			{
+				SetInfoMessage message;
+				message.level = level;
+				message.ready = false;
+				message.typing = true;
+				connection->SendMessage(message);		
+				nextState = wifiChatEntryState;
+			}
 			break;
 
 		case WMSEL_QUIT:
@@ -445,6 +443,66 @@ private:
 	State* acceptState;
 };
 
+class SetupWifiState : public State {
+public:
+	SetupWifiState() 
+		: dialog(NULL) {
+	}
+	virtual void Enter() {
+		FieldGraphics::InitSubScreen(true);
+		g_fieldGraphics->ClearChat();
+
+		dialog = new StatusDialog("PLEASE WAIT");
+		gui->SetActiveDialog(dialog);
+		if(hasSetupWifi) {
+			nextState = wifiState;
+			return;
+		}
+		SetupWifi();
+		status = ASSOCSTATUS_DISCONNECTED;
+	}
+	virtual void Tick() {
+		if (dialog->abort) {
+			nextState = mainMenuState;
+			return;
+		}
+		
+		WIFI_ASSOCSTATUS newStatus = (WIFI_ASSOCSTATUS)Wifi_AssocStatus();
+		if(status != newStatus) {
+			status = newStatus;
+			static const char* statusMessages[] = {
+				"Disconnected",
+				"Searching...",
+				"Authenticating...",
+				"Associating...",
+				"Acquiring DHCP...",
+				"Associated",
+				"Cannot connect"
+			};
+			char statusString[1024];
+			sprintf(
+				statusString,
+				"Connecting to Access Point\n%s",
+				(status <= 6) ? statusMessages[status] : "???");
+			dialog->SetStatus(statusString);
+				
+			if(status == ASSOCSTATUS_ASSOCIATED) {
+				hasSetupWifi = true;
+				nextState = wifiState;
+			}
+		}
+	}
+
+	virtual void Exit() {
+		gui->SetActiveDialog(NULL);
+		delete dialog;
+		dialog = NULL;
+	}
+private:
+	StatusDialog* dialog;
+	WIFI_ASSOCSTATUS status;
+};
+
 class WifiState : public State {
 	virtual void Enter() {
 		currentSubState = NULL;
@@ -501,18 +559,64 @@ private:
 	State * currentSubState;
 };
 
+class SplashScreenState : public State {
+public:
+	virtual void Enter() {
+		ShowSplashScreen();
+
+		// load music
+		Sound::InitMusic();
+		Sound::LoadMusic();
+	}
+
+	void Tick() {
+		nextState = mainMenuState;
+	}
+	
+	void Exit() {
+		HideSplashScreen();
+		
+		InitSettings();
+	}
+};
+
 void InitStates()
 {
+	/* Main game state transitions
+	
+	mainMenuState -> select (endlessLevelState, vsSelfLevelState, wifiHostEntryState, highScoreState)
+	endlessLevelState -> choice (endlessGameState, mainMenuState)
+	endlessGameState -> always (mainMenuState)
+	vsSelfLevelState -> choice (vsSelfGameState, mainMenuState)
+	vsSelfGameState -> always (mainMenuState)
+	highScoreState -> always (mainMenuState)
+	wifiHostEntryState -> choice (setupWifiState, mainMenuState)
+	setupWifiState -> choice (wifiState, mainMenuState)
+	wifiState -> always (mainMenuState)
+	*/
+	
+	/* Wifi state transitions
+	
+	waitForServerAcceptState -> always (wifiMenuState)
+	wifiMenuState -> select (wifiGameState, wifiLevelState, wifiChatEntryState)
+	wifiGameState -> always (waitForGameEndState)
+	waitForGameEndState -> always (wifiMenuState)
+	wifiLevelState -> always (wifiMenuState)
+	wifiChatEntryState -> always (wifiMenuState)
+	*/
+
 	highscoreState = new HighscoreState;
 	mainMenuState = new MainMenuState;
 	endlessGameState = new EndlessGameState;
 	vsSelfGameState = new VsSelfGameState;
 	wifiState = new WifiState;
+	setupWifiState = new SetupWifiState;	
 	wifiHostEntryState = new WifiHostEntryState;
 	wifiMenuState = new WifiMenuState;
 	wifiChatEntryState = new WifiChatEntryState;
 	waitForGameEndState = new WaitForServerState(SERVERSTATE_GAME_ENDED, wifiMenuState);
 	wifiGameState = new WifiGameState;
+	splashScreenState = new SplashScreenState;
 	waitForServerAcceptState = new WaitForServerState(SERVERSTATE_ACCEPTED, wifiMenuState);
 	endlessLevelState = new LevelState(endlessGameState, mainMenuState);
 	vsSelfLevelState = new LevelState(vsSelfGameState, mainMenuState);
@@ -522,16 +626,49 @@ void InitStates()
 	currentState->Enter();
 }
 
-bool StateTick()
+void StateTick()
 {
 	currentState->Tick();
 
-	if (nextState == NULL)
-		return false;
+	if (nextState != NULL)
+	{
+		currentState->Exit();
+		currentState = nextState;
+		nextState = NULL;
+		currentState->Enter();
+#if 0
+		playSound(&menuSound);
+#endif
+	}
 
-	currentState->Exit();
-	currentState = nextState;
-	nextState = NULL;
-	currentState->Enter();
-	return true;
+	gui->Tick();
+	Sound::UpdateMusic();
+}
+
+
+void InitGui()
+{
+	gui = new FwGui::Driver();
+	FwGui::backgroundImage = GetMenuBackground();
+	FwGui::selectedColor = FwGui::Color(255, 255, 255);
+	FwGui::labelTextColor = FwGui::Color(0, 0, 0);
+	FwGui::enabledButtonColor = FwGui::Color(0, 0, 0, 190);
+	FwGui::disabledButtonColor = FwGui::Color(171, 171, 171, 190);
+	FwGui::buttonTextColor = FwGui::Color(255, 255, 255);
+	FwGui::enabledEditBoxColor = FwGui::Color(255, 255, 255, 190);
+#if 0
+	keySound.data = menu1_bin;
+	keySound.len = menu1_bin_size;
+	keySound.rate = 22050;
+	keySound.vol = 64;
+	keySound.pan = 64;
+	keySound.format = 2;
+	FwGui::keyClickSound = &keySound;
+	menuSound.data = menu2_bin;
+	menuSound.len = menu2_bin_size;
+	menuSound.rate = 22050;
+	menuSound.vol = 64;
+	menuSound.pan = 64;
+	menuSound.format = 2;
+#endif
 }

@@ -8,12 +8,12 @@ class Marker
 	Marker(bool large) {
 		if(large)
 		{
-			sprite = Sprite::GetSprite(0, 0, MARKER_PRIORITY, SSIZE_32x16, 0);
+			sprite = Sprite::GetSprite(0, 0, MARKER_PRIORITY, SSIZE_32x16, false, false);
 			sprite->SetTile(TILE_LARGE_MARKER);
 		}
 		else
 		{
-			sprite = Sprite::GetSprite(0, 0, MARKER_PRIORITY, SSIZE_16x16, 0);
+			sprite = Sprite::GetSprite(0, 0, MARKER_PRIORITY, SSIZE_16x16, false, false);
 			sprite->SetTile(TILE_SMALL_MARKER);
 		}
 		Hide();

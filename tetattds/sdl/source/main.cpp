@@ -1,0 +1,169 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <SDL.h>
+#include <driver.h>
+#include <textentrydialog.h>
+
+#include "tetattds.h"
+
+#include <stdio.h>
+
+#include "fieldgraphics.h"
+#include "util.h"
+#include "settings.h"
+#include "statusdialog.h"
+#include "state.h"
+
+char name[10];
+Settings* settings = NULL;
+uint32_t heldKeys, downKeys, upKeys;
+
+
+void SeedRandom()
+{
+	srand(SDL_GetTicks());
+}
+
+void ShowSplashScreen()
+{
+	// No splash screen for now...
+}
+	
+void HideSplashScreen()
+{
+	// No splash screen for now...
+}
+
+void InitSettings()
+{		
+	settings = new FatSettings();
+	settings->Load();
+}
+
+void GetName()
+{
+	const char * user = getenv("USER");
+	strlcpy(name, user ? user : "anonymous", sizeof(name));
+}
+
+// TODO: Move this someplace else
+void InitGui();
+
+SDL_Surface
+  *menubackground = NULL,
+	*background = NULL,
+	*singlebackground = NULL,
+	*splash2 = NULL,
+	*wifibackground = NULL,
+	*sprites = NULL,
+	*font = NULL,
+	*smalltiles = NULL;
+
+#define LOAD_IMAGE(name, kind) \
+	name = SDL_LoadBMP("images/" #kind "/" #name ".bmp"); \
+	if (name == NULL) { \
+		fprintf(stderr, "Failed to load %s-image %s\n", #kind, #name); \
+		return EXIT_FAILURE; \
+	}
+		
+	
+
+int main(int,char **)
+{
+	if(SDL_Init(SDL_INIT_VIDEO) == -1) {
+		fprintf(stderr, "Unable to init SDL: %s\n", SDL_GetError());
+		return EXIT_FAILURE;
+	}
+
+	SDL_Surface* surface = SDL_SetVideoMode(
+		256, //int width
+		192, //int height
+		0,   //int bitsperpixel
+		0);  //Uint32 flags
+	if(surface == NULL) {
+		fprintf(stderr, "Failed to set SDL video mode: %s\n", SDL_GetError());
+		return EXIT_FAILURE;
+	}
+
+	LOAD_IMAGE(menubackground,   bg);
+	LOAD_IMAGE(background,       bg_tile);
+	LOAD_IMAGE(singlebackground, bg_tile);
+	LOAD_IMAGE(splash2,          bg_tile);
+	LOAD_IMAGE(wifibackground,   bg_tile);
+	LOAD_IMAGE(sprites,          tile16);
+	LOAD_IMAGE(font,             tile8);
+	LOAD_IMAGE(smalltiles,       tile8);
+	
+	SDL_SetColorKey(sprites, SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+	SDL_SetColorKey(font, SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+	SDL_SetColorKey(smalltiles, SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+	
+	GetName();
+	
+	Sprite::InitSprites();
+	g_fieldGraphics = new FieldGraphics();
+	InitGui();
+	InitStates();
+	
+	while(true)
+	{
+		uint32_t ticks = SDL_GetTicks();
+		StateTick();
+		SDL_Flip(surface);
+		SDL_Event event;
+		while(SDL_PollEvent(&event))
+		{
+			if (event.type == SDL_QUIT)
+			{
+				SDL_Quit();
+
+				return EXIT_SUCCESS;				
+			}
+		}
+		// Emulate swiWaitForVBlank...
+		SDL_Delay(16 - (SDL_GetTicks() - ticks) % 16);
+	}
+}
+
+void scanKeys()
+{
+	SDL_PumpEvents();
+
+	uint32_t oldHeld = heldKeys;
+	heldKeys = 0;
+	uint8_t *keys = SDL_GetKeyState(NULL);
+
+#define KEYMAP(sdl,nds) if (keys[SDLK_ ## sdl]) heldKeys |= KEY_ ## nds;
+	KEYMAP(SPACE, A);
+	KEYMAP(BACKSPACE, B);
+	KEYMAP(RETURN, START);
+	KEYMAP(UP, UP);
+	KEYMAP(DOWN, DOWN);
+	KEYMAP(LEFT, LEFT);
+	KEYMAP(RIGHT, RIGHT);
+	KEYMAP(TAB,X);
+	KEYMAP(ESCAPE,Y);
+	KEYMAP(LSHIFT,L);
+	KEYMAP(RSHIFT,R);
+	
+	// Missing a lot of keys
+#undef KEYMAP
+	if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1))
+		heldKeys |= KEY_TOUCH;
+
+	upKeys = oldHeld & ~heldKeys;
+	downKeys = heldKeys & ~oldHeld;
+}
+
+touchPosition touchReadXY()
+{
+	touchPosition pos;
+	SDL_GetMouseState(&pos.px, &pos.py);
+	return pos;
+}
+
+void* GetMenuBackground()
+{
+	return menubackground;
+}
+
