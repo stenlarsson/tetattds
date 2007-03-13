@@ -4,7 +4,7 @@
 namespace FwGui
 {
 	extern Color backgroundColor;
-	extern uint16_t* backgroundImage;
+	extern void* backgroundImage;
 	extern Color titleBackgroundColor;
 	extern Color titleTextColor;
 	extern Color enabledButtonColor;

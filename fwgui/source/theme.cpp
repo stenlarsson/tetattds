@@ -4,7 +4,7 @@
 namespace FwGui
 {
 	Color backgroundColor = Color(255, 255, 255);
-	uint16_t* backgroundImage = NULL;
+	void* backgroundImage = NULL;
 	Color titleBackgroundColor = Color(0, 0, 0);
 	Color titleTextColor = Color(255, 255, 255);
 	Color enabledButtonColor = Color(33, 171, 243);

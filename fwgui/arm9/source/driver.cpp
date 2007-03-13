@@ -7,6 +7,7 @@
 #include "gunship_12_bin.h"
 #include "vera_11_bin.h"
 #include "dialog.h"
+#include "theme.h"
 
 #define TOUCH_DELTA 100
 
@@ -120,13 +121,26 @@ namespace FwGui
 		{
 			u16* doublebuffer = new u16[256*192];
 			Graphics* graphics = new Graphics(doublebuffer, 256, 192);
+			if(backgroundImage == NULL)
+			{
+				graphics->SetFillColor(backgroundColor);
+				graphics->FillRect(0, 0, 256, 192);
+			}
+			else
+			{
+				graphics->Blit(0, 0, 256, 192, (u16*)backgroundImage);
+			}
 			dialog->Paint(graphics);
+			if(needGraphicsInit)
+			{
+				InitGraphics();
+			}
+			memcpy(framebuffer, doublebuffer, 256*192*2);
 			if(needGraphicsInit)
 			{
 				InitGraphics();
 				needGraphicsInit = false;
 			}
-			memcpy(framebuffer, doublebuffer, 256*192*2);
 			delete graphics;
 			delete doublebuffer;
 			dialog->SetRepaint(false);
@@ -146,6 +160,7 @@ namespace FwGui
 		BG3_YDY = 1<<8;
 		BG3_CY = 0;
 		BG3_CX = 0;
-	
+		BLEND_Y = 0;
+		SUB_BLEND_Y = 0;
 	}
 }

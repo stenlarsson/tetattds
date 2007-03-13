@@ -26,16 +26,6 @@ namespace FwGui
 	
 	void Dialog::Paint(Graphics* graphics)
 	{
-		if(backgroundImage == NULL)
-		{
-			graphics->SetFillColor(backgroundColor);
-			graphics->FillRect(0, 0, 256, 192);
-		}
-		else
-		{
-			graphics->Blit(0, 0, 256, 192, backgroundImage);
-		}
-	
 		graphics->SetFillColor(titleBackgroundColor);
 		graphics->FillRect(0, 0, 256, 24);
 		graphics->SetFont(Font::GUNSHIP_12);
