@@ -2,7 +2,7 @@
 
 class Chain;
 
-//#include <mikmod.h>
+#include <mikmod.h>
 struct MODULE;
 
 class Sound
