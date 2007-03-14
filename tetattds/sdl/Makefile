@@ -40,6 +40,7 @@ export PATH := $(CURDIR)/../../tools:$(CURDIR)/../../fwgui/tools:$(PATH)
 CXXFLAGS := $(INCLUDE) -g -Wall -Werror \
 	-DVERSION_STRING="\"$(VERSION_STRING)\"" -DABOUT_STRING="\"$(ABOUT_STRING)\""
 CXXFLAGS += $(shell sdl-config --cflags)
+CXXFLAGS += $(shell libmikmod-config --cflags)
 
 ifneq (,$(findstring CYGWIN,$(shell uname)))
 CXXFLAGS += -mno-cygwin
@@ -47,6 +48,7 @@ endif
 
 LDFLAGS  := -g
 LDFLAGS  += $(shell sdl-config --libs)
+LDFLAGS  += $(shell libmikmod-config --libs)
 
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project

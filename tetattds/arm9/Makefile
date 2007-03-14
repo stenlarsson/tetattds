@@ -20,7 +20,7 @@ INCLUDES	:=	../network/include ../source source
 DATA		:=  data
 IMAGES      :=  ../images
 MUSIC       :=  ../music
-SOUND       :=  ../sound
+SOUND       :=  ../sound/compressed
 
 # applications
 PIMPMYBMP   :=  pimpmybmp
