@@ -20,6 +20,7 @@ public:
 	virtual ~ServerConnection();
 
 	ServerState GetState() { return state; }
+	inline bool IsState(ServerState const & s) { return state == s; }
 	PlayerInfo* GetPlayerInfo(int playerNum)
 	{
 		ASSERT(playerNum >= 0);

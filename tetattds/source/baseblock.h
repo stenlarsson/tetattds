@@ -42,6 +42,7 @@ class BaseBlock
 	virtual void Tick() = 0;
 	virtual enum BlockType GetType() { return type; }
 	virtual enum BlockState GetState() { return state; }
+	inline bool IsState(enum BlockState const & s) { return GetState() == s; } 
 
 	virtual void Drop();
 	virtual void Land();

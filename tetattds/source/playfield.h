@@ -49,6 +49,7 @@ class PlayField
 	int GetFieldY(int i) { return fieldY[i]; }
 	BaseBlock* GetField(int i) { return field[i]; }
 	PFState GetState() { return state; }
+	bool IsState(PFState const & s) { return state == s; }
 	void SetState(PFState state) { this->state = state; }
 
 	void AddGarbage(int num, int player, GarbageType type) { gh->AddGarbage(num, player, type); }
