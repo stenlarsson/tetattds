@@ -265,7 +265,7 @@ public:
 		SetInfoMessage message;
 		switch(dialog->selection) {
 		case WMSEL_NONE:
-			if(connection->GetState() == SERVERSTATE_GAME_STARTED) {
+			if(connection->IsState(SERVERSTATE_GAME_STARTED)) {
 				nextState = wifiGameState;
 			}
 			break;
@@ -336,7 +336,7 @@ public:
 		
 		g_game->Draw();
 
-		if(g_game->field->GetState() == PFS_DEAD)
+		if(g_game->field->IsState(PFS_DEAD))
 		{
 			gameEndTimer--;
 			if(gameEndTimer == 0)
@@ -400,7 +400,7 @@ public:
 	virtual void Tick() {
 		GameState::Tick();
 		
-		if(connection->GetState() == SERVERSTATE_GAME_ENDED)
+		if(connection->IsState(SERVERSTATE_GAME_ENDED))
 		{
 			g_game->field->SetState(PFS_DEAD);
 		}
@@ -431,7 +431,7 @@ public:
 			connection->Shutdown();
 		}
 		
-		if(connection->GetState() == desiredState) {
+		if(connection->IsState(desiredState)) {
 			nextState = acceptState;
 		}
 	}
@@ -537,7 +537,7 @@ class WifiState : public State {
 			currentSubState->Enter();
 		}
 		
-		if (connection->GetState() == SERVERSTATE_DISCONNECTED) {
+		if (connection->IsState(SERVERSTATE_DISCONNECTED)) {
 			nextState = mainMenuState;
 			return;
 		}

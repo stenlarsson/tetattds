@@ -222,7 +222,7 @@ void Game::Draw()
 
 void Game::AddGarbage(int num, int player, GarbageType type)
 {
-	if(field->GetState() == PFS_PLAY)
+	if(field->IsState(PFS_PLAY))
 		field->AddGarbage(num, player, type);
 }
 

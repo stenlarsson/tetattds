@@ -46,7 +46,7 @@ static inline bool IsGarbage(BaseBlock *b)
 }
 static inline bool IsOfState(BaseBlock *b, BlockState s)
 {
-	return b != NULL && b->GetState() == s;
+	return b != NULL && b->IsState(s);
 }
 static inline bool IsHoverOrMove(BaseBlock *b)
 {
@@ -475,7 +475,7 @@ void PlayField::DropBlocks()
 		if(field[i] == NULL)
 			continue;//if there's no block, continue
 
-		if(field[i]->GetState() == BST_POSTMOVE)
+		if(field[i]->IsState(BST_POSTMOVE))
 		{//if this block just has finished moving
 			if(field[Below(i)] == NULL)//if there's no block below
 			{
@@ -507,13 +507,13 @@ void PlayField::DropBlocks()
 		}//end of BST_POSTMOVE actions
 
 		//if it's an idle block (that's not on the bottom row)
-		if(i < PF_FIRST_BLOCK_SECOND_LAST_ROW && field[i]->GetState() == BST_IDLE)
+		if(i < PF_FIRST_BLOCK_SECOND_LAST_ROW && field[i]->IsState(BST_IDLE))
 		{
 			if(field[Below(i)] == NULL)
 			{//and there's no block below
 				field[i]->Drop();	//we drop the block
 			}
-			else if(field[Below(i)]->GetState() == BST_FALLING)
+			else if(field[Below(i)]->IsState(BST_FALLING))
 			{//or if the block below is falling
 				field[i]->Drop();	//drop this and
 				//set chain to same as the falling block
@@ -525,7 +525,7 @@ void PlayField::DropBlocks()
 		}//end of BST_IDLE actions
 
 		//if it's a falling block
-		if(field[i]->GetState() == BST_FALLING)
+		if(field[i]->IsState(BST_FALLING))
 		{
 			if(IsHoverOrMove(field[Below(i)]))
 			{
@@ -536,7 +536,7 @@ void PlayField::DropBlocks()
 				continue;
 									
 			}
-			else if(field[Below(i)] != NULL && field[Below(i)]->GetState() != BST_FALLING)
+			else if(field[Below(i)] != NULL && !field[Below(i)]->IsState(BST_FALLING))
 			{//else, if it's not falling, we should land here
 			 //(meaning, we land on idle and popping blocks)
 				field[i]->Land();
@@ -544,7 +544,7 @@ void PlayField::DropBlocks()
 			}
 			if(i >= PF_WIDTH && field[Above(i)] != NULL)//if there's a block above
 			{
-				if(field[Above(i)]->GetState() == BST_HOVER || field[Above(i)]->GetState() == BST_IDLE)
+				if(field[Above(i)]->IsState(BST_HOVER) || field[Above(i)]->IsState(BST_IDLE))
 				{ //and it's hovering or idle
 					field[Above(i)]->Drop();	//we drop it
 										// This happens when a stack of blocks 'landed'
@@ -576,7 +576,7 @@ void PlayField::DropBlocks()
 			continue;//if there's no block, continue
 
 		//if it's a falling block
-		if(field[i]->GetState() == BST_FALLING)
+		if(field[i]->IsState(BST_FALLING))
 		{
 			if(field[i]->CheckDrop())	//if it's time to really drop the block
 			{
@@ -624,13 +624,13 @@ void PlayField::CheckForPops()
 		if(field[i] == NULL)//skip if there's no block
 			continue;
 
-		if(field[i]->GetState() != BST_FALLING)// no falling blocks please
+		if(!field[i]->IsState(BST_FALLING))// no falling blocks please
 			if(fieldHeight[i%PF_WIDTH] == -1)//if we haven't already found one in the same column
 				fieldHeight[i%PF_WIDTH] = PF_HEIGHT - i / PF_WIDTH - 1;//set height
 
 		if(IsGarbage(field[i]))//and we don't really want to pop garbage like this =)
 		{
-			if(field[i]->GetState() == BST_POP2)//but we want to check if we need to 'pop' it
+			if(field[i]->IsState(BST_POP2))//but we want to check if we need to 'pop' it
 			{
 				if(i/PF_WIDTH >= PF_FIRST_VISIBLE_ROW)// only if it's onscreen
 					effects->Add(new EffPop(fieldX[i], fieldY[i]+(int)scrollOffset, 0));
@@ -642,7 +642,7 @@ void PlayField::CheckForPops()
 		if(!field[i]->NeedPopCheck())//and if the block doesn't need a check
 		{
 			//maybe this part shouldn't be here?
-			if(field[i]->GetState() == BST_POP2)//check if it's popping and we should insert gfx
+			if(field[i]->IsState(BST_POP2))//check if it's popping and we should insert gfx
 			{
 				score += 10;  //add score
 				if(i/PF_WIDTH >= PF_FIRST_VISIBLE_ROW)// only if it's onscreen
@@ -660,7 +660,7 @@ void PlayField::CheckForPops()
 				break;//break if there's no block
 			if(field[Above(check)]->GetType() != field[i]->GetType())
 				break;//or if it's not of the same type
-			if(field[Above(check)]->GetState() != BST_IDLE && field[Above(check)]->GetState() != BST_HOVER)
+			if(!field[Above(check)]->IsState(BST_IDLE) && !field[Above(check)]->IsState(BST_HOVER))
 				break;//or if it's not idle or hovering
 		}
 
@@ -678,7 +678,7 @@ void PlayField::CheckForPops()
 				break;//break if there's no block
 			if(field[Below(check)]->GetType() != field[i]->GetType())
 				break;//or if it's not the same type
-			if(field[Below(check)]->GetState() != BST_IDLE && field[Below(check)]->GetState() != BST_HOVER)
+			if(!field[Below(check)]->IsState(BST_IDLE) && !field[Below(check)]->IsState(BST_HOVER))
 				break;//or if it's not idle or hovering
 			num++;//increase number of blocks
 		}
@@ -709,7 +709,7 @@ void PlayField::CheckForPops()
 				break;//break if there's no block
 			if(field[LeftOf(check)]->GetType() != field[i]->GetType())
 				break;//break if it's not the same
-			if(field[LeftOf(check)]->GetState() != BST_IDLE && field[LeftOf(check)]->GetState() != BST_HOVER)
+			if(!field[LeftOf(check)]->IsState(BST_IDLE) && !field[LeftOf(check)]->IsState(BST_HOVER))
 				break;//break if it's not idle or hovering
 		}
 
@@ -728,7 +728,7 @@ void PlayField::CheckForPops()
 				break;//break if there's no block
 			if(field[RightOf(check)]->GetType() != field[i]->GetType())
 				break;//break if it's not the same
-			if(field[RightOf(check)]->GetState() != BST_IDLE && field[RightOf(check)]->GetState() != BST_HOVER)
+			if(!field[RightOf(check)]->IsState(BST_IDLE) && !field[RightOf(check)]->IsState(BST_HOVER))
 				break;//break if it's not idle or hovering
 			num++;//and increase number of blocks
 		}
@@ -752,7 +752,7 @@ void PlayField::CheckForPops()
 		}
 
 		field[i]->PopCheck();//flag current block as checked
-		if(bClearChain && field[i]->GetState() != BST_HOVER)//if nothing happened to the block and it's not hovering
+		if(bClearChain && !field[i]->IsState(BST_HOVER))//if nothing happened to the block and it's not hovering
 			field[i]->SetChain(NULL);//clear the chain
 	}
 
@@ -772,7 +772,7 @@ void PlayField::CheckForPops()
 					continue;
 				if(!IsGarbage(field[i]))
 					continue;
-				if(field[i]->GetState() != BST_IDLE)
+				if(!field[i]->IsState(BST_IDLE))
 					continue;
 				if(field[i]->IsPopped())
 					continue;
@@ -858,7 +858,7 @@ void PlayField::ClearDeadBlocks()
 		if(field[i] == NULL)
 			continue;//break if empty
 
-		if(field[i]->GetState() == BST_DEAD)
+		if(field[i]->IsState(BST_DEAD))
 		{//if block is dead
 			if(!IsGarbage(field[i]))//if it's an ordinary block
 			{
@@ -869,10 +869,10 @@ void PlayField::ClearDeadBlocks()
 				{//loop through upwards
 					if(field[y] != NULL)//if there's a block
 					{
-						if(!IsGarbage(field[y]) && (field[y]->GetState() == BST_IDLE || IsHoverOrMove(field[y])))
+						if(!IsGarbage(field[y]) && (field[y]->IsState(BST_IDLE) || IsHoverOrMove(field[y])))
 						{//and if it's idle, moving or hovering, and not a garbage block
 							field[y]->SetChain(tChain);//set chain
-							if(field[y]->GetState() == BST_IDLE)
+							if(field[y]->IsState(BST_IDLE))
 								field[y]->Drop();//and drop it if it's idle
 						}
 						else
@@ -903,7 +903,7 @@ bool PlayField::ShouldScroll()
 		if(field[i] == NULL)
 			continue;
 
-		if(field[i]->GetState() != BST_IDLE)
+		if(!field[i]->IsState(BST_IDLE))
 		{
 			bFastScroll = false;
 			return false;
