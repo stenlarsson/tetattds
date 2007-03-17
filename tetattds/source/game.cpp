@@ -45,21 +45,22 @@ const LevelData* Game::GetLevelData()
 Game::Game(int level,
 		bool sendToSelf,
 		ServerConnection* connection)
-:	connection(connection),
+:	paused(false),
+	field(new PlayField(g_fieldGraphics->GetEffectHandler())),
+	connection(connection),
+	running(false),
+	touchedArea(0),
 	level(level),
-	sendToSelf(sendToSelf)
+	sendToSelf(sendToSelf),
+	scrollSpeed(levelData[level].scrollSpeed),
+	col(0),
+	row(0)
 {
-	field = NULL;
-	scanKeys();
+	for(int i = 0; i < FWGUI_NUM_KEYS; i++) {
+		heldKeys[i] = false;
+	}
 
-	touchedArea = 0;
-	lastX = INT_MAX;
-	lastY = INT_MAX;
-
-	field = new PlayField(g_fieldGraphics->GetEffectHandler());
 	field->Init(88, 0);
-	scrollSpeed = levelData[level].scrollSpeed;
-	paused = false;
 }
 
 Game::~Game()
@@ -73,16 +74,12 @@ void Game::Start()
 	field->Start();
 }
 
-void Game::HandleInput()
+void Game::KeyDown(FwGui::Key key)
 {
-	static int upDownTime = KEY_HOLD_DELAY;	// keeps track of when to autopress keys while holding
-	static int leftRightTime = KEY_HOLD_DELAY;
-	bool bUpDownHeld = false;					// any key held this frame i wonder?
-	bool bLeftRightHeld = false;
-	
-	scanKeys();
+	heldKeys[key] = true;
+	heldKeysDelay[key] = KEY_HOLD_DELAY;
 
-	if(keysDown() & KEY_START)
+	if(key == FwGui::FWKEY_START)
 	{
 		if(connection == NULL)
 			paused = !paused;
@@ -90,127 +87,112 @@ void Game::HandleInput()
 
 	if(!paused)
 	{
-		if(keysDown() & KEY_UP)
-		{
+		switch(key) {
+		case FwGui::FWKEY_UP:
 			field->KeyInput(INPUT_UP);
-		}
-		if(keysHeld() & KEY_UP)
-		{
-			bUpDownHeld = true;
-			if(--upDownTime < 0)
-			{
-				field->KeyInput(INPUT_UP);
-				upDownTime = KEY_REPEAT_DELAY;
-			}
-		}
-	
-		if(keysDown() & KEY_LEFT)
-		{
-			field->KeyInput(INPUT_LEFT);
-		}
-		if(keysHeld() & KEY_LEFT)
-		{
-			bLeftRightHeld = true;
-			if(--leftRightTime < 0)
-			{
-				field->KeyInput(INPUT_LEFT);
-				leftRightTime = KEY_REPEAT_DELAY;
-			}
-		}
-	
-		if(keysDown() & KEY_RIGHT)
-		{
-			field->KeyInput(INPUT_RIGHT);
-		}
-		if(keysHeld() & KEY_RIGHT)
-		{
-			bLeftRightHeld = true;
-			if(--leftRightTime < 0)
-			{
-				field->KeyInput(INPUT_RIGHT);
-				leftRightTime = KEY_REPEAT_DELAY;
-			}
-		}
-	
-		if(keysDown() & KEY_DOWN)
-		{
-			field->KeyInput(INPUT_DOWN);
-		}
-		if(keysHeld() & KEY_DOWN)
-		{
-			bUpDownHeld = true;
-			if(--upDownTime < 0)
-			{
-				field->KeyInput(INPUT_DOWN);
-				upDownTime = KEY_REPEAT_DELAY;
-			}
-		}
-	
-		if(keysDown() & (KEY_A | KEY_B | KEY_X | KEY_Y))
-		{
-			field->KeyInput(INPUT_SWAP);
-		}
-	
-		if(keysHeld() & (KEY_L | KEY_R))
-		{
-			field->KeyInput(INPUT_RAISE);
-		}
+			break;
 
-		if(keysHeld() & KEY_TOUCH)
-		{
-			touchPosition touchXY = touchReadXY();
-			int x = touchXY.px;
-			int y = touchXY.py;
-			int dx = x - lastX;
-			int dy = y - lastY;
-			lastX = x;
-			lastY = y;
-	
-			if(dx*dx + dy*dy < TOUCH_DELTA)
-			{
-				if (touchedArea != 2 &&
-					x >= 206 && x <= 247 &&
-					y >= 142 && y <= 183)
-				{
-					field->KeyInput(INPUT_RAISE);
-					touchedArea = 1;
-				}
-				else if (touchedArea != 1)
-				{
-					int col, row;
-					field->PixelsToColRow(x, y, col, row);
-					if(touchedArea == 0)
-					{
-						field->TouchDown(col, row);
-						touchedArea = 2;
-					}
-					else
-					{
-						field->TouchHeld(col, row);
-					}
-				}
-			}
-		}
-		else if(keysUp() & KEY_TOUCH)
-		{
-			field->TouchUp();
-			touchedArea = 0;
-			lastX = INT_MAX;
-			lastY = INT_MAX;
+		case FwGui::FWKEY_DOWN:
+			field->KeyInput(INPUT_DOWN);
+			break;
+
+		case FwGui::FWKEY_LEFT:
+			field->KeyInput(INPUT_LEFT);
+			break;
+
+		case FwGui::FWKEY_RIGHT:
+			field->KeyInput(INPUT_RIGHT);
+			break;
+
+		case FwGui::FWKEY_A:
+		case FwGui::FWKEY_B:
+		case FwGui::FWKEY_X:
+		case FwGui::FWKEY_Y:
+			field->KeyInput(INPUT_SWAP);
+			break;
+		default:
+			break;
 		}
 	}
-	
-	if(!bUpDownHeld)	// No key held?
-		upDownTime = KEY_HOLD_DELAY;	// Reset delay
-	if(!bLeftRightHeld)
-		leftRightTime = KEY_HOLD_DELAY;
+}
+
+void Game::KeyUp(FwGui::Key key)
+{
+	heldKeys[key] = false;
+}
+
+void Game::TouchDown(int x, int y)
+{
+	heldKeys[FwGui::FWKEY_TOUCH] = true;
+
+	if (touchedArea != 2 &&
+		x >= 206 && x <= 247 &&
+		y >= 142 && y <= 183)
+	{
+		field->KeyInput(INPUT_RAISE);
+		touchedArea = 1;
+	}
+	else if (touchedArea != 1)
+	{
+		field->PixelsToColRow(x, y, col, row);
+		if(touchedArea == 0)
+		{
+			field->TouchDown(col, row);
+			touchedArea = 2;
+		}
+	}
+}
+
+void Game::TouchDrag(int x, int y)
+{
+	if(touchedArea == 2) {
+		field->PixelsToColRow(x, y, col, row);
+	}
+}
+void Game::TouchUp(int x, int y)
+{
+	heldKeys[FwGui::FWKEY_TOUCH] = false;
+	field->TouchUp();
+	touchedArea = 0;
 }
 
 void Game::Tick()
 {
 	if(scrollSpeed < MAX_SCROLL_SPEED)
 		scrollSpeed *= SCROLL_SPEED_INCREASE;
-	
+
+	if(heldKeys[FwGui::FWKEY_UP] && --heldKeysDelay[FwGui::FWKEY_UP] < 0)
+	{
+		field->KeyInput(INPUT_UP);
+		heldKeysDelay[FwGui::FWKEY_UP] = KEY_REPEAT_DELAY;
+	}
+	if(heldKeys[FwGui::FWKEY_DOWN] && --heldKeysDelay[FwGui::FWKEY_DOWN] < 0)
+	{
+		field->KeyInput(INPUT_DOWN);
+		heldKeysDelay[FwGui::FWKEY_DOWN] = KEY_REPEAT_DELAY;
+	}
+	if(heldKeys[FwGui::FWKEY_LEFT] && --heldKeysDelay[FwGui::FWKEY_LEFT] < 0)
+	{
+		field->KeyInput(INPUT_LEFT);
+		heldKeysDelay[FwGui::FWKEY_LEFT] = KEY_REPEAT_DELAY;
+	}
+	if(heldKeys[FwGui::FWKEY_RIGHT] && --heldKeysDelay[FwGui::FWKEY_RIGHT] < 0)
+	{
+		field->KeyInput(INPUT_RIGHT);
+		heldKeysDelay[FwGui::FWKEY_RIGHT] = KEY_REPEAT_DELAY;
+	}
+	if(heldKeys[FwGui::FWKEY_L] || heldKeys[FwGui::FWKEY_R])
+	{
+		field->KeyInput(INPUT_RAISE);
+	}
+	if(heldKeys[FwGui::FWKEY_TOUCH])
+	{
+		if(touchedArea == 1)
+			field->KeyInput(INPUT_RAISE);
+		else
+			field->TouchHeld(col, row);
+	}
+
 	DEBUGVERBOSE("Game: field->Tick\n");
 	field->Tick();
 }

@@ -10,7 +10,7 @@ StatusDialog::StatusDialog(const char* title)
 	abort(false)
 {
 	closeButton = new ImageButton(232, 0, STDIMG_CLOSE);
-	AddControl(closeButton, KEY_B);
+	AddControl(closeButton, FWKEY_B);
 	statusLabel = new Label(5, 79, 246, 32, "");
 	AddControl(statusLabel);
 }

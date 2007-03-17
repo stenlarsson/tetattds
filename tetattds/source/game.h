@@ -3,6 +3,7 @@
 #include "sprite.h"
 #include "baseblock.h"
 #include "garbage.h"
+#include <inputlistener.h>
 
 class PlayField;
 class ServerConnection;
@@ -18,7 +19,7 @@ struct LevelData
 	int effComboDuration;
 };
 
-class Game
+class Game : public FwGui::InputListener
 {
 public:
 	Game(
@@ -44,7 +45,11 @@ public:
 	PlayField* field;
 
 	void Start();
-	void HandleInput();
+	virtual void KeyDown(FwGui::Key key);
+	virtual void KeyUp(FwGui::Key key);
+	virtual void TouchDown(int x, int y);
+	virtual void TouchUp(int x, int y);
+	virtual void TouchDrag(int x, int y);
 	void Tick();
 	void Draw();
 	void SendFieldState();
@@ -52,12 +57,14 @@ public:
 private:
 	ServerConnection* connection;
 	bool running;
-	int lastX;
-	int lastY;
 	int touchedArea;
 	int level;
 	bool sendToSelf;
 	double scrollSpeed;
+	bool heldKeys[FWGUI_NUM_KEYS];
+	int heldKeysDelay[FWGUI_NUM_KEYS];
+	int col;
+	int row;
 };
 
 extern Game* g_game;

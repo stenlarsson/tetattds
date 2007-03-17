@@ -58,7 +58,7 @@ void EffPop::Tick()
 	spriteC->Move(-mov, mov);
 	spriteD->Move(mov, mov);
 	if(mov > 0)
-		if(duration & BIT(0))
+		if(duration & 1)
 			mov--;
 	duration--;
 }

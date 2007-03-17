@@ -1,5 +1,7 @@
 #include <stdio.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 #include <SDL.h>
 #include <driver.h>
 #include <textentrydialog.h>
@@ -43,7 +45,7 @@ void InitSettings()
 void GetName()
 {
 	const char * user = getenv("USER");
-	strlcpy(name, user ? user : "anonymous", sizeof(name));
+	strncpy(name, user ? user : "anonymous", sizeof(name));
 }
 
 // TODO: Move this someplace else
@@ -74,6 +76,8 @@ int main(int,char **)
 		fprintf(stderr, "Unable to init SDL: %s\n", SDL_GetError());
 		return EXIT_FAILURE;
 	}
+
+	SDL_WM_SetCaption(VERSION_STRING, VERSION_STRING);
 
 	SDL_Surface* surface = SDL_SetVideoMode(
 		256, //int width
@@ -108,58 +112,16 @@ int main(int,char **)
 	while(true)
 	{
 		uint32_t ticks = SDL_GetTicks();
-		StateTick();
-		SDL_Flip(surface);
-		SDL_Event event;
-		while(SDL_PollEvent(&event))
-		{
-			if (event.type == SDL_QUIT)
-			{
-				SDL_Quit();
-
-				return EXIT_SUCCESS;				
-			}
+		if(!StateTick()) {
+			break;
 		}
+		SDL_Flip(surface);
 		// Emulate swiWaitForVBlank...
 		SDL_Delay(16 - (SDL_GetTicks() - ticks) % 16);
 	}
-}
 
-void scanKeys()
-{
-	SDL_PumpEvents();
-
-	uint32_t oldHeld = heldKeys;
-	heldKeys = 0;
-	uint8_t *keys = SDL_GetKeyState(NULL);
-
-#define KEYMAP(sdl,nds) if (keys[SDLK_ ## sdl]) heldKeys |= KEY_ ## nds;
-	KEYMAP(SPACE, A);
-	KEYMAP(BACKSPACE, B);
-	KEYMAP(RETURN, START);
-	KEYMAP(UP, UP);
-	KEYMAP(DOWN, DOWN);
-	KEYMAP(LEFT, LEFT);
-	KEYMAP(RIGHT, RIGHT);
-	KEYMAP(TAB,X);
-	KEYMAP(ESCAPE,Y);
-	KEYMAP(LSHIFT,L);
-	KEYMAP(RSHIFT,R);
-	
-	// Missing a lot of keys
-#undef KEYMAP
-	if(SDL_GetMouseState(NULL, NULL)&SDL_BUTTON(1))
-		heldKeys |= KEY_TOUCH;
-
-	upKeys = oldHeld & ~heldKeys;
-	downKeys = heldKeys & ~oldHeld;
-}
-
-touchPosition touchReadXY()
-{
-	touchPosition pos;
-	SDL_GetMouseState(&pos.px, &pos.py);
-	return pos;
+	SDL_Quit();
+	return EXIT_SUCCESS;
 }
 
 void* GetMenuBackground()

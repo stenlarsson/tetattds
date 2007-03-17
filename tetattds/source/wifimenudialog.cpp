@@ -18,7 +18,7 @@ WifiMenuDialog::WifiMenuDialog()
 	sendMessageButton = new Button(27, 124, 200, 24, "Send chat message");
 	AddControl(sendMessageButton);
 	closeButton = new ImageButton(232, 0, STDIMG_CLOSE);
-	AddControl(closeButton, KEY_B);
+	AddControl(closeButton, FWKEY_B);
 	infoLabel = new Label(27, 43, 200, 24, "");
 	AddControl(infoLabel);
 }

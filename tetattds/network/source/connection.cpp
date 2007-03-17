@@ -1,5 +1,9 @@
 #include "network.h"
 #include "connection.h"
+#ifdef _WIN32
+// SDL.h can be used instead of stdint.h
+#include <SDL.h>
+#endif
 
 #ifndef ARM9
 #include <time.h>
