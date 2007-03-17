@@ -218,9 +218,9 @@ void PlayField::Tick()
 		// Shake screen
 		if(stateDelay > 0)
 		{
-			if(stateDelay & BIT(0))
+			if(stateDelay & 1)
 			{
-				if(stateDelay & BIT(1))
+				if(stateDelay & 2)
 					scrollOffset += 5;
 				else
 					scrollOffset -= 5;
@@ -324,8 +324,10 @@ void PlayField::TouchUp()
 	controlMode = MM_NONE;
 }
 
+#ifndef _WIN32
 template<typename T> T max(T a, T b) { return (a > b) ? a : b; }
 template<typename T> T min(T a, T b) { return (a < b) ? a : b; }
+#endif
 
 void PlayField::PixelsToColRow(int x, int y, int& col, int& row)
 {

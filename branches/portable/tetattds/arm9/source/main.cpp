@@ -1,3 +1,4 @@
+#include <nds.h>
 #include "tetattds.h"
 
 #include <stdio.h>

@@ -326,7 +326,6 @@ public:
 		gameEndTimer = GAME_END_DELAY;
 	}
 	virtual void Tick() {
-		g_game->HandleInput();
 #ifdef DEBUG		// In debug mode, you can step frames with the select button
 		if(!g_game->paused || keysDown() & KEY_SELECT)
 #else
@@ -346,6 +345,7 @@ public:
 		}
 	}
 	virtual void Exit() {
+		gui->SetListener(NULL);
 		delete g_game;
 		g_game = NULL;
 	}
@@ -363,6 +363,7 @@ public:
 		GameState::Enter();
 		g_game = new Game(level, false, NULL);
 		g_game->Start();
+		gui->SetListener(g_game);
 	}
 	virtual void Exit() {
 		settings->UpdateHighscore(0, level, name, g_game->GetScore());
@@ -379,6 +380,7 @@ public:
 		GameState::Enter();
 		g_game = new Game(level, true, NULL);
 		g_game->Start();
+		gui->SetListener(g_game);
 	}
 	virtual void Exit() {
 		settings->UpdateHighscore(1, level, name, g_game->GetScore());
@@ -396,6 +398,7 @@ public:
 		sendFieldStateTimer = SEND_FIELDSTATE_INTERVAL;
 		g_game = new Game(level, true, connection);
 		g_game->Start();
+		gui->SetListener(g_game);
 	}
 	virtual void Tick() {
 		GameState::Tick();
@@ -626,7 +629,7 @@ void InitStates()
 	currentState->Enter();
 }
 
-void StateTick()
+bool StateTick()
 {
 	currentState->Tick();
 
@@ -641,8 +644,11 @@ void StateTick()
 #endif
 	}
 
-	gui->Tick();
+	if(!gui->Tick())
+		return false;
 	Sound::UpdateMusic();
+
+	return true;
 }
 
 

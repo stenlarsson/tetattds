@@ -47,17 +47,17 @@ private:
 	void PrintTime(int ticks);
 	void PrintStopTime(int ticks);
 
-	static void CreateShadedPalette(u16* dest, u16* src);
-	void PrintSmall(u16* startCell, const char* text);
-	void PrintLarge(u16* startCell, const char* text);
-	void ClearText(u16* startCell, int length);
-	void ClearTextLine(u16* startCell);
+	static void CreateShadedPalette(uint16_t* dest, uint16_t* src);
+	void PrintSmall(uint16_t* startCell, const char* text);
+	void PrintLarge(uint16_t* startCell, const char* text);
+	void ClearText(uint16_t* startCell, int length);
+	void ClearTextLine(uint16_t* startCell);
 	void PrintChat();
 	
-	u16* mainBlockMap;
-	u16* subBlockMap;
-	u16* mainTextMap;
-	u16* subTextMap;
+	uint16_t* mainBlockMap;
+	uint16_t* subBlockMap;
+	uint16_t* mainTextMap;
+	uint16_t* subTextMap;
 	EffectHandler effects;
 	Marker marker;
 	Marker touchMarker;

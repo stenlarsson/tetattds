@@ -27,7 +27,7 @@ LevelDialog::LevelDialog(int defaultLevel)
 	}
 	
 	closeButton = new ImageButton(232, 0, STDIMG_CLOSE);
-	AddControl(closeButton, KEY_B);
+	AddControl(closeButton, FWKEY_B);
 
 	if(defaultLevel >= 0 && defaultLevel < 10)
 	{

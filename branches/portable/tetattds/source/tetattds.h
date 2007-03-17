@@ -1,8 +1,13 @@
-#include <nds.h>
+#ifndef WIN32
+#include <unistd.h>
 #include <stdint.h>
+#else
+#define snprintf _snprintf
+// SDL.h can be used instead of stdint.h
+#include <SDL.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 
 #include "constants.h"
