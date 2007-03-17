@@ -24,12 +24,12 @@ namespace FwGui
 		y += 21;
 		AddKeys(x, y, 10);
 		backspaceButton = new ImageButton(x + 10*19, y, STDIMG_BACKSPACE);
-		AddControl(backspaceButton, KEY_B);
+		AddControl(backspaceButton, FWKEY_B);
 		x += 9;
 		y += 21;
 		AddKeys(x, y, 9);
 		enterButton = new Button(x + 9*19, y, 47, 20, "ENTER");
-		AddControl(enterButton, KEY_START);
+		AddControl(enterButton, FWKEY_START);
 		x += 9;
 		y += 21;
 		shiftButton = new ImageButton(10, y, STDIMG_SHIFT);

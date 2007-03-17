@@ -19,7 +19,8 @@ namespace FwGui
 		lastX(INT_MAX),
 		lastY(INT_MAX),
 		firstTouch(true),
-		needGraphicsInit(false)
+		needGraphicsInit(false),
+		listener(NULL)
 	{
 		Font::GUNSHIP_12 = new Font(gunship_12_bin);
 		Font::VERA_11 = new Font(vera_11_bin);
@@ -34,6 +35,7 @@ namespace FwGui
 	void Driver::SetActiveDialog(Dialog* dialog)
 	{
 		this->dialog = dialog;
+		SetListener(dialog);
 		if(dialog != NULL)
 		{
 			needGraphicsInit = true;
@@ -41,83 +43,60 @@ namespace FwGui
 		}
 	}
 	
-	void Driver::Tick()
+	void Driver::SetListener(InputListener* listener)
 	{
-		if(dialog == NULL)
-		{
-			return;
-		}
+		this->listener = listener;
+	}
+	
+	bool Driver::Tick()
+	{
+		if(listener != NULL) {
+			scanKeys();
+			
+			uint32_t down = keysDown();
+			uint32_t up = keysDown();
+
+			for(int i = 0; i < FWGUI_NUM_KEYS; i++) {
+				if(down & BIT(i))
+					listener->KeyDown((Key)i);
+				if(up & BIT(i))
+					listener->KeyUp((Key)i);
+			}
 		
-		scanKeys();
-		
-		if(keysDown() & KEY_A)
-		{
-			dialog->KeyA();
-		}
-	
-		if(keysDown() & KEY_B)
-		{
-			dialog->KeyB();
-		}
-		
-		if(keysDown() & KEY_START)
-		{
-			dialog->KeyStart();
-		}
-	
-		if(keysDown() & KEY_UP)
-		{
-			dialog->KeyUp();
-		}
-	
-		if(keysDown() & KEY_DOWN)
-		{
-			dialog->KeyDown();
-		}
-	
-		if(keysDown() & KEY_LEFT)
-		{
-			dialog->KeyLeft();
-		}
-	
-		if(keysDown() & KEY_RIGHT)
-		{
-			dialog->KeyRight();
-		}
-	
-		if(keysHeld() & KEY_TOUCH)
-		{
-			touchPosition touchXY = touchReadXY();
-			int x = touchXY.px;
-			int y = touchXY.py;
-			int dx = x - lastX;
-			int dy = y - lastY;
-			lastX = x;
-			lastY = y;
-	
-			if(dx*dx + dy*dy < TOUCH_DELTA)
+			if(keysHeld() & KEY_TOUCH)
 			{
-				if(firstTouch)
+				touchPosition touchXY = touchReadXY();
+				int x = touchXY.px;
+				int y = touchXY.py;
+				int dx = x - lastX;
+				int dy = y - lastY;
+				lastX = x;
+				lastY = y;
+		
+				if(dx*dx + dy*dy < TOUCH_DELTA)
 				{
-					firstTouch = false;
-					
-					dialog->TouchDown(x, y);
-				}
-				else
-				{
-					dialog->TouchHeld(x, y);
+					if(firstTouch)
+					{
+						firstTouch = false;
+						
+						listener->TouchDown(x, y);
+					}
+					else
+					{
+						listener->TouchDrag(x, y);
+					}
 				}
 			}
-		}
-		else if(keysUp() & KEY_TOUCH)
-		{
-			firstTouch = true;
-			dialog->TouchUp(lastX, lastY);
-			lastX = INT_MAX;
-			lastY = INT_MAX;
+			else if(keysUp() & KEY_TOUCH)
+			{
+				firstTouch = true;
+				listener->TouchUp(lastX, lastY);
+				lastX = INT_MAX;
+				lastY = INT_MAX;
+			}
 		}
 		
-		if(dialog->NeedsRepaint())
+		if(dialog != NULL && dialog->NeedsRepaint())
 		{
 			u16* doublebuffer = new u16[256*192];
 			Graphics* graphics = new Graphics(doublebuffer, 256, 192);
@@ -145,6 +124,8 @@ namespace FwGui
 			delete doublebuffer;
 			dialog->SetRepaint(false);
 		}
+
+		return true;
 	}
 	
 	void Driver::InitGraphics()
