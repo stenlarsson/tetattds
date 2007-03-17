@@ -34,7 +34,7 @@ void Sprite::InitSprites()
 /**
  * Return next free sprite, or NULL if no free are available.
  */
-Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, bool flipX, bool flipY)
+Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, Anim const & anim, bool flipX, bool flipY)
 {
 	Sprite* sprite = firstFreeSprite;
 
@@ -51,7 +51,7 @@ Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, bool flip
 	sprite->size = size;
 	sprite->flipX = flipX;
 	sprite->flipY = flipY;
-	sprite->anim = NULL;
+	sprite->anim = new Anim(anim);
 
 	return sprite;
 }
@@ -74,8 +74,7 @@ void Sprite::Draw()
 	if(y < -16 || y > 192 || x < -16 || x > 256)
 		return;
 		
-	if(anim != NULL)
-		tile = anim->GetFrame();
+	int tile = anim->GetFrame();
 
 	// TODO: Deal with flipped sprites
 	switch (size)

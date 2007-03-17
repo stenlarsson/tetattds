@@ -5,56 +5,27 @@
 
 EffPop::EffPop(int x, int y, int /*strength*/)
 {
-	Anim anim;
-
-	//int i;
-
-	/*if(strength > 1)
-	{
-		anim.Init(9, ANIM_ONCE);
-		anim.AddFrame(TILE_EGG_SHELL+0,60);
-		anim.AddFrame(TILE_EGG_SHELL+1,60);
-		//anim.AddFrame(TILE_EGG_SHELL+8,1);
-		anim.AddFrame(TILE_EGG_SHELL+2,60);
-		//anim.AddFrame(TILE_EGG_SHELL+8,1);
-		anim.AddFrame(TILE_EGG_SHELL+3,60);
-		anim.AddFrame(TILE_EGG_SHELL+4,60);
-		anim.AddFrame(TILE_EGG_SHELL+5,60);
-		anim.AddFrame(TILE_EGG_SHELL+6,60);
-		anim.AddFrame(TILE_EGG_SHELL+7,60);
-	}
-	else
-	{
-		anim.Init(8, ANIM_ONCE);
-		for(i=0;i<8;i++)
-			anim.AddFrame(TILE_EGG_SHELL+i,60);*/
-		anim.Init(9, ANIM_ONCE);
-		anim.AddFrame(TILE_EGG_SHELL+0,3);
-		anim.AddFrame(TILE_EGG_SHELL+1,3);
-		anim.AddFrame(TILE_EGG_SHELL+2,3);
-		anim.AddFrame(TILE_EGG_SHELL+3,3);
-		anim.AddFrame(TILE_EGG_SHELL+4,3);
-		anim.AddFrame(TILE_EGG_SHELL+5,3);
-		anim.AddFrame(TILE_EGG_SHELL+6,3);
-		anim.AddFrame(TILE_EGG_SHELL+7,3);
+	AnimFrame frames[] = {
+		AnimFrame(TILE_EGG_SHELL+0,3),
+		AnimFrame(TILE_EGG_SHELL+1,3),
+		AnimFrame(TILE_EGG_SHELL+2,3),
+		AnimFrame(TILE_EGG_SHELL+3,3),
+		AnimFrame(TILE_EGG_SHELL+4,3),
+		AnimFrame(TILE_EGG_SHELL+5,3),
+		AnimFrame(TILE_EGG_SHELL+6,3),
+		AnimFrame(TILE_EGG_SHELL+7,3),
 		//! \todo Hack to get the last frame.
-		anim.AddFrame(TILE_EGG_SHELL+26,3);
+		AnimFrame(TILE_EGG_SHELL+26,3),
+	};
 
-	/*}*/
+	Anim anim(ANIM_ONCE, frames, COUNT_OF(frames));
 
 	int off = BLOCKSIZE>>1; // Offset
 	
-	spriteA = Sprite::GetSprite(x - off, y - off, 1, SSIZE_16x16, false, false);
-	spriteA->SetAnim(&anim);
-	
-	spriteB = Sprite::GetSprite(x + off, y - off, 1, SSIZE_16x16, true, false);
-	spriteB->SetAnim(&anim);
-
-	spriteC = Sprite::GetSprite(x - off, y + off, 1, SSIZE_16x16, false, true);
-	spriteC->SetAnim(&anim);
-
-	spriteD = Sprite::GetSprite(x + off, y + off, 1, SSIZE_16x16, true, true);
-	spriteD->SetAnim(&anim);
+	spriteA = Sprite::GetSprite(x - off, y - off, 1, SSIZE_16x16, anim, false, false);
+	spriteB = Sprite::GetSprite(x + off, y - off, 1, SSIZE_16x16, anim, true, false);
+	spriteC = Sprite::GetSprite(x - off, y + off, 1, SSIZE_16x16, anim, false, true);
+	spriteD = Sprite::GetSprite(x + off, y + off, 1, SSIZE_16x16, anim, true, true);
 
 	mov = 3;
 	duration = 9 * 3;

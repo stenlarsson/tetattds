@@ -1,96 +1,51 @@
 #include "tetattds.h"
 #include "anim.h"
+#include <algorithm>
 
-Anim::Anim()
+BaseAnim::BaseAnim(
+	AnimType type, AnimFrame const * begin, AnimFrame const * end)
+	: frames((AnimFrame*)new char[sizeof(AnimFrame)*(end-begin)]),
+		curFrame(frames),
+		endFrame(frames + (end-begin)),
+		animTick(0),
+		step(1),
+		type(type)
 {
-	frames = NULL;
-	curFrame = 0;
-	animTick = 0;
-	delays = NULL;
+	std::uninitialized_copy(begin, end, frames);
 }
 
-Anim::~Anim()
+BaseAnim::~BaseAnim()
 {
-	DEL(frames);
-	DEL(delays);
-}
-
-void Anim::Init(int numFrames, AnimType type)
-{
-	DEL(frames);
-	DEL(delays);
-	this->type = type;
-	frames = new int[numFrames];
-	delays = new int[numFrames];
-	for(int i = 0; i < numFrames; i++)
-	{
-		frames[i] = 0;
-		delays[i] = 0;
-	}
-	curFrame = 0;
-	this->numFrames = numFrames;
-	step = 1;
-}
-
-void Anim::AddFrame(int frame, int delay)
-{
-	int i;
-	// find empty frame
-	for(i = 0;delays[i] != 0;i++);
-
-	frames[i] = frame;
-	delays[i] = delay;
+	delete[] frames;
+	frames = curFrame = endFrame = NULL;
 }
 
 void Anim::Tick()
-{
+{	
 	if(type == ANIM_STATIC)
 		return;
 
-	if(++animTick >= delays[curFrame])
+	if(++animTick >= curFrame->delay)
 	{
 		animTick = 0;
+		curFrame++; // curFrame += step;
 		if(type == ANIM_CYCLING)
 		{
-			curFrame+=step;
-			if(curFrame == numFrames-1)
-			{
+			if(curFrame == 0 || curFrame == endFrame-1)
 				step = -step;
-			}
-			else if(curFrame == 0)
-			{
-				step = -step;
-			}
 		}
 		else if(type == ANIM_LOOPING)
 		{
-			curFrame += step;
-			if(curFrame == numFrames)
-				curFrame = 0;
+			if(curFrame == endFrame)
+				curFrame = frames;
 		}
 		else if(type == ANIM_ONCE)
 		{
-			curFrame += step;
-			if(curFrame == numFrames)
+			if(curFrame == endFrame)
 			{
 				type = ANIM_STATIC;
 				curFrame--;
 			}
 		}
 	}
-}
-
-Anim* Anim::Copy()
-{
-	Anim* newAnim = new Anim;
-	newAnim->Init(numFrames, type);
-	for(int i = 0;i < numFrames; i++)
-	{
-		newAnim->frames[i] = frames[i];
-		newAnim->delays[i] = delays[i];
-	}
-	newAnim->curFrame = curFrame;
-	newAnim->animTick = animTick;
-
-	return newAnim;
 }

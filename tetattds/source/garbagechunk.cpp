@@ -7,9 +7,8 @@ GarbageChunk::GarbageChunk(int num, GarbageBlock* newgb, GarbageType type)
 	gb = newgb;
 	for(int i = 0; i < num; i++)
 	{
-		blocks[i] = new Garbage(type);
+		blocks[i] = new Garbage(type, gb);
 		blocks[i]->SetBlockType(g_game->GetRandomBlockType(false));
-		blocks[i]->SetGB(gb);
 	}
 	numBlocks = num;
 }

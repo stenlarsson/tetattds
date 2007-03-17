@@ -4,28 +4,16 @@
 #include "playfield.h"
 
 Block::Block(enum BlockType type)
+	: BaseBlock(
+			AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET),
+			type)
 {
-	anim.Init(1, ANIM_STATIC);
-	//Type equals framenumber in tileset
-	anim.AddFrame(type+TILE_BLOCK_NORMAL_OFFSET, 0);
-	this->type = type;
-	state = BST_IDLE;
-	nextState = BST_IDLE;
-	stateDelay = -1;
-	bNeedPopCheck = true;
-	dropTimer = -1;
-	chain = NULL;
-	bStress = false;
-	bStop = false;
-	bPopped = false;
 }
 
 Block::~Block()
 {
 	if(chain != NULL)
-	{
 		chain->activeBlocks--;
-	}
 }
 
 void Block::Tick()
@@ -50,25 +38,23 @@ void Block::ChangeState(enum BlockState newState)
 	switch(newState)
 	{
 	case BST_IDLE:
-		if(bStress)
 		{
-			anim.Init(4, ANIM_LOOPING);
-			anim.AddFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET,5);
-			anim.AddFrame(type+TILE_BLOCK_BOUNCE_2_OFFSET,5);
-			anim.AddFrame(type+TILE_BLOCK_BOUNCE_1_OFFSET,5);
-			anim.AddFrame(type+TILE_BLOCK_NORMAL_OFFSET,5);
+			AnimFrame frames[] = {
+				AnimFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET,5),
+				AnimFrame(type+TILE_BLOCK_BOUNCE_2_OFFSET,5),
+				AnimFrame(type+TILE_BLOCK_BOUNCE_1_OFFSET,5),
+				AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET,5)
+			};
+			
+			if(bStress)
+				anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));
+			else if(state == BST_FALLING)
+				anim = Anim(ANIM_ONCE, frames, COUNT_OF(frames));
+
+			state = BST_IDLE;
+			stateDelay = -1;
+			bNeedPopCheck = true;
 		}
-		else if(state == BST_FALLING)
-		{
-			anim.Init(4, ANIM_ONCE);
-			anim.AddFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET,5);
-			anim.AddFrame(type+TILE_BLOCK_BOUNCE_2_OFFSET,5);
-			anim.AddFrame(type+TILE_BLOCK_BOUNCE_1_OFFSET,5);
-			anim.AddFrame(type+TILE_BLOCK_NORMAL_OFFSET,5);
-		}
-		state = BST_IDLE;
-		stateDelay = -1;
-		bNeedPopCheck = true;
 		break;
 	case BST_FALLING:
 		state = BST_FALLING;
@@ -81,30 +67,32 @@ void Block::ChangeState(enum BlockState newState)
 		bNeedPopCheck = true; // needed for lateslip-technique
 		break;
 	case BST_MOVING:
-		anim.Init(1, ANIM_STATIC);
-		anim.AddFrame(type+TILE_BLOCK_NORMAL_OFFSET, 1);
+		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
 		state = BST_MOVING;
 		nextState = BST_POSTMOVE;
 		stateDelay = 5;
 		break;
 	case BST_POSTMOVE:
-		anim.Init(1, ANIM_STATIC);
-		anim.AddFrame(type+TILE_BLOCK_NORMAL_OFFSET, 1);
+		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
 		state = BST_POSTMOVE;
 		nextState = BST_IDLE;
 		stateDelay = 1;
 		break;
 	case BST_FLASH:
-		anim.Init(2, ANIM_LOOPING);
-		anim.AddFrame(type+TILE_BLOCK_NORMAL_OFFSET, 1);
-		anim.AddFrame(type+TILE_BLOCK_FLASH_OFFSET, 4);
-		state = BST_FLASH;
-		nextState = BST_POP;
-		stateDelay = g_game->GetLevelData()->flashTime;
+		{
+			AnimFrame frames [] = {
+				AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET),
+				AnimFrame(type+TILE_BLOCK_FLASH_OFFSET, 4),
+			};
+			anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));
+
+			state = BST_FLASH;
+			nextState = BST_POP;
+			stateDelay = g_game->GetLevelData()->flashTime;
+		}
 		break;
 	case BST_POP:
-		anim.Init(1, ANIM_STATIC);
-		anim.AddFrame(type+TILE_BLOCK_EYES_OFFSET, 1);
+		anim = Anim(type+TILE_BLOCK_EYES_OFFSET);
 		state = BST_POP;
 		nextState = BST_POP2;
 		stateDelay = popOffset;
@@ -115,8 +103,7 @@ void Block::ChangeState(enum BlockState newState)
 		stateDelay = 1;
 		break;
 	case BST_POP3:
-		anim.Init(1, ANIM_STATIC);
-		anim.AddFrame(TILE_BLANK, 1);
+		anim = Anim(TILE_BLANK);
 		state = BST_POP3;
 		nextState = BST_DEAD;
 		stateDelay = dieOffset;

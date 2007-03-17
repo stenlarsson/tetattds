@@ -3,8 +3,8 @@
 
 EffMoveBlock::EffMoveBlock(enum Direction dir, BaseBlock* block, int x, int y)
 {
-	sprite = Sprite::GetSprite(x, y, BLOCKS_PRIORITY, SSIZE_16x16, false, false);
-	sprite->SetTile(block->GetTile());
+	Anim anim(block->GetTile());
+	sprite = Sprite::GetSprite(x, y, BLOCKS_PRIORITY, SSIZE_16x16, anim, false, false);
 	XOffset = x;
 	YOffset = y;
 	duration = 5;

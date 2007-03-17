@@ -36,7 +36,7 @@ enum BlockState
 class BaseBlock
 {
   public:
-	BaseBlock();
+	BaseBlock(Anim const & anim, BlockType type);
 	virtual ~BaseBlock();
 
 	virtual void Tick() = 0;
