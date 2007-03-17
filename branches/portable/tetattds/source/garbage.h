@@ -18,7 +18,7 @@ enum GarbageType
 class Garbage : public BaseBlock
 {
   public:
-	Garbage(GarbageType type);
+	Garbage(GarbageType type, GarbageBlock * gb);
 	~Garbage();
 
 	void Drop();
@@ -30,7 +30,6 @@ class Garbage : public BaseBlock
 
 	void SetBlockType(enum BlockType newType);
 	void SetGraphic(int newGraphic);
-	void SetGB(GarbageBlock* newGB) { gb = newGB; }
 	GarbageBlock* GetGB(){ return gb; }
 
 	void SetChain(Chain* newChain) { if(chain != NULL) chain->activeBlocks--; chain = newChain; if(chain != NULL) chain->activeBlocks++;}

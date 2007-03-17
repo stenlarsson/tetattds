@@ -6,16 +6,8 @@ class Marker
 {
   public:
 	Marker(bool large) {
-		if(large)
-		{
-			sprite = Sprite::GetSprite(0, 0, MARKER_PRIORITY, SSIZE_32x16, false, false);
-			sprite->SetTile(TILE_LARGE_MARKER);
-		}
-		else
-		{
-			sprite = Sprite::GetSprite(0, 0, MARKER_PRIORITY, SSIZE_16x16, false, false);
-			sprite->SetTile(TILE_SMALL_MARKER);
-		}
+		int tile = large ? TILE_LARGE_MARKER : TILE_SMALL_MARKER;
+		sprite = Sprite::GetSprite(0, 0, MARKER_PRIORITY, SSIZE_32x16, Anim(tile), false, false);
 		Hide();
 	}
 

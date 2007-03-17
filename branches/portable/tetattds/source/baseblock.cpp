@@ -3,7 +3,20 @@
 #include "game.h"
 #include "playfield.h"
 
-BaseBlock::BaseBlock()
+BaseBlock::BaseBlock(Anim const & anim, BlockType type)
+	: anim(anim),
+		type(type),
+		state(BST_IDLE),
+		bNeedPopCheck(true),
+		popOffset(0),
+		dieOffset(0),
+		dropTimer(-1),
+		stateDelay(-1),
+		nextState(BST_IDLE),
+		chain(NULL),
+		bPopped(false),
+		bStress(false),
+		bStop(false)
 {
 	ASSERT(g_game != NULL);
 }
@@ -74,15 +87,14 @@ void BaseBlock::Stop(bool stop)
 
 	if(!bStop && stop && state == BST_IDLE)
 	{
-		anim.Init(1, ANIM_STATIC);
-		anim.AddFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET ,1);
+		anim = Anim(type+TILE_BLOCK_BOUNCE_3_OFFSET);
 		bStress = false;
 		bStop = true;
 	}
 	else if((bStop || bStress) && !stop && state == BST_IDLE)
 	{
-		anim.Init(1, ANIM_STATIC);
-		anim.AddFrame(type+TILE_BLOCK_NORMAL_OFFSET,1);
+		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
+		;
 		bStress = false;
 		bStop = false;
 	}
@@ -95,18 +107,21 @@ void BaseBlock::Stress(bool stress)
 
 	if(!bStress && stress && state == BST_IDLE)
 	{
-		anim.Init(4, ANIM_LOOPING);
-		anim.AddFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET,5);
-		anim.AddFrame(type+TILE_BLOCK_BOUNCE_2_OFFSET,5);
-		anim.AddFrame(type+TILE_BLOCK_BOUNCE_1_OFFSET,5);
-		anim.AddFrame(type+TILE_BLOCK_NORMAL_OFFSET,5);
+		AnimFrame frames[] = {
+			AnimFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET, 5),
+			AnimFrame(type+TILE_BLOCK_BOUNCE_2_OFFSET, 5),
+			AnimFrame(type+TILE_BLOCK_BOUNCE_1_OFFSET, 5),
+			AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET, 5),
+		};
+		anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));
+		;
 		bStop = false;
 		bStress = true;
 	}
 	else if((bStress || bStop) && !stress && state == BST_IDLE)
 	{
-		anim.Init(1, ANIM_STATIC);
-		anim.AddFrame(type+TILE_BLOCK_NORMAL_OFFSET,1);
+		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
+		;
 		bStop = false;
 		bStress = false;
 	}

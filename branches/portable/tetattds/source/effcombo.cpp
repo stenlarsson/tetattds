@@ -12,21 +12,14 @@ EffCombo::EffCombo(int x, int y, int type)
 
 	XOffset = x;
 	YOffset = y;
-	sign = Sprite::GetSprite(x, y, COMBO_COUNTER_PRIORITY, SSIZE_16x16, false, false);
-	Anim anim;
-	anim.Init(1, ANIM_STATIC);
-	anim.AddFrame(type, 1);
-	sign->SetAnim(&anim);
+	Anim anim(type);
+	sign = Sprite::GetSprite(x, y, COMBO_COUNTER_PRIORITY, SSIZE_16x16, anim, false, false);
 	const LevelData* data = g_game->GetLevelData();
 	duration = data->effComboDuration;
 
-	anim.Init(1, ANIM_STATIC);
-	anim.AddFrame(TILE_EGG, 1);
+	Anim anim2(TILE_EGG);
 	for(int i = 0; i < COMBO_NUM_EGGS; i++)
-	{
-		eggs[i] = Sprite::GetSprite(x, y, COMBO_EGG_PRIORITY, SSIZE_16x16, false, false);
-		eggs[i]->SetAnim(&anim);
-	}
+		eggs[i] = Sprite::GetSprite(x, y, COMBO_EGG_PRIORITY, SSIZE_16x16, anim2, false, false);
 	eggRad = COMBO_EGG_RADIUS;
 }
 

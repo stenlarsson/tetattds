@@ -5,24 +5,16 @@
 #include "game.h"
 #include "playfield.h"
 
-Garbage::Garbage(GarbageType type)
+Garbage::Garbage(GarbageType type, GarbageBlock * gb)
+	: BaseBlock(
+			AnimFrame(GARBAGE_GRAPHICS_SINGLE),
+	  	type == GARBAGE_EVIL ? BLC_EVILGARBAGE : BLC_GARBAGE),
+		blockType(BLC_GARBAGE),
+		gb(gb),
+		nextGraphic(-1),
+		bWantToDrop(false)
 {
-	if(type == GARBAGE_EVIL)
-		this->type = BLC_EVILGARBAGE;
-	else
-		this->type = BLC_GARBAGE;
-	blockType = BLC_GARBAGE;
-	bNeedPopCheck = false;
-	state = BST_IDLE;
-	nextState = BST_IDLE;
-	stateDelay = -1;
-	dropTimer = -1;
-	chain = NULL;
-	nextGraphic = -1;
-	bStress = false;
-	bStop = false;
-	bPopped = false;
-	bWantToDrop = false;
+	BaseBlock::bNeedPopCheck = false;
 }
 
 Garbage::~Garbage()
@@ -30,12 +22,12 @@ Garbage::~Garbage()
 	if(chain != NULL)
 		chain->activeBlocks--;
 	gb->RemoveBlock();
+	gb = NULL;
 }
 
 void Garbage::SetGraphic(int newGraphic)
 {
-	anim.Init(1, ANIM_STATIC);
-	anim.AddFrame(newGraphic,1);
+	anim = Anim(newGraphic);
 }
 
 void Garbage::SetBlockType(enum BlockType newType)
@@ -93,16 +85,19 @@ void Garbage::ChangeState(enum BlockState newState)
 		nextState = BST_FALLING;
 		break;
 	case BST_FLASH:
-		anim.Init(2, ANIM_LOOPING);
-		anim.AddFrame(type + TILE_GARBAGE_FLASH_1_OFFSET, 1);
-		anim.AddFrame(type + TILE_GARBAGE_FLASH_2_OFFSET, 4);
-		state = BST_FLASH;
-		nextState = BST_POP;
-		stateDelay = g_game->GetLevelData()->flashTime;
+		{		
+			AnimFrame frames[] = {
+				AnimFrame(type + TILE_GARBAGE_FLASH_1_OFFSET, 1),
+				AnimFrame(type + TILE_GARBAGE_FLASH_2_OFFSET, 4),				
+			};
+			anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));
+			state = BST_FLASH;
+			nextState = BST_POP;
+			stateDelay = g_game->GetLevelData()->flashTime;
+		}
 		break;
 	case BST_POP:
-		anim.Init(1, ANIM_STATIC);
-		anim.AddFrame(type + TILE_GARBAGE_FLASH_1_OFFSET, 1);
+		anim = Anim(type + TILE_GARBAGE_FLASH_1_OFFSET);
 		state = BST_POP;
 		nextState = BST_POP2;
 		stateDelay = popOffset;
@@ -113,16 +108,7 @@ void Garbage::ChangeState(enum BlockState newState)
 		stateDelay = 1;
 		break;
 	case BST_POP3:
-		if(nextGraphic == -1)
-		{
-			anim.Init(1, ANIM_STATIC);
-			anim.AddFrame(blockType, 1);
-		}
-		else
-		{
-			anim.Init(1, ANIM_STATIC);
-			anim.AddFrame(nextGraphic, 1);
-		}
+		anim = Anim(nextGraphic == -1 ? blockType : nextGraphic);
 		state = BST_POP3;
 		nextState = BST_DEAD;
 		stateDelay = dieOffset;

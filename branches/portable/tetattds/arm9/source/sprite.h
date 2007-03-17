@@ -13,15 +13,13 @@ class Sprite
 {
 public:
 	static void InitSprites();
-	static Sprite* GetSprite(int x, int y, int priority, SpriteSize size, bool flipX, bool flipY);
+	static Sprite* GetSprite(int x, int y, int priority, SpriteSize size, Anim const & anim, bool flipX, bool flipY);
 	static void ReleaseSprite(Sprite* sprite);
 
-	void SetAnim(Anim* newAnim) { ASSERT(newAnim != NULL); anim = newAnim->Copy(); }
-	void SetTile(int newTile) { tile = newTile; }
 	void Draw();
 	void Disable();
-	void Tick() { ASSERT(anim != NULL); anim->Tick(); tile = anim->GetFrame(); }
-	bool IsDone() { ASSERT(anim != NULL); return (anim->GetType() == ANIM_STATIC); }
+	void Tick() { anim->Tick(); }
+	bool IsDone() { return anim->IsDone(); }
 	void Move(int x, int y) { this->x += x; this->y += y; }
 	void SetPos(int x, int y) { this->x = x; this->y = y; }
 	void GetPos(int& x, int& y) { x = this->x; y = this->y; }
@@ -38,7 +36,6 @@ private:
 	Anim* anim;
 	int x;
 	int y;
-	int tile;
 	int attr0;
 	int attr1;
 	int attr2;

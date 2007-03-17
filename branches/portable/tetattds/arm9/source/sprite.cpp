@@ -33,7 +33,7 @@ void Sprite::InitSprites()
 /**
  * Return next free sprite, or NULL if no free are available.
  */
-Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, bool flipX, bool flipY)
+Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, Anim const & anim, bool flipX, bool flipY)
 {
 	Sprite* sprite = firstFreeSprite;
 
@@ -76,7 +76,7 @@ Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, bool flip
 		sprite->attr1 |= ATTR1_FLIP_Y;
 	sprite->attr2 |= ATTR2_PRIORITY(priority);
 
-	sprite->anim = NULL;
+	sprite->anim = new Anim(anim);
 
 	return sprite;
 }
@@ -92,15 +92,12 @@ void Sprite::ReleaseSprite(Sprite* sprite)
 
 void Sprite::Draw()
 {
-	if(anim != NULL)
-	{
-		tile = anim->GetFrame();
-	}
-
 	if(y < -16 || y > 192 || x < -16 || x > 256) // No drawing of sprites offscreen please
 		spriteEntries[spriteIndex].attribute[0] = ATTR0_DISABLED;
 	else
 	{
+		int tile = anim->GetFrame();
+
 		spriteEntries[spriteIndex].attribute[0] = (y & 0xFF) | attr0;
 		spriteEntries[spriteIndex].attribute[1] = (x & 0x1FF) | attr1;
 		spriteEntries[spriteIndex].attribute[2] = ((tile<<3) & 0x3FF) | attr2;

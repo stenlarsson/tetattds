@@ -41,3 +41,7 @@ extern void PrintStatus(char* format, ...);
 	function;\
 	variable = TIMER_DATA(timer)/(33554432.0/1024.0);\
 	TIMER_CR(timer) = 0;
+
+// Determine the number of elements in an array
+#define COUNT_OF(array) sizeof(array)/sizeof(array[0])
+
