@@ -215,8 +215,8 @@ FieldGraphics::FieldGraphics()
 
 FieldGraphics::~FieldGraphics()
 {
-	Sprite::ReleaseSprite(marker);
-	Sprite::ReleaseSprite(touchMarker);
+	delete marker;
+	delete touchMarker;
 }
 
 void FieldGraphics::Draw(PlayField *pf)

@@ -22,10 +22,10 @@ EffPop::EffPop(int x, int y, int /*strength*/)
 
 	int off = BLOCKSIZE>>1; // Offset
 	
-	spriteA = Sprite::GetSprite(x - off, y - off, 1, SSIZE_16x16, anim, false, false);
-	spriteB = Sprite::GetSprite(x + off, y - off, 1, SSIZE_16x16, anim, true, false);
-	spriteC = Sprite::GetSprite(x - off, y + off, 1, SSIZE_16x16, anim, false, true);
-	spriteD = Sprite::GetSprite(x + off, y + off, 1, SSIZE_16x16, anim, true, true);
+	spriteA = new Sprite(x - off, y - off, 1, SSIZE_16x16, anim, false, false);
+	spriteB = new Sprite(x + off, y - off, 1, SSIZE_16x16, anim, true, false);
+	spriteC = new Sprite(x - off, y + off, 1, SSIZE_16x16, anim, false, true);
+	spriteD = new Sprite(x + off, y + off, 1, SSIZE_16x16, anim, true, true);
 
 	mov = 3;
 	duration = 9 * 3;
@@ -33,10 +33,10 @@ EffPop::EffPop(int x, int y, int /*strength*/)
 
 EffPop::~EffPop()
 {
-	Sprite::ReleaseSprite(spriteA);
-	Sprite::ReleaseSprite(spriteB);
-	Sprite::ReleaseSprite(spriteC);
-	Sprite::ReleaseSprite(spriteD);
+	delete spriteA;
+	delete spriteB;
+	delete spriteC;
+	delete spriteD;
 }
 
 void EffPop::Draw()

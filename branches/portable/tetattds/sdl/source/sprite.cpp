@@ -6,63 +6,42 @@
 #define MAX_SPRITES 128
 
 extern SDL_Surface *sprites;
-Sprite* Sprite::sprites_data = NULL;
-Sprite* Sprite::firstFreeSprite = NULL;
 
-/**
- * Set up linked list of sprites
- */
-void Sprite::InitSprites()
+static int allocatedSpriteCount = 0;
+
+void* Sprite::operator new (size_t size)
 {
-	if(sprites_data == NULL)
-		sprites_data = new Sprite[MAX_SPRITES];
+	ASSERT(allocatedSpriteCount < MAX_SPRITES);
 
-	for(int i = 0; i < MAX_SPRITES-1; i++)
-	{
-		sprites_data[i].spriteIndex = i;
-		sprites_data[i].nextFreeSprite = &sprites_data[i+1];
-		sprites_data[i].Disable();
-	}
-
-	sprites_data[MAX_SPRITES-1].spriteIndex = MAX_SPRITES-1;
-	sprites_data[MAX_SPRITES-1].nextFreeSprite = NULL;
-	sprites_data[MAX_SPRITES-1].Disable();
-
-	firstFreeSprite = &sprites_data[0];
+	allocatedSpriteCount++;
+	return ::operator new(size);
 }
 
-/**
- * Return next free sprite, or NULL if no free are available.
- */
-Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, Anim const & anim, bool flipX, bool flipY)
+void Sprite::operator delete (void *p)
 {
-	Sprite* sprite = firstFreeSprite;
-
-	if(sprite == NULL)
-	{
-		printf("BUG:out of sprites.\nPlease report me.\n"); // BUG! =D
-		for(;;);
-	}
-
-	firstFreeSprite = sprite->nextFreeSprite;
-	sprite->x = x;
-	sprite->y = y;
-	sprite->priority = priority;
-	sprite->size = size;
-	sprite->flipX = flipX;
-	sprite->flipY = flipY;
-	sprite->anim = new Anim(anim);
-
-	return sprite;
+	ASSERT(allocatedSpriteCount > 0);
+	
+	allocatedSpriteCount--;
+	::operator delete(p);
 }
 
-void Sprite::ReleaseSprite(Sprite* sprite)
+Sprite::Sprite(
+	int x, int y, 
+	int priority,
+	SpriteSize size,
+	Anim const & anim,
+	bool flipX, bool flipY)
+	: anim(new Anim(anim)),
+		x(x), y(y),
+	  priority(priority),
+		size(size),
+		flipX(flipX), flipY(flipY)
 {
-	DEL(sprite->anim);
-	sprite->Disable();
+}
 
-	sprite->nextFreeSprite = firstFreeSprite;
-	firstFreeSprite = sprite;
+Sprite::~Sprite()
+{
+	DEL(anim);
 }
 
 void Sprite::Draw()

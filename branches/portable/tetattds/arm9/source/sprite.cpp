@@ -15,7 +15,7 @@ Sprite* Sprite::firstFreeSprite = NULL;
 void Sprite::InitSprites()
 {
 	if(sprites == NULL)
-		sprites = new Sprite[MAX_SPRITES];
+		sprites = (Sprite*)new char[sizeof(Sprite)*MAX_SPRITES];
 
 	for(int i = 0; i < MAX_SPRITES-1; i++)
 	{
@@ -31,10 +31,7 @@ void Sprite::InitSprites()
 	firstFreeSprite = &sprites[0];
 }
 
-/**
- * Return next free sprite, or NULL if no free are available.
- */
-Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, Anim const & anim, bool flipX, bool flipY)
+void* Sprite::operator new (size_t size)
 {
 	Sprite* sprite = firstFreeSprite;
 
@@ -45,50 +42,57 @@ Sprite* Sprite::GetSprite(int x, int y, int priority, SpriteSize size, Anim cons
 	}
 
 	firstFreeSprite = sprite->nextFreeSprite;
-	sprite->x = x;
-	sprite->y = y;
-
-	sprite->attr0 = 0;
-	sprite->attr1 = 0;
-	sprite->attr2 = 0;
-
-	switch(size)
-	{
-	case SSIZE_8x8:
-		sprite->attr0 |= ATTR0_SQUARE;
-		sprite->attr1 |= ATTR1_SIZE_8;
-		break;
-
-	case SSIZE_16x16:
-		sprite->attr0 |= ATTR0_SQUARE;
-		sprite->attr1 |= ATTR1_SIZE_16;
-		break;
-
-	case SSIZE_32x16:
-		sprite->attr0 |= ATTR0_WIDE;
-		sprite->attr1 |= ATTR1_SIZE_32;
-		break;
-	}
-
-	sprite->attr0 |= ATTR0_COLOR_256;
-	if(flipX)
-		sprite->attr1 |= ATTR1_FLIP_X;
-	if(flipY)
-		sprite->attr1 |= ATTR1_FLIP_Y;
-	sprite->attr2 |= ATTR2_PRIORITY(priority);
-
-	sprite->anim = new Anim(anim);
-
+	
 	return sprite;
 }
 
-void Sprite::ReleaseSprite(Sprite* sprite)
+void Sprite::operator delete (void *p)
 {
-	DEL(sprite->anim);
-	sprite->Disable();
-
+	Sprite *sprite = (Sprite *)p;
 	sprite->nextFreeSprite = firstFreeSprite;
-	firstFreeSprite = sprite;
+	firstFreeSprite = sprite;	
+}
+
+Sprite::Sprite(
+	int x, int y,
+	int priority, 
+	SpriteSize size,
+	Anim const & anim,
+	bool flipX, bool flipY)
+	: anim(new Anim(anim)),
+		x(x), y(y),
+	  attr0(ATTR0_COLOR_256),
+		attr1(0),
+		attr2(ATTR2_PRIORITY(priority))
+{
+	switch(size)
+	{
+	case SSIZE_8x8:
+		attr0 |= ATTR0_SQUARE;
+		attr1 |= ATTR1_SIZE_8;
+		break;
+
+	case SSIZE_16x16:
+		attr0 |= ATTR0_SQUARE;
+		attr1 |= ATTR1_SIZE_16;
+		break;
+
+	case SSIZE_32x16:
+		attr0 |= ATTR0_WIDE;
+		attr1 |= ATTR1_SIZE_32;
+		break;
+	}
+
+	if(flipX)
+		attr1 |= ATTR1_FLIP_X;
+	if(flipY)
+		attr1 |= ATTR1_FLIP_Y;
+}
+
+Sprite::~Sprite()
+{
+	DEL(anim);
+	Disable();
 }
 
 void Sprite::Draw()
