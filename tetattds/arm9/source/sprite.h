@@ -13,8 +13,12 @@ class Sprite
 {
 public:
 	static void InitSprites();
-	static Sprite* GetSprite(int x, int y, int priority, SpriteSize size, Anim const & anim, bool flipX, bool flipY);
-	static void ReleaseSprite(Sprite* sprite);
+	static void* operator new (size_t size);
+	static void operator delete (void *p);
+
+	Sprite(int x, int y, int priority, SpriteSize size, Anim const & anim, bool flipX, bool flipY);
+	~Sprite();
+
 
 	void Draw();
 	void Disable();
@@ -24,14 +28,12 @@ public:
 	void SetPos(int x, int y) { this->x = x; this->y = y; }
 	void GetPos(int& x, int& y) { x = this->x; y = this->y; }
 
+
 private:
 	static Sprite* sprites;
 	static Sprite* firstFreeSprite;
 	int spriteIndex;
 	Sprite* nextFreeSprite;
-
-	Sprite() {}
-	~Sprite() {}
 
 	Anim* anim;
 	int x;

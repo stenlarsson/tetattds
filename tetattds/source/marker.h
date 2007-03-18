@@ -3,7 +3,7 @@
 #include "sprite.h"
 
 Sprite* GetMarker(bool large) {
-	return Sprite::GetSprite(
+	return new Sprite(
 		0, 0,
 		MARKER_PRIORITY,
 		large ? SSIZE_32x16 : SSIZE_16x16,

@@ -4,7 +4,7 @@
 EffMoveBlock::EffMoveBlock(enum Direction dir, BaseBlock* block, int x, int y)
 {
 	Anim anim(block->GetTile());
-	sprite = Sprite::GetSprite(x, y, BLOCKS_PRIORITY, SSIZE_16x16, anim, false, false);
+	sprite =  new Sprite(x, y, BLOCKS_PRIORITY, SSIZE_16x16, anim, false, false);
 	XOffset = x;
 	YOffset = y;
 	duration = 5;
@@ -29,7 +29,7 @@ EffMoveBlock::EffMoveBlock(enum Direction dir, BaseBlock* block, int x, int y)
 
 EffMoveBlock::~EffMoveBlock()
 {
-	Sprite::ReleaseSprite(sprite);
+	delete sprite;
 }
 
 void EffMoveBlock::Draw()
