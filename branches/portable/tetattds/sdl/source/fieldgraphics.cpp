@@ -4,6 +4,7 @@
 #include "playfield.h"
 #include "util.h"
 #include "sprite.h"
+#include "marker.h"
 #include <SDL.h>
 
 FieldGraphics* g_fieldGraphics = NULL;
@@ -27,8 +28,8 @@ void FieldGraphics::InitSubScreen(bool wifi)
 FieldGraphics::FieldGraphics()
 :	framebuffer(NULL),
 	effects(),
-	marker(true),
-	touchMarker(false),
+	marker(GetMarker(true)),
+	touchMarker(GetMarker(false)),
 	lastChatLine(-1)
 {
 	framebuffer = SDL_CreateRGBSurface(
@@ -53,6 +54,8 @@ FieldGraphics::FieldGraphics()
 
 FieldGraphics::~FieldGraphics()
 {
+	Sprite::ReleaseSprite(marker);
+	Sprite::ReleaseSprite(touchMarker);
 }
 
 void FieldGraphics::Draw(PlayField *pf)
@@ -108,29 +111,31 @@ void FieldGraphics::Draw(PlayField *pf)
 		switch(pf->GetControlMode())
 		{
 		case MM_NONE:
-			marker.Hide();
-			touchMarker.Hide();
+			marker->Disable();
+			touchMarker->Disable();
 			break;
 		case MM_KEY:
 			{
 				int markerPos = pf->GetMarkerPos();
-				marker.Draw(pf->GetFieldX(markerPos), pf->GetFieldY(markerPos) + scrollOffset);
-				touchMarker.Hide();
+				marker->SetPos(pf->GetFieldX(markerPos), pf->GetFieldY(markerPos) + scrollOffset);
+				marker->Draw();
+				touchMarker->Disable();
 			}
 			break;
 		case MM_TOUCH:
 		  {
+				marker->Disable();
 				int touchPos = pf->GetTouchPos();
-				marker.Hide();
-				touchMarker.Draw(pf->GetFieldX(touchPos), pf->GetFieldY(touchPos) + scrollOffset);
+				touchMarker->SetPos(pf->GetFieldX(touchPos), pf->GetFieldY(touchPos) + scrollOffset);
+				touchMarker->Draw();
 			}
 			break;
 		}
 	}
 	else
 	{
-		marker.Hide();
-		touchMarker.Hide();
+		marker->Disable();
+		touchMarker->Disable();
 	}
 	
 	SDL_BlitSurface(framebuffer, NULL, SDL_GetVideoSurface(), NULL);

@@ -1,10 +1,9 @@
 #pragma once
 
 #include "protocol.h"
-#include "marker.h"
 #include "effecthandler.h"
 
-class BaseBlock;
+class Sprite;
 class PlayField;
 
 struct PlayerInfo
@@ -59,8 +58,8 @@ private:
 	uint16_t* mainTextMap;
 	uint16_t* subTextMap;
 	EffectHandler effects;
-	Marker marker;
-	Marker touchMarker;
+	Sprite* marker;
+	Sprite* touchMarker;
 	
 	char chatBuffer[MAX_CHAT_LINES][32+1];
 	int lastChatLine;

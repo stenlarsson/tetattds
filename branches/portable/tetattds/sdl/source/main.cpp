@@ -15,6 +15,7 @@
 #include "settings.h"
 #include "statusdialog.h"
 #include "state.h"
+#include "sprite.h"
 
 char name[10];
 Settings* settings = NULL;

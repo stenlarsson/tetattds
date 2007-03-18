@@ -1,10 +1,9 @@
 #pragma once
 
 #include "protocol.h"
-#include "marker.h"
 #include "effecthandler.h"
 
-class BaseBlock;
+class Sprite;
 class PlayField;
 struct SDL_Surface;
 
@@ -56,8 +55,8 @@ private:
 	void PrintChat();
 	
 	EffectHandler effects;
-	Marker marker;
-	Marker touchMarker;
+	Sprite* marker;
+	Sprite* touchMarker;
 	
 	char chatBuffer[MAX_CHAT_LINES][32+1];
 	int lastChatLine;
