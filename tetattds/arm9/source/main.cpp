@@ -19,6 +19,7 @@
 #include "fifo.h"
 #include "statusdialog.h"
 #include "state.h"
+#include "sprite.h"
 
 #define BLEND_SRC_ALL 0x003F
 
