@@ -22,8 +22,8 @@ public:
 
 	void Draw();
 	void Disable();
-	void Tick() { anim->Tick(); }
-	bool IsDone() { return anim->IsDone(); }
+	void Tick() { anim.Tick(); }
+	bool IsDone() { return anim.IsDone(); }
 	void Move(int x, int y) { this->x += x; this->y += y; }
 	void SetPos(int x, int y) { this->x = x; this->y = y; }
 	void GetPos(int& x, int& y) { x = this->x; y = this->y; }
@@ -35,7 +35,7 @@ private:
 	int spriteIndex;
 	Sprite* nextFreeSprite;
 
-	Anim* anim;
+	Anim anim;
 	int x;
 	int y;
 	int attr0;

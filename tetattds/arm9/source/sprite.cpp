@@ -59,7 +59,7 @@ Sprite::Sprite(
 	SpriteSize size,
 	Anim const & anim,
 	bool flipX, bool flipY)
-	: anim(new Anim(anim)),
+	: anim(anim),
 		x(x), y(y),
 	  attr0(ATTR0_COLOR_256),
 		attr1(0),
@@ -91,7 +91,6 @@ Sprite::Sprite(
 
 Sprite::~Sprite()
 {
-	DEL(anim);
 	Disable();
 }
 
@@ -101,7 +100,7 @@ void Sprite::Draw()
 		spriteEntries[spriteIndex].attribute[0] = ATTR0_DISABLED;
 	else
 	{
-		int tile = anim->GetFrame();
+		int tile = anim.GetFrame();
 
 		spriteEntries[spriteIndex].attribute[0] = (y & 0xFF) | attr0;
 		spriteEntries[spriteIndex].attribute[1] = (x & 0x1FF) | attr1;

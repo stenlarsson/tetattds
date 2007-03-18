@@ -31,7 +31,7 @@ Sprite::Sprite(
 	SpriteSize size,
 	Anim const & anim,
 	bool flipX, bool flipY)
-	: anim(new Anim(anim)),
+	: anim(anim),
 		x(x), y(y),
 	  priority(priority),
 		size(size),
@@ -41,7 +41,6 @@ Sprite::Sprite(
 
 Sprite::~Sprite()
 {
-	DEL(anim);
 }
 
 void Sprite::Draw()
@@ -53,7 +52,7 @@ void Sprite::Draw()
 	if(y < -16 || y > 192 || x < -16 || x > 256)
 		return;
 		
-	int tile = anim->GetFrame();
+	int tile = anim.GetFrame();
 
 	// TODO: Deal with flipped sprites
 	switch (size)
