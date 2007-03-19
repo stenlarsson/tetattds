@@ -4,6 +4,8 @@
 #include "anim.h"
 
 EffPop::EffPop(int x, int y, int /*strength*/)
+	: Effect(x, y, 9*3+1),
+		mov(3)
 {
 	AnimFrame frames[] = {
 		AnimFrame(TILE_EGG_SHELL+0,3),
@@ -26,9 +28,6 @@ EffPop::EffPop(int x, int y, int /*strength*/)
 	spriteB = new Sprite(x + off, y - off, 1, SSIZE_16x16, anim, true, false);
 	spriteC = new Sprite(x - off, y + off, 1, SSIZE_16x16, anim, false, true);
 	spriteD = new Sprite(x + off, y + off, 1, SSIZE_16x16, anim, true, true);
-
-	mov = 3;
-	duration = 9 * 3;
 }
 
 EffPop::~EffPop()
@@ -49,6 +48,7 @@ void EffPop::Draw()
 
 void EffPop::Tick()
 {
+	Effect::Tick();
 	spriteA->Tick();
 	spriteB->Tick();
 	spriteC->Tick();
@@ -60,5 +60,4 @@ void EffPop::Tick()
 	if(mov > 0)
 		if(duration & 1)
 			mov--;
-	duration--;
 }
