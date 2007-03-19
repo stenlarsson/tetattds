@@ -89,9 +89,9 @@ class PlayField
 	void StateCheck();
 	void CheckHeight();
 
-	BaseBlock* field[PF_WIDTH*PF_HEIGHT];
-	int fieldX[PF_WIDTH*PF_HEIGHT];
-	int fieldY[PF_WIDTH*PF_HEIGHT];
+	BaseBlock* field[PF_NUM_BLOCKS];
+	int fieldX[PF_NUM_BLOCKS];
+	int fieldY[PF_NUM_BLOCKS];
 	int fieldHeight[PF_WIDTH];
 	int markerPos;
 	Popper* popper;
