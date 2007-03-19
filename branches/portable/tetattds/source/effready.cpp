@@ -27,7 +27,3 @@ void EffReady::Tick()
 {
 	duration--;
 }
-
-void EffReady::SetOffset(int x, int y)
-{
-}

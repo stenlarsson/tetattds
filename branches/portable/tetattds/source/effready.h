@@ -10,6 +10,4 @@ public:
 
 	void Draw();
 	void Tick();
-
-	void SetOffset(int x, int y);
 };
