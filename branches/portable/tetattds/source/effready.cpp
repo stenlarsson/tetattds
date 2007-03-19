@@ -3,11 +3,7 @@
 #include "fieldgraphics.h"
 
 EffReady::EffReady()
-{
-	duration = 150;
-}
-
-EffReady::~EffReady()
+	: Effect(0, 0, 150)
 {
 }
 
@@ -21,9 +17,4 @@ void EffReady::Draw()
 		g_fieldGraphics->PrintCountdown(1);
 	else if(duration <= 1)
 		g_fieldGraphics->PrintCountdown(0);
-}
-
-void EffReady::Tick()
-{
-	duration--;
 }

@@ -6,21 +6,16 @@
 #include "game.h"
 #include "playfield.h"
 
-EffCombo::EffCombo(int x, int y, ComboType type, int count)
+EffCombo::EffCombo(int x, int y, LevelData const * const level, ComboType type, int count)
+	: Effect(x, y, level->effComboDuration),
+		eggRad(COMBO_EGG_RADIUS)
 {
-	ASSERT(g_game != NULL);
-
-	XOffset = x;
-	YOffset = y;
 	Anim anim(type + count);
 	sign = new Sprite(x, y, COMBO_COUNTER_PRIORITY, SSIZE_16x16, anim, false, false);
-	const LevelData* data = g_game->GetLevelData();
-	duration = data->effComboDuration;
 
 	Anim anim2(TILE_EGG);
 	for(int i = 0; i < COMBO_NUM_EGGS; i++)
 		eggs[i] = new Sprite(x, y, COMBO_EGG_PRIORITY, SSIZE_16x16, anim2, false, false);
-	eggRad = COMBO_EGG_RADIUS;
 }
 
 EffCombo::~EffCombo()
@@ -39,6 +34,7 @@ void EffCombo::Draw()
 
 void EffCombo::Tick()
 {
+	Effect::Tick();
 	int t = abs(duration - 80);
 	double r = eggRad + 16;
 	double tetha;
@@ -49,6 +45,5 @@ void EffCombo::Tick()
 	}
 	YOffset -= duration>>5;
 	sign->Move(0,-(duration>>5));
-	duration--;
 	eggRad *= 0.9;
 }

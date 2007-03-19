@@ -2,14 +2,11 @@
 #include "effmoveblock.h"
 
 EffMoveBlock::EffMoveBlock(enum Direction dir, BaseBlock* block, int x, int y)
+	: Effect(x, y, 5),
+		stepX(0), stepY(0)
 {
 	Anim anim(block->GetTile());
 	sprite =  new Sprite(x, y, BLOCKS_PRIORITY, SSIZE_16x16, anim, false, false);
-	XOffset = x;
-	YOffset = y;
-	duration = 5;
-	stepX = 0;
-	stepY = 0;
 	switch(dir)
 	{
 	case DIR_LEFT:
@@ -39,6 +36,6 @@ void EffMoveBlock::Draw()
 
 void EffMoveBlock::Tick()
 {
-	duration--;
+	Effect::Tick();
 	sprite->Move(stepX,stepY);
 }
