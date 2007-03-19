@@ -36,6 +36,22 @@ static inline bool IsRightmost(int i, int amount = 1)
 {
 	return i % PF_WIDTH >= PF_WIDTH - amount;
 }
+static inline bool IsTopmostVisible(int pos, int amount = 1)
+{
+	return Above(pos, amount) < PF_FIRST_BLOCK_FIRST_VISIBLE_ROW;
+}
+static inline bool IsBottommostVisible(int pos, int amount = 1)
+{
+	return Below(pos, amount) >= PF_FIRST_BLOCK_LAST_ROW;
+}
+static inline bool IsTopmost(int pos)
+{
+	return pos < PF_WIDTH;
+}
+static inline bool IsForthcoming(int pos)
+{
+	return IsBottommostVisible(pos, 0);
+}
 static inline bool IsOfType(BaseBlock *b, BlockType t)
 {
 	return b != NULL && b->GetType() == t;
@@ -89,9 +105,7 @@ PlayField::PlayField(EffectHandler *effects)
 PlayField::~PlayField()
 {
 	for(int i = 0; i < PF_NUM_BLOCKS; i++)
-	{
 		DEL(field[i]);
-	}
 
 	DEL(gh);
 	DEL(popper);
@@ -116,9 +130,7 @@ void PlayField::Init(int xOffset, int yOffset)
 	}
 
 	for(int i = 0; i < PF_NUM_BLOCKS; i++)
-	{
 		field[i] = NULL;
-	}
 
 	popper = new Popper(this, effects);
 }
@@ -126,9 +138,7 @@ void PlayField::Init(int xOffset, int yOffset)
 void PlayField::RandomizeField()
 {
 	for(int i = PF_FIRST_FILLED_ROW; i < PF_HEIGHT; i++)
-	{
 		RandomizeRow(i);
-	}
 }
 
 void PlayField::RandomizeRow(int row)
@@ -240,37 +250,29 @@ void PlayField::KeyInput(Input input)
 	case INPUT_UP:
 		controlMode = MM_KEY;
 		iSwapTimer = 0;
-		if(GetHeight() >= PF_VISIBLE_HEIGHT)
-		{
-			if((markerPos - PF_WIDTH) >= PF_FIRST_BLOCK_FIRST_VISIBLE_ROW)
-				markerPos -= PF_WIDTH;
-		}
-		else
-		{
-			if((markerPos - PF_WIDTH) >= PF_FIRST_BLOCK_SECOND_VISIBLE_ROW)
-				markerPos -= PF_WIDTH;
-		}
+		if(!IsTopmostVisible(markerPos, GetHeight() >= PF_VISIBLE_HEIGHT ? 1 : 2))
+			markerPos = Above(markerPos);
 		break;
 
 	case INPUT_LEFT:
 		controlMode = MM_KEY;
 		iSwapTimer = 0;	
-		if(markerPos % PF_WIDTH != 0)
-			markerPos -= 1;
+		if(!IsLeftmost(markerPos))
+			markerPos = LeftOf(markerPos);
 		break;
 
 	case INPUT_RIGHT:
 		controlMode = MM_KEY;
 		iSwapTimer = 0;	
-		if(markerPos % PF_WIDTH != PF_WIDTH-2)
-			markerPos += 1;
+		if(!IsRightmost(markerPos, 2))
+			markerPos = RightOf(markerPos);
 		break;
 
 	case INPUT_DOWN:
 		controlMode = MM_KEY;
 		iSwapTimer = 0;
-		if((markerPos + PF_WIDTH) < PF_FIRST_BLOCK_LAST_ROW)
-			markerPos += PF_WIDTH;
+		if(!IsBottommostVisible(markerPos))
+			markerPos = Below(markerPos);
 		break;
 
 	case INPUT_SWAP:
@@ -353,8 +355,7 @@ int PlayField::ColRowToPos(int col, int row)
 
 bool PlayField::SwapBlocks(int pos)
 {
-	//Don't move blocks that we shouldn't
-	if(pos >= PF_FIRST_BLOCK_LAST_ROW)
+	if(IsForthcoming(pos))
 		return false;
 		
 	BaseBlock *left = field[pos], *right = field[RightOf(pos)];
@@ -402,8 +403,6 @@ bool PlayField::SwapBlocks(int pos)
 
 void PlayField::ScrollField()
 {
-	int i;
-	
 	if(!bTooHigh)
 	{
 		scrolledRows++;
@@ -415,14 +414,10 @@ void PlayField::ScrollField()
 
 		if(scrollOffset <= -BLOCKSIZE)
 		{
-			DEL(field[0]);
-			DEL(field[1]);
-			DEL(field[2]);
-			DEL(field[3]);
-			DEL(field[4]);
-			DEL(field[5]);
+			for(int i=0; IsTopmost(i); i++)
+				DEL(field[i]);
 
-			for(i = 0; i < PF_FIRST_BLOCK_LAST_ROW; i++)
+			for(int i = 0; !IsForthcoming(i); i++)
 				field[i] = field[Below(i)];
 			RandomizeRow(PF_HEIGHT-1);
 
@@ -472,7 +467,7 @@ void PlayField::ScrollField()
 void PlayField::DropBlocks()
 {
 	//loop through field, starting at the bottom
-	for(int i = PF_FIRST_BLOCK_LAST_ROW-1; i >= PF_WIDTH; i--)
+	for(int i = PF_LAST_BLOCK_SECOND_LAST_ROW; !IsTopmost(i); i--)
 	{
 		if(field[i] == NULL)
 			continue;//if there's no block, continue
@@ -494,7 +489,7 @@ void PlayField::DropBlocks()
 				field[i]->Land(); //land this block now instead of next tick
 
 				//loop through and land all hovering blocks above
-				for(int y = Above(i); y >= PF_WIDTH; y = Above(y))
+				for(int y = Above(i); !IsTopmost(y); y = Above(y))
 				{
 					if(IsOfState(field[y], BST_HOVER))
 					{
@@ -544,7 +539,7 @@ void PlayField::DropBlocks()
 				field[i]->Land();
 				continue;
 			}
-			if(i >= PF_WIDTH && field[Above(i)] != NULL)//if there's a block above
+			if(!IsTopmost(i) && field[Above(i)] != NULL)//if there's a block above
 			{
 				if(field[Above(i)]->IsState(BST_HOVER) || field[Above(i)]->IsState(BST_IDLE))
 				{ //and it's hovering or idle
@@ -572,7 +567,7 @@ void PlayField::DropBlocks()
 	}//end of main loop
 
 	//loop through field, starting at the bottom
-	for(int i = PF_FIRST_BLOCK_LAST_ROW;i >= PF_WIDTH;i--)
+	for(int i = PF_LAST_BLOCK_SECOND_LAST_ROW; !IsTopmost(i); i--)
 	{
 		if(field[i] == NULL)
 			continue;//if there's no block, continue
@@ -620,7 +615,7 @@ void PlayField::CheckForPops()
 	for(int i = 0; i < PF_WIDTH; i++)
 		fieldHeight[i] = -1;
 
-	for(int i = PF_WIDTH; i < PF_FIRST_BLOCK_LAST_ROW; i++)//loop, top to bottom
+	for(int i = PF_WIDTH; !IsForthcoming(i); i++)//loop, top to bottom
 	{
 		bClearChain = true;
 		if(field[i] == NULL)//skip if there's no block
@@ -656,7 +651,7 @@ void PlayField::CheckForPops()
 
 		int check = 0;
 		//scroll upwards from current block
-		for(check = i; check >= PF_WIDTH; check = Above(check))
+		for(check = i; !IsTopmost(check); check = Above(check))
 		{
 			if(field[Above(check)] == NULL)
 				break;//break if there's no block
@@ -671,7 +666,7 @@ void PlayField::CheckForPops()
 		tmpChain = NULL;
 
 		//scroll downwards from top and count
-		for(check = top; check < PF_FIRST_BLOCK_SECOND_LAST_ROW; check = Below(check))
+		for(check = top; !IsBottommostVisible(check); check = Below(check))
 		{
 			if(tmpChain == NULL)
 				tmpChain = field[check]->GetChain(); //if one of the blocks is in a chain
@@ -768,7 +763,7 @@ void PlayField::CheckForPops()
 		while(bDoOver) // Check again to catch garbage popping garbage below itself
 		{
 			bDoOver=false;
-			for(int i = PF_FIRST_BLOCK_LAST_ROW-1; i > PF_WIDTH; i--)//loop, bottom to top
+			for(int i = PF_LAST_BLOCK_SECOND_LAST_ROW; !IsTopmost(i); i--)//loop, bottom to top
 			{ // This checks if there are GarbageBlocks that needs to pop
 				if(field[i] == NULL)
 					continue;
@@ -799,7 +794,7 @@ void PlayField::CheckForPops()
 					if(otherType == curType || otherType != notCurType)
 					{
 						if(tmpChain == NULL)
-							tmpChain = field[i-PF_WIDTH]->GetChain();
+							tmpChain = field[Above(i)]->GetChain();
 						((Garbage*)field[i])->GetGB()->InitPop(tmpChain);
 					}
 				}
@@ -855,7 +850,7 @@ void PlayField::ClearDeadBlocks()
 	Chain* tChain = NULL;	//keeps track of deleted blocks' chain
 
 	//loop, top to bottom
-	for(int i = PF_WIDTH;i < PF_FIRST_BLOCK_LAST_ROW; i++)
+	for(int i = PF_WIDTH; !IsForthcoming(i); i++)
 	{
 		if(field[i] == NULL)
 			continue;//break if empty
@@ -867,7 +862,7 @@ void PlayField::ClearDeadBlocks()
 				tChain = field[i]->GetChain();//store chain
 				delete field[i];//delete block
 				field[i] = NULL;//clear field
-				for(int y = Above(i);y >= PF_WIDTH;y = Above(y))
+				for(int y = Above(i); !IsTopmost(y); y = Above(y))
 				{//loop through upwards
 					if(field[y] != NULL)//if there's a block
 					{
@@ -900,7 +895,7 @@ void PlayField::ClearDeadBlocks()
 
 bool PlayField::ShouldScroll()
 {
-	for(int i = 0;i < PF_FIRST_BLOCK_LAST_ROW;i++)
+	for(int i = 0; !IsForthcoming(i); i++)
 	{
 		if(field[i] == NULL)
 			continue;
@@ -960,7 +955,7 @@ void PlayField::CheckHeight()
 		if(fieldHeight[i] >= PF_STRESS_HEIGHT)
 		{
 			bDanger = true; // music stuff
-			for(int o = i; o < PF_FIRST_BLOCK_LAST_ROW; o = Below(o))
+			for(int o = i; !IsForthcoming(o); o = Below(o))
 			{
 				if(field[o] != NULL)
 				{
@@ -973,7 +968,7 @@ void PlayField::CheckHeight()
 		}
 		else
 		{
-			for(int o = i; o < PF_FIRST_BLOCK_LAST_ROW; o = Below(o))
+			for(int o = i; !IsForthcoming(o); o = Below(o))
 			{
 				if(field[o] != NULL)
 				{
@@ -1008,19 +1003,8 @@ void PlayField::CheckHeight()
 
 void PlayField::GetFieldState(char* dest)
 {
-	for(int i = PF_FIRST_BLOCK_FIRST_VISIBLE_ROW; i < PF_FIRST_BLOCK_LAST_ROW; i++)
-	{
-		if(field[i] != NULL)
-		{
-			*dest = field[i]->GetTile();
-		}
-		else
-		{
-			*dest = TILE_BLANK;
-		}
-
-		dest++;
-	}
+	for(int i = PF_FIRST_BLOCK_FIRST_VISIBLE_ROW; !IsForthcoming(i); i++)
+		*dest++ = (field[i] != NULL) ? field[i]->GetTile() : TILE_BLANK;
 }
 
 bool PlayField::IsLineOfFieldEmpty(int x) {
@@ -1033,7 +1017,7 @@ bool PlayField::IsLineOfFieldEmpty(int x) {
 }
 
 bool PlayField::InsertGarbage(int x, GarbageBlock *b, bool leftAlign) {
-	if( (x - b->GetNum()) < PF_WIDTH )
+	if( IsTopmost(x - b->GetNum()) )
 	{
 #ifdef DEBUG
 		printf("Out of space to drop blocks.\n");
