@@ -14,7 +14,7 @@ namespace FwGui
 		controls(new Control*[numcontrols]),
 		selectedControl(0)
 	{
-		for(int i = 0;i<14;i++)
+		for(int i = 0; i<FWGUI_NUM_KEYS; i++)
 			defaultControl[i] = -1;
 	}
 	
@@ -71,7 +71,6 @@ namespace FwGui
 	void Dialog::KeyDown(Key key)
 	{
 		int control = defaultControl[key];
-
 		if(control != -1) {
 			if(controls[control]->IsEnabled()) {
 				ControlClicked(controls[control]);
@@ -82,7 +81,7 @@ namespace FwGui
 		switch(key) {
 		case FWKEY_A:
 			if(controls[selectedControl]->IsEnabled()) {
-				ControlClicked(controls[control]);
+				ControlClicked(controls[selectedControl]);
 			}
 			break;
 
@@ -90,53 +89,61 @@ namespace FwGui
 		case FWKEY_LEFT:
 		case FWKEY_UP:
 		case FWKEY_DOWN:
-			int startX = controls[selectedControl]->x;
-			int startY = controls[selectedControl]->y;
-			
-			int distance = INT_MAX;
-			for(int i = 0; i < numcontrols; i++)
 			{
-				int dx = INT_MAX;
-				int dy = INT_MAX;
-				switch(key) {
-				case FWKEY_RIGHT:
-					if(controls[i]->x > startX) {
-						int dx = controls[i]->x - startX;
-						int dy = controls[i]->y - startY;
-					}
-					break;
-				case FWKEY_LEFT:
-					if(controls[i]->x + controls[i]->width < startX) {
-						int dx = controls[i]->x + controls[i]->width - startX;
-						int dy = controls[i]->y - startY;
-					}
-					break;
-				case FWKEY_UP:
-					if(controls[i]->y + controls[i]->height < startY) {
-						int dx = controls[i]->x - startX;
-						int dy = controls[i]->y + controls[i]->height - startY;
-					}
-					break;
-				case FWKEY_DOWN:
-					if(controls[i]->y > startY) {
-						int dx = controls[i]->x - startX;
-						int dy = controls[i]->y - startY;
-					}
-					break;
-				default:
-					break;
-				}
-
-				if(dx*dx + dy*dy < distance)
+				int bestControl = selectedControl;
+				int startX = controls[selectedControl]->x;
+				int startY = controls[selectedControl]->y;
+			
+				int distance = INT_MAX;
+				for(int i = 0; i < numcontrols; i++)
 				{
-					if(controls[i]->IsSelectable())
+					if(i == selectedControl || !controls[i]->IsSelectable())
+						continue;
+					
+					int dx = INT_MAX;
+					int dy = INT_MAX;
+					switch(key) {
+					case FWKEY_RIGHT:
+						if(controls[i]->x > startX) {
+							dx = controls[i]->x - startX;
+							dy = controls[i]->y - startY;
+						}
+						break;
+					case FWKEY_LEFT:
+						if(controls[i]->x + controls[i]->width < startX) {
+							dx = controls[i]->x + controls[i]->width - startX;
+							dy = controls[i]->y - startY;
+						}
+						break;
+					case FWKEY_UP:
+						if(controls[i]->y + controls[i]->height < startY) {
+							dx = controls[i]->x - startX;
+							dy = controls[i]->y + controls[i]->height - startY;
+						}
+						break;
+					case FWKEY_DOWN:
+						if(controls[i]->y > startY) {
+							dx = controls[i]->x - startX;
+							dy = controls[i]->y - startY;
+						}
+						break;
+					default:
+						break;
+					}
+					
+					if((dx < distance || dy < distance) && dx*dx + dy*dy < distance)
 					{
-						selectedControl = i;
+						bestControl = i;
 						distance = dx*dx + dy*dy;
 					}
 				}
+
+				selectedControl = bestControl;
+				Repaint();
 			}
-			Repaint();
+			break;
+
+		default:
 			break;
 		}
 	}
