@@ -17,7 +17,8 @@ namespace FwGui
 		FWKEY_X,
 		FWKEY_Y,
 		FWKEY_TOUCH,
-		FWKEY_LID
+		FWKEY_LID,
+		FWKEY_NONE = -1,
 	};
 
 	class InputListener
