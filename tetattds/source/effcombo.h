@@ -6,8 +6,8 @@ class Sprite;
 
 enum ComboType
 {
-	COMBO_4 = TILE_COMBO,
-	COMBO_2X = TILE_CHAIN
+	COMBO_4 = TILE_COMBO - 4,
+	COMBO_2X = TILE_CHAIN - 2
 };
 
 #define NUM_EGGS 6
@@ -15,7 +15,7 @@ enum ComboType
 class EffCombo : public Effect
 {
   public:
-	EffCombo(int x, int y, int type);
+	EffCombo(int x, int y, ComboType type, int count);
 	~EffCombo();
 
 	void Draw();

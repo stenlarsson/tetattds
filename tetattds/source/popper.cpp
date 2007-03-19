@@ -96,14 +96,14 @@ void Popper::Pop()
 			pf->AddScore((chains[curChain].numBlocks-1)*10);
 			
 			if(!offscreen) // Only add effect if it's onscreen
-				eh->Add(new EffCombo(pf->GetFieldX(chains[curChain].blockNum[0]), pf->GetFieldY(chains[curChain].blockNum[0]), COMBO_4 + (chains[curChain].numBlocks-4)));
+				eh->Add(new EffCombo(pf->GetFieldX(chains[curChain].blockNum[0]), pf->GetFieldY(chains[curChain].blockNum[0]), COMBO_4, chains[curChain].numBlocks));
 			if(chains[curChain].length > 1)
 			{
 				// A chain involving the combo.
 				pf->DelayScroll(chains[curChain].numBlocks*10);
 				pf->AddScore(50+(chains[curChain].length-1)*20*chains[curChain].length);
 				if(!offscreen)
-					eh->Add(new EffCombo(pf->GetFieldX(chains[curChain].blockNum[0]-PF_WIDTH), pf->GetFieldY(chains[curChain].blockNum[0]-PF_WIDTH), COMBO_2X + (chains[curChain].length-2)));
+					eh->Add(new EffCombo(pf->GetFieldX(chains[curChain].blockNum[0]-PF_WIDTH), pf->GetFieldY(chains[curChain].blockNum[0]-PF_WIDTH), COMBO_2X, chains[curChain].length));
 			}
 			Sound::PlayChainStepEffect(&chains[curChain]);
 		}
@@ -113,7 +113,7 @@ void Popper::Pop()
 			pf->DelayScroll(chains[curChain].numBlocks*10);
 			pf->AddScore(50+(chains[curChain].length-1)*20*chains[curChain].length);
 			if(!offscreen)
-				eh->Add(new EffCombo(pf->GetFieldX(chains[curChain].blockNum[0]), pf->GetFieldY(chains[curChain].blockNum[0]), COMBO_2X + (chains[curChain].length-2)));
+				eh->Add(new EffCombo(pf->GetFieldX(chains[curChain].blockNum[0]), pf->GetFieldY(chains[curChain].blockNum[0]), COMBO_2X, chains[curChain].length));
 			if(pf->GetHeight() > PF_STRESS_HEIGHT)
 				bBonusStop = true;
 			Sound::PlayChainStepEffect(&chains[curChain]);

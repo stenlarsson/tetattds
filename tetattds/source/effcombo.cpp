@@ -6,13 +6,13 @@
 #include "game.h"
 #include "playfield.h"
 
-EffCombo::EffCombo(int x, int y, int type)
+EffCombo::EffCombo(int x, int y, ComboType type, int count)
 {
 	ASSERT(g_game != NULL);
 
 	XOffset = x;
 	YOffset = y;
-	Anim anim(type);
+	Anim anim(type + count);
 	sign = new Sprite(x, y, COMBO_COUNTER_PRIORITY, SSIZE_16x16, anim, false, false);
 	const LevelData* data = g_game->GetLevelData();
 	duration = data->effComboDuration;
