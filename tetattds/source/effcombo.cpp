@@ -52,12 +52,3 @@ void EffCombo::Tick()
 	duration--;
 	eggRad *= 0.9;
 }
-
-void EffCombo::SetOffset(int x, int y)
-{
-	for(int i = 0; i < COMBO_NUM_EGGS; i++)
-		eggs[i]->Move(x, y);
-	sign->Move(x, y);
-	XOffset += x;
-	YOffset += y;
-}

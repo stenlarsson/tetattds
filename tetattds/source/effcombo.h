@@ -14,16 +14,14 @@ enum ComboType
 
 class EffCombo : public Effect
 {
-  public:
+public:
 	EffCombo(int x, int y, ComboType type, int count);
 	~EffCombo();
 
 	void Draw();
 	void Tick();
 
-	void SetOffset(int x, int y);
-
-  private:
+private:
 	Sprite* sign;
 	Sprite* eggs[COMBO_NUM_EGGS];
 	double eggRad;

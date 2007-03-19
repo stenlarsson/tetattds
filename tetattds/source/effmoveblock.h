@@ -6,16 +6,14 @@
 
 class EffMoveBlock : public Effect
 {
-  public:
+public:
 	EffMoveBlock(enum Direction dir, BaseBlock* block, int x, int y);
 	~EffMoveBlock();
 
 	void Draw();
 	void Tick();
 
-	void SetOffset(int x, int y) { sprite->Move(x,y); }
-
-  private:
+private:
 	Sprite* sprite;
 	BaseBlock* block;
 	int stepX;
