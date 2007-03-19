@@ -65,59 +65,66 @@ namespace FwGui
 		this->listener = listener;
 	}
 	
+	/**
+	 * Maps SDL keyboard codes to FWKEY_* constants.
+	 * Returns FWKEY_NONE for unrecognized keys.
+	 */
+	static inline Key MapKey(int sdlkey) {
+		switch(sdlkey) {
+		case SDLK_SPACE:     return FWKEY_A;
+		case SDLK_ESCAPE:    return FWKEY_B;
+		case SDLK_BACKSPACE: return FWKEY_SELECT;
+		case SDLK_RETURN:    return FWKEY_START;
+		case SDLK_RIGHT:     return FWKEY_RIGHT;
+		case SDLK_LEFT:      return FWKEY_LEFT;
+		case SDLK_UP:        return FWKEY_UP;
+		case SDLK_DOWN:      return FWKEY_DOWN;
+		case SDLK_RSHIFT:    return FWKEY_R;
+		case SDLK_LSHIFT:    return FWKEY_L;
+		case SDLK_x:         return FWKEY_X;
+		case SDLK_y:         return FWKEY_Y;
+		default:             return FWKEY_NONE;
+		}
+	}
+	
 	bool Driver::Tick()
 	{
-		if(listener != NULL) {
-			SDL_Event event;
-			while(SDL_PollEvent(&event)) {
-				Key key = (Key)-1;
-				switch(event.type) {
-				case SDL_KEYDOWN:
-				case SDL_KEYUP:
-					switch(event.key.keysym.sym) {
-					case SDLK_SPACE:		key = FWKEY_A; break;
-					case SDLK_ESCAPE:		key = FWKEY_B; break;
-					case SDLK_BACKSPACE:	key = FWKEY_SELECT; break;
-					case SDLK_RETURN:		key = FWKEY_START; break;
-					case SDLK_RIGHT:		key = FWKEY_RIGHT; break;
-					case SDLK_LEFT:			key = FWKEY_LEFT; break;
-					case SDLK_UP:			key = FWKEY_UP; break;
-					case SDLK_DOWN:			key = FWKEY_DOWN; break;
-					case SDLK_RSHIFT:		key = FWKEY_R; break;
-					case SDLK_LSHIFT:		key = FWKEY_L; break;
-					case SDLK_x:			key = FWKEY_X; break;
-					case SDLK_y:			key = FWKEY_Y; break;
-					default:
-						break;
-					}
-
-					if(key != -1) {
+		SDL_Event event;
+		while(SDL_PollEvent(&event)) {
+			switch(event.type) {
+			case SDL_KEYDOWN:
+			case SDL_KEYUP:
+				if(listener != NULL) {
+					Key key = MapKey(event.key.keysym.sym);
+					if(key != FWKEY_NONE) {
 						if(event.type == SDL_KEYDOWN)
 							listener->KeyDown(key);
 						else if(event.type == SDL_KEYUP)
 							listener->KeyUp(key);
-					}
-					break;
-					
-				case SDL_MOUSEBUTTONDOWN:
-					listener->TouchDown(event.button.x, event.button.y);
-					break;
-					
-				case SDL_MOUSEBUTTONUP:
-					listener->TouchUp(event.button.x, event.button.y);
-					break;
-
-				case SDL_MOUSEMOTION:
-					if(event.motion.state)
-						listener->TouchDrag(event.motion.x, event.motion.y);
-					break;
-
-				case SDL_QUIT:
-					return false;				
-
-				default:
-					break;
+					}						
 				}
+				break;
+				
+			case SDL_MOUSEBUTTONDOWN:
+				if(listener != NULL)
+					listener->TouchDown(event.button.x, event.button.y);
+				break;
+				
+			case SDL_MOUSEBUTTONUP:
+				if(listener != NULL)
+					listener->TouchUp(event.button.x, event.button.y);
+				break;
+
+			case SDL_MOUSEMOTION:
+				if(listener != NULL && event.motion.state)
+					listener->TouchDrag(event.motion.x, event.motion.y);
+				break;
+
+			case SDL_QUIT:
+				return false;
+
+			default:
+				break;
 			}
 		}
 			  
