@@ -91,6 +91,11 @@ static inline bool IsHoverOrIdle(BaseBlock *b)
 		return false;
 	}	
 }
+static inline bool IsPopableWith(
+	BaseBlock * reference, BaseBlock * candidate)
+{
+	return IsHoverOrIdle(candidate) && candidate->SameType(reference);
+}
 
 PlayField::PlayField(EffectHandler *effects)
 :	effects(effects)
@@ -620,39 +625,27 @@ void PlayField::CheckForPops()
 			continue;
 		}
 
-		int check = 0;
-		for(check = i; !IsTopmost(check); check = Above(check))
+		int top = i;
+		for( ; !IsTopmost(top); top = Above(top))
 		{
-			if(field[Above(check)] == NULL)
-				break;
-			if(!field[Above(check)]->SameType(field[i]))
-				break;
-			if(!IsHoverOrIdle(field[Above(check)]))
+			if(!IsPopableWith(field[i], field[Above(top)]))
 				break;
 		}
 
-		int top = check;
-		int verticalCount = 1;
 		/* Chain * */ tmpChain = NULL;
 
-		for(check = top; !IsBottommostVisible(check); check = Below(check))
+		int bottom = top;
+		for( ; !IsBottommostVisible(bottom); bottom = Below(bottom))
 		{
 			// TODO: Move the chain thing after we know the block is used
 			if(tmpChain == NULL)
-				tmpChain = field[check]->GetChain(); //if one of the blocks is in a chain
+				tmpChain = field[bottom]->GetChain(); //if one of the blocks is in a chain
 													 //this'll store that
-			if(field[Below(check)] == NULL)
+			if(!IsPopableWith(field[i], field[Below(bottom)]))
 				break;
-			if(!field[Below(check)]->SameType(field[i]))
-				break;
-			if(!IsHoverOrIdle(field[Below(check)]))
-				break;
-			verticalCount++;
 		}
 
-		int bottom = check;
-
-		if(verticalCount >= 3)
+		if(bottom >= Below(top, 2)) // Distance between 3 adjacent blocks is 2
 		{
 			for(int check = top; check <= bottom; check = Below(check))
 			{
@@ -667,37 +660,27 @@ void PlayField::CheckForPops()
 			bPop = true;//and set popflag
 		}
 
-		for(check = i; !IsLeftmost(check); check = LeftOf(check))
+		int left = i;
+		for( ; !IsLeftmost(left); left = LeftOf(left))
 		{
-			if(field[LeftOf(check)] == NULL)
-				break;
-			if(!field[LeftOf(check)]->SameType(field[i]))
-				break;
-			if(!IsHoverOrIdle(field[LeftOf(check)]))
+			if(!IsPopableWith(field[i], field[LeftOf(left)]))
 				break;
 		}
 
-		int left = check;
-		int horizontalCount = 1;
 		/* Chain * */ tmpChain = NULL;
 
-		for(check = left; !IsRightmost(check); check = RightOf(check))
+		int right = left;
+		for( ; !IsRightmost(right); right = RightOf(right))
 		{
 			// TODO: Move until we know block should be in chain
 			if(tmpChain == NULL)
-				tmpChain = field[check]->GetChain();//store the chain
-			if(field[RightOf(check)] == NULL)
+				tmpChain = field[right]->GetChain();//store the chain
+
+			if(!IsPopableWith(field[i], field[RightOf(right)]))
 				break;
-			if(!field[RightOf(check)]->SameType(field[i]))
-				break;
-			if(!IsHoverOrIdle(field[RightOf(check)]))
-				break;
-			horizontalCount++;
 		}
 
-		int right = check;
-
-		if(horizontalCount >= 3)
+		if(right >= RightOf(left, 2)) // Distance between 3 adjacent blocks is 2
 		{
 			for(int check = left;check <= right; check = RightOf(check))
 			{
