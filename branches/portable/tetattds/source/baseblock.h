@@ -43,9 +43,11 @@ class BaseBlock
 	virtual enum BlockType GetType() { return type; }
 	virtual enum BlockState GetState() { return state; }
 	inline bool IsState(enum BlockState const & s) { return GetState() == s; } 
+	inline bool SameType(BaseBlock * other) { return other->GetType() == GetType(); }
 
 	virtual void Drop();
 	virtual void Land();
+	inline void DropAndLand() { Drop(); Land(); }
 	virtual void Move();
 	virtual void Hover(int delay);
 	virtual void Pop(int num, int total);
