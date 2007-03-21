@@ -38,7 +38,7 @@ int GarbageHandler::NextFree()
 	return -1;
 }
 
-void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
+void GarbageHandler::AllocGarbage(int num, GarbageType type)
 {
 	int nextFree = NextFree();
 	if(nextFree == -1) // No room for more garbage!
@@ -48,48 +48,40 @@ void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
 #endif
 		return;
 	}
-	
+
+	Blocks[nextFree] = new GarbageBlock(num, type);
+	bDropped[nextFree] = false;
+	bDropBlock[nextFree] = true;	
+	numBlocks++;
+}
+
+void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
+{
 	bDropGarbage = true;
 	
 	switch(type)
 	{
 	case GARBAGE_CHAIN:
-		Blocks[nextFree] = new GarbageBlock(num, GARBAGE_CHAIN);
-		bDropped[nextFree] = false;
-		bDropBlock[nextFree] = true;
-		numBlocks++;
+		AllocGarbage(num, GARBAGE_CHAIN);
 		break;
 	case GARBAGE_COMBO:
-		if(num-6 >= 5)	// If there's enough blocks to be sure we need a size-6 block
-		{				// Takes care of cases 11+
-			AddGarbage(num-6, player, GARBAGE_COMBO);	// Add remaining garbage first
-			AddGarbage(6, player, GARBAGE_COMBO);	// Add the size-6 block on top of the others
-		}
-		else if(num >= 7)	// For cases 7-10
 		{
-			int half = num / 2; // Divide into (3,4) (4,4) (4,5) (5,5)
-			AddGarbage(half, player, GARBAGE_COMBO); // Add small block first
-			AddGarbage(num-half, player, GARBAGE_COMBO);	// Add larger block
-		}
-		else	// Cases 3-6 (well, and 1-2, which shouldn't happen...)
-		{
-			Blocks[nextFree] = new GarbageBlock(num, GARBAGE_COMBO);
-			bDropped[nextFree] = false;
-			bDropBlock[nextFree] = true;
-			numBlocks++;
+			int rows = (num - PF_WIDTH + 1) / PF_WIDTH;
+			int small = num - rows * PF_WIDTH;
+			if(small >= 7) {
+				int half = small / 2; // Divide into (3,4) (4,4) (4,5) (5,5)
+				AllocGarbage(half, GARBAGE_COMBO);
+				AllocGarbage(small-half, GARBAGE_COMBO);
+			}
+			else
+				AllocGarbage(small, GARBAGE_COMBO);
+			while(rows-- > 0)
+				AllocGarbage(PF_WIDTH, GARBAGE_COMBO);
 		}
 		break;
 	case GARBAGE_EVIL:
-		for(int i = 0;i<num;i++)
-		{
-			Blocks[nextFree] = new GarbageBlock(0, GARBAGE_EVIL);
-			bDropped[nextFree] = false;
-			bDropBlock[nextFree] = true;
-			numBlocks++;
-			nextFree = NextFree();
-			if(nextFree == -1)
-				break; // No room for more garbage!!@$!%
-		}
+		while(num-- > 0)
+			AllocGarbage(0, GARBAGE_EVIL);
 		break;
 	}
 }
@@ -214,12 +206,8 @@ void GarbageHandler::Pop()
 		{
 			if (PopOrder[j+1] < PopOrder[j])
 			{
-				int tmp = PopOrder[j];
-				PopOrder[j] = PopOrder[j+1];
-				PopOrder[j+1] = tmp;
-				tmp = order[j];
-				order[j] = order[j+1];
-				order[j+1] = tmp;
+				std::swap(PopOrder[j], PopOrder[j+1]);
+				std::swap(order[j], order[j+1]);
 			}
 		}
 	}

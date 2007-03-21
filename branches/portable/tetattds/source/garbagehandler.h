@@ -8,13 +8,16 @@ class GarbageBlock;
 
 class GarbageHandler
 {
-  public:
+public:
 	GarbageHandler(PlayField* newPF);
 	~GarbageHandler();
 
-	// Adds garbage to be dropped, num is number of blocks for type==GARBAGE_COMBO and
-	// number of lines for type==GARBAGE_CHAIN and type==GARBAGE_EVIL.
-	// player is the number of the player who sent the garbage, used for coloring.
+	/**
+	 * Adds garbage to be dropped, num is number of blocks for type==GARBAGE_COMBO and
+	 * number of lines for type==GARBAGE_CHAIN and type==GARBAGE_EVIL.
+	 * player is the number of the player who sent the garbage,
+	 * to be used for coloring.
+	 */
 	void AddGarbage(int num, int player, GarbageType type);
 	
 	void Tick();
@@ -22,7 +25,10 @@ class GarbageHandler
 	void AddPop(GarbageBlock* newPop, Chain* chain, int order);
 	void Pop();
 
-  private:
+private:
+	/** Helper method to allocate a garbage block in the memory pool */
+	void AllocGarbage(int num, GarbageType type);
+	
 	int NextFree();					// Gets the next free Blocks-number
 	void DropGarbage();				// Drops GarbageBlocks specified by bDropChain
 	GarbageBlock* Blocks[MAX_GARBAGE];	// Our GarbageBlocks
