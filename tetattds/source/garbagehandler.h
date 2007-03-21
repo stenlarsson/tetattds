@@ -10,7 +10,7 @@ class GarbageBlock;
 struct GBInfo
 {
 	GBInfo() 
-		: block(NULL), chain(NULL), PopOrder(0xFFFF), bPop(false), bDropBlock(false)
+		: block(NULL), chain(NULL), PopOrder(0xFFFF)
 	{
 	}
 
@@ -19,10 +19,6 @@ struct GBInfo
 	Chain* chain;
 	/** The pop priority of the block */
 	int PopOrder;
-	/** Should the block pop this tick or not. */
-	bool bPop;
-	/** Set when opponent signals that a chain should be dropped. */
-	bool bDropBlock;
 };
 
 /**
@@ -55,7 +51,10 @@ private:
 	PlayField * const pf;
 	
 	GBInfo Blocks[MAX_GARBAGE];
-	int numBlocks;
-
-	bool bDropGarbage;
+	/** Number of blocks waiting to be popped */
+	int numPopBlocks;
+	/** Number of blocks normal blocks. */
+	int numNormalBlocks;
+	/** Number of blocks waiting to be dropped. */
+	int numDropBlocks;
 };

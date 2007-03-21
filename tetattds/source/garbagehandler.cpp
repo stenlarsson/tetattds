@@ -5,8 +5,9 @@
 
 GarbageHandler::GarbageHandler(PlayField* pf)
 	: pf(pf),
-		numBlocks(0),
-	  bDropGarbage(false)		
+		numPopBlocks(0),
+		numNormalBlocks(0),
+		numDropBlocks(0)
 {
 }
 
@@ -16,15 +17,8 @@ GarbageHandler::~GarbageHandler()
 
 int GarbageHandler::NextFree()
 {
-	int nextFree = 0;
-
-	for(nextFree = 0;nextFree < MAX_GARBAGE;nextFree++)
-	{
-		if(Blocks[nextFree].block == NULL)
-			return nextFree;
-	}
-
-	return -1;
+	int nextFree = numPopBlocks + numNormalBlocks + numDropBlocks;
+	return nextFree == MAX_GARBAGE ? -1 : nextFree;
 }
 
 void GarbageHandler::AllocGarbage(int num, GarbageType type)
@@ -38,17 +32,13 @@ void GarbageHandler::AllocGarbage(int num, GarbageType type)
 		return;
 	}
 
-	GBInfo & info = Blocks[nextFree];
-	info.block = new GarbageBlock(num, type);
-	info.bDropBlock = true;
+	Blocks[nextFree].block = new GarbageBlock(num, type);
 	
-	numBlocks++;
+	numDropBlocks++;
 }
 
 void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
 {
-	bDropGarbage = true;
-	
 	switch(type)
 	{
 	case GARBAGE_CHAIN:
@@ -78,91 +68,81 @@ void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
 
 void GarbageHandler::DropGarbage()
 {
-	// TODO: Rewrite/cleanup this function
-	int fieldHeight = pf->GetHeight();
 	int startField = PF_GARBAGE_DROP_START;
-	int curBlock = 0;
-	int curField = 0;
-	bool bLeftAlign = true;
-
-	if(numBlocks == 0)
-		return;
-
+	int fieldHeight = pf->GetHeight();
 	if(fieldHeight > 14)
 		startField = PF_NUM_BLOCKS - fieldHeight*PF_WIDTH - 1;
 
 	// Get the position where we should start inserting
-	curField = startField;
+	int curField = startField;
 	while (curField >=2*PF_WIDTH-1 && !pf->IsLineOfFieldEmpty(curField))
 		curField -= PF_WIDTH;
 
 	// Process all chains except the garbage chains
-	for(curBlock = 0;curBlock < MAX_GARBAGE;curBlock++)
+	bool bLeftAlign = true;
+	for(int i = 0; i < numDropBlocks; i++)
 	{
-		GBInfo & info = Blocks[curBlock];
-		if(!info.bDropBlock)
-			continue;
+		GBInfo & info = Blocks[i + numPopBlocks + numNormalBlocks];
 		if(info.block->GetType() == GARBAGE_CHAIN)
 			continue;
 				
 		if (!pf->InsertGarbage(curField, info.block, bLeftAlign))
-			break;
+			return;
 
 		bLeftAlign = !bLeftAlign;
 		curField -= PF_WIDTH;
 		info.block->SetGraphic();
-
-		info.bDropBlock = false;
-		numBlocks--;
 	}
 
 	// Now process the delayed garbage chains
-	for(curBlock = 0;curBlock < MAX_GARBAGE;curBlock++)
+	for(int i = 0; i < numDropBlocks; i++)
 	{
-		GBInfo & info = Blocks[curBlock];
-		if(!info.bDropBlock)
+		GBInfo & info = Blocks[i + numPopBlocks + numNormalBlocks];
+		if(info.block->GetType() != GARBAGE_CHAIN)
 			continue;
 		
 		if (!pf->InsertGarbage(curField, info.block, false))
-			break;
+			return;
 
 		info.block->SetGraphic();
-		info.bDropBlock = false;
-		numBlocks--;
 	}
-	
-	bDropGarbage = false;
+
+	numNormalBlocks += numDropBlocks;
+	numDropBlocks = 0;
 }
 
 void GarbageHandler::Tick()
 {
-	if(bDropGarbage)
+	if(numDropBlocks > 0)
 		DropGarbage();
 	
-	for(int i = 0;i < MAX_GARBAGE;i++)
+	ASSERT(numPopBlocks == 0);
+	for(int i = 0; i < numNormalBlocks; )
 	{
-		if(Blocks[i].block == NULL)
-			continue;
-	
 		Blocks[i].block->Tick();
 
 		if(Blocks[i].block->GetNum() > 0)
-			continue;
-
-		DEL(Blocks[i].block);
+			i++;
+		else
+		{
+			DEL(Blocks[i].block);
+			std::swap(Blocks[i], Blocks[--numNormalBlocks]);
+		}	
 	}
 }
 
 void GarbageHandler::AddPop(GarbageBlock* newPop, Chain* chain, int order)
 {
-	for(int i = 0;i < MAX_GARBAGE;i++)
+	for(int i = numPopBlocks; i < numPopBlocks + numNormalBlocks; i++)
 	{
 		GBInfo & info = Blocks[i];
 		if(info.block == newPop)
 		{
-			info.bPop = true;
 			info.chain = chain;
 			info.PopOrder = order;
+			std::swap(Blocks[i], Blocks[numPopBlocks]);
+			numPopBlocks++;
+			numNormalBlocks--;
 			break;
 		}
 	}
@@ -170,39 +150,26 @@ void GarbageHandler::AddPop(GarbageBlock* newPop, Chain* chain, int order)
 
 void GarbageHandler::Pop()
 {
-	int numBlocks = 0;
-	int delay = 0;
-	int order[MAX_GARBAGE];
-	int numGarbage = 0;
-	
-	for(int i = 0;i < MAX_GARBAGE;i++)
-	{
-		if(Blocks[i].bPop)
-		{
-			numBlocks += Blocks[i].block->GetNum();
-			numGarbage++;
-		}
-	}
-
-	if(numBlocks == 0)
-		return;
-
-	for(int i = 0;i<MAX_GARBAGE;i++)
-		order[i] = i;
-
 	// Bubblesortey!
-	for (int i=0; i<MAX_GARBAGE-1; i++)
-		for (int j=0; j<MAX_GARBAGE-1-i; j++)
+	for(int i=0; i<numPopBlocks-1; i++)
+		for(int j=0; j<numPopBlocks-1-i; j++)
 			if (Blocks[j+1].PopOrder < Blocks[j].PopOrder)
 				std::swap(Blocks[j], Blocks[j+1]);
 	
-	for(int i = 0;i < numGarbage;i++)
+	int numBlocks = 0;
+	for(int i = 0; i < numPopBlocks; i++)
+		numBlocks += Blocks[i].block->GetNum();
+
+	int delay = 0;
+	for(int i = 0; i < numPopBlocks; i++)
 	{
 		Blocks[i].block->Pop(delay, numBlocks, Blocks[i].chain);
 		delay += Blocks[i].block->GetNum();
-		Blocks[i].bPop = false;
 	}
 
 	for(int i = 0;i < MAX_GARBAGE;i++)
 		Blocks[i].PopOrder = 0xFFFF;
+		
+	numNormalBlocks += numPopBlocks;
+	numPopBlocks = 0;
 }
