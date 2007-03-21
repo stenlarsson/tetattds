@@ -3,7 +3,7 @@
 #include "playfield.h"
 #include "garbageblock.h"
 
-GarbageHandler::GarbageHandler(PlayField* newpf)
+GarbageHandler::GarbageHandler(PlayField* pf)
 	: pf(pf),
 		numBlocks(0),
 	  bDropGarbage(false)		
