@@ -6,6 +6,28 @@
 class PlayField;
 class GarbageBlock;
 
+/** Helper struct maintaining per-block information */
+struct GBInfo
+{
+	GBInfo() 
+		: block(NULL), chain(NULL), PopOrder(0xFFFF), bPop(false), bDropBlock(false)
+	{
+	}
+
+	GarbageBlock* block;
+	/** The local chain the GarbageBlock is involved in. */
+	Chain* chain;
+	/** The pop priority of the block */
+	int PopOrder;
+	/** Should the block pop this tick or not. */
+	bool bPop;
+	/** Set when opponent signals that a chain should be dropped. */
+	bool bDropBlock;
+};
+
+/**
+ * GarbageHandler is a helper class for PlayField that handles garbage.
+ */
 class GarbageHandler
 {
 public:
@@ -19,9 +41,7 @@ public:
 	 * to be used for coloring.
 	 */
 	void AddGarbage(int num, int player, GarbageType type);
-	
 	void Tick();
-
 	void AddPop(GarbageBlock* newPop, Chain* chain, int order);
 	void Pop();
 
@@ -29,17 +49,13 @@ private:
 	/** Helper method to allocate a garbage block in the memory pool */
 	void AllocGarbage(int num, GarbageType type);
 	
-	int NextFree();					// Gets the next free Blocks-number
-	void DropGarbage();				// Drops GarbageBlocks specified by bDropChain
-	GarbageBlock* Blocks[MAX_GARBAGE];	// Our GarbageBlocks
-	Chain* BlockChain[MAX_GARBAGE];		// Keeps track of the local chain the GarbageBlock is involved in.
-	bool bDropped[MAX_GARBAGE];		// Set when a block is dropped to the playfield.
-	bool bPop[MAX_GARBAGE];			// Whether a certain GarbageBlock should pop this tick or not.
-	int PopOrder[MAX_GARBAGE];			// The order to pop garbageblocks.
-	int numBlocks;						// Current number of active GarbageBlocks.
-//	int iDropChain[MAX_GARBAGE];		// Opponents chain number, to keep track of when to drop what.
-	bool bDropBlock[MAX_GARBAGE];		// Set when opponent signals that a chain should be dropped.
-	bool bDropGarbage;					// Set when there's something to drop.
+	int NextFree();
+	void DropGarbage();
 
-	PlayField* pf;
+	PlayField * const pf;
+	
+	GBInfo Blocks[MAX_GARBAGE];
+	int numBlocks;
+
+	bool bDropGarbage;
 };
