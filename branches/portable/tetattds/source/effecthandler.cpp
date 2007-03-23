@@ -1,21 +1,8 @@
+#include "util.h"
 #include "effecthandler.h"
 #include "effect.h"
 #include <algorithm>
 #include <functional>
-
-template <typename T>
-static inline void delete_elem(T* & t)
-{
-	delete t;
-	t = NULL;
-}
-
-template <typename It>
-static inline void delete_each(It begin, It end)
-{
-	for (It it = begin; it != end; ++it)
-		delete_elem(*it);
-}
 
 EffectHandler::EffectHandler()
   : effects()
@@ -24,8 +11,7 @@ EffectHandler::EffectHandler()
 
 EffectHandler::~EffectHandler()
 {
-	delete_each(effects.begin(), effects.end());
-	effects.clear();
+	delete_and_clear(effects);
 }
 
 void EffectHandler::Add(Effect* e)
@@ -36,10 +22,7 @@ void EffectHandler::Add(Effect* e)
 void EffectHandler::Tick()
 {
 	std::for_each(effects.begin(), effects.end(), std::mem_fun(&Effect::Tick));
-	std::list<Effect*>::iterator keep =
-		std::partition(effects.begin(), effects.end(), std::mem_fun(&Effect::IsDone));
-	delete_each(effects.begin(), keep);
-	effects.erase(effects.begin(), keep);
+	delete_and_erase_if(effects, std::mem_fun(&Effect::IsDone));
 }
 
 void EffectHandler::Draw()

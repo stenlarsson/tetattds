@@ -2,39 +2,30 @@
 #include "garbagehandler.h"
 #include "playfield.h"
 #include "garbageblock.h"
+#include "util.h"
+#include <algorithm>
+#include <functional>
+
+/** Helper struct maintaining per-block information */
+struct GBInfo
+{
+	GarbageBlock* block;
+	Chain* chain;
+};
 
 GarbageHandler::GarbageHandler(PlayField* pf)
 	: pf(pf),
-		numPopBlocks(0),
-		numNormalBlocks(0),
-		numDropBlocks(0)
+		activeBlocks(),
+		normalDrops(), chainDrops(),
+		popBlocks()
 {
 }
 
 GarbageHandler::~GarbageHandler()
 {
-}
-
-int GarbageHandler::NextFree()
-{
-	int nextFree = numPopBlocks + numNormalBlocks + numDropBlocks;
-	return nextFree == MAX_GARBAGE ? -1 : nextFree;
-}
-
-void GarbageHandler::AllocGarbage(int num, GarbageType type)
-{
-	int nextFree = NextFree();
-	if(nextFree == -1) // No room for more garbage!
-	{
-#ifdef DEBUG
-		printf("Too much garbage, skipping.\n"); // DEBUG
-#endif
-		return;
-	}
-
-	Blocks[nextFree].block = new GarbageBlock(num, type);
-	
-	numDropBlocks++;
+	delete_and_clear(normalDrops);
+	delete_and_clear(chainDrops);
+	delete_and_clear(activeBlocks);
 }
 
 void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
@@ -42,7 +33,7 @@ void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
 	switch(type)
 	{
 	case GARBAGE_CHAIN:
-		AllocGarbage(num, GARBAGE_CHAIN);
+		chainDrops.push_back(new GarbageBlock(num, GARBAGE_CHAIN));
 		break;
 	case GARBAGE_COMBO:
 		{
@@ -50,18 +41,18 @@ void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
 			int small = num - rows * PF_WIDTH;
 			if(small >= 7) {
 				int half = small / 2; // Divide into (3,4) (4,4) (4,5) (5,5)
-				AllocGarbage(half, GARBAGE_COMBO);
-				AllocGarbage(small-half, GARBAGE_COMBO);
+				normalDrops.push_back(new GarbageBlock(half, GARBAGE_COMBO));
+				normalDrops.push_back(new GarbageBlock(small-half, GARBAGE_COMBO));
 			}
 			else
-				AllocGarbage(small, GARBAGE_COMBO);
+				normalDrops.push_back(new GarbageBlock(small, GARBAGE_COMBO));
 			while(rows-- > 0)
-				AllocGarbage(PF_WIDTH, GARBAGE_COMBO);
+				normalDrops.push_back(new GarbageBlock(PF_WIDTH, GARBAGE_COMBO));
 		}
 		break;
 	case GARBAGE_EVIL:
 		while(num-- > 0)
-			AllocGarbage(0, GARBAGE_EVIL);
+			normalDrops.push_back(new GarbageBlock(0, GARBAGE_EVIL));
 		break;
 	}
 }
@@ -78,98 +69,61 @@ void GarbageHandler::DropGarbage()
 	while (curField >=2*PF_WIDTH-1 && !pf->IsLineOfFieldEmpty(curField))
 		curField -= PF_WIDTH;
 
-	// Process all chains except the garbage chains
+	// Process all garbage blocks about to drop.
 	bool bLeftAlign = true;
-	for(int i = 0; i < numDropBlocks; i++)
+	std::list<GarbageBlock*> * queues[] = {&normalDrops, &chainDrops};
+	for(int i = 0; i < 2; i++)
 	{
-		GBInfo & info = Blocks[i + numPopBlocks + numNormalBlocks];
-		if(info.block->GetType() == GARBAGE_CHAIN)
-			continue;
-				
-		if (!pf->InsertGarbage(curField, info.block, bLeftAlign))
-			return;
+		for(std::list<GarbageBlock*> & q = *(queues[i]) ; !q.empty(); q.pop_front())
+		{
+			// Abort if we cannot place all garbage.
+			if (!pf->InsertGarbage(curField, q.front(), bLeftAlign))
+				break;
 
-		bLeftAlign = !bLeftAlign;
-		curField -= PF_WIDTH;
-		info.block->SetGraphic();
+			bLeftAlign = !bLeftAlign;
+			curField -= PF_WIDTH;
+			q.front()->SetGraphic();
+			
+			activeBlocks.push_back(q.front());
+		}
 	}
-
-	// Now process the delayed garbage chains
-	for(int i = 0; i < numDropBlocks; i++)
-	{
-		GBInfo & info = Blocks[i + numPopBlocks + numNormalBlocks];
-		if(info.block->GetType() != GARBAGE_CHAIN)
-			continue;
-		
-		if (!pf->InsertGarbage(curField, info.block, false))
-			return;
-
-		info.block->SetGraphic();
-	}
-
-	numNormalBlocks += numDropBlocks;
-	numDropBlocks = 0;
 }
 
 void GarbageHandler::Tick()
 {
-	if(numDropBlocks > 0)
+	if(!normalDrops.empty() || !chainDrops.empty())
 		DropGarbage();
 	
-	ASSERT(numPopBlocks == 0);
-	for(int i = 0; i < numNormalBlocks; )
-	{
-		Blocks[i].block->Tick();
-
-		if(Blocks[i].block->GetNum() > 0)
-			i++;
-		else
-		{
-			DEL(Blocks[i].block);
-			std::swap(Blocks[i], Blocks[--numNormalBlocks]);
-		}	
-	}
+	std::for_each(
+		activeBlocks.begin(), activeBlocks.end(),
+		std::mem_fun(&GarbageBlock::Tick));
+	
+	delete_and_erase_if(activeBlocks, std::mem_fun(&GarbageBlock::IsEmpty));
 }
 
 void GarbageHandler::AddPop(GarbageBlock* newPop, Chain* chain, int order)
 {
-	for(int i = numPopBlocks; i < numPopBlocks + numNormalBlocks; i++)
-	{
-		GBInfo & info = Blocks[i];
-		if(info.block == newPop)
-		{
-			info.chain = chain;
-			info.PopOrder = order;
-			std::swap(Blocks[i], Blocks[numPopBlocks]);
-			numPopBlocks++;
-			numNormalBlocks--;
-			break;
-		}
+	GBInfo info = {newPop, chain};
+	if (order < 0) {
+		popBlocks.push_front(info);
+	}
+	else {
+		popBlocks.push_back(info);
 	}
 }
 
 void GarbageHandler::Pop()
 {
-	// Bubblesortey!
-	for(int i=0; i<numPopBlocks-1; i++)
-		for(int j=0; j<numPopBlocks-1-i; j++)
-			if (Blocks[j+1].PopOrder < Blocks[j].PopOrder)
-				std::swap(Blocks[j], Blocks[j+1]);
-	
 	int numBlocks = 0;
-	for(int i = 0; i < numPopBlocks; i++)
-		numBlocks += Blocks[i].block->GetNum();
+	for(std::list<GBInfo>::iterator it = popBlocks.begin(); it != popBlocks.end(); ++it)
+		numBlocks += it->block->GetNum();
 
 	int delay = 0;
-	for(int i = 0; i < numPopBlocks; i++)
+	for(std::list<GBInfo>::iterator it = popBlocks.begin(); it != popBlocks.end(); ++it)
 	{
-		Blocks[i].block->Pop(delay, numBlocks, Blocks[i].chain);
-		delay += Blocks[i].block->GetNum();
+		it->block->Pop(delay, numBlocks, it->chain);
+		delay += it->block->GetNum();
 	}
 
-	for(int i = 0;i < MAX_GARBAGE;i++)
-		Blocks[i].PopOrder = 0xFFFF;
-		
-	numNormalBlocks += numPopBlocks;
-	numPopBlocks = 0;
+	popBlocks.clear();
 }
