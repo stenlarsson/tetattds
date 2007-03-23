@@ -38,6 +38,7 @@ class GarbageBlock
 
 	BaseBlock* GetBlock(int num);
 	int GetNum();
+	bool IsEmpty() {return GetNum() <= 0;}
 	GarbageType GetType() {return type;}
 
   private:

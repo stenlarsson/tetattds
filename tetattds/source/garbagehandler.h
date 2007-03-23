@@ -2,24 +2,12 @@
 
 #include "chain.h"
 #include "garbage.h"
+#include <vector>
+#include <list>
 
 class PlayField;
 class GarbageBlock;
-
-/** Helper struct maintaining per-block information */
-struct GBInfo
-{
-	GBInfo() 
-		: block(NULL), chain(NULL), PopOrder(0xFFFF)
-	{
-	}
-
-	GarbageBlock* block;
-	/** The local chain the GarbageBlock is involved in. */
-	Chain* chain;
-	/** The pop priority of the block */
-	int PopOrder;
-};
+class GBInfo;
 
 /**
  * GarbageHandler is a helper class for PlayField that handles garbage.
@@ -37,24 +25,26 @@ public:
 	 * to be used for coloring.
 	 */
 	void AddGarbage(int num, int player, GarbageType type);
+	/** Call Tick for all active blocks, and remove redundant ones. */
 	void Tick();
+	/**
+	 * Add another garbage block to the pop check. If order is positive
+	 * the block is placed after existing blocks. if order is negative,
+	 * it is placed before existing blocks.
+	 */
 	void AddPop(GarbageBlock* newPop, Chain* chain, int order);
+	/** Run Pop for the blocks collected using AddPop. */
 	void Pop();
 
 private:
-	/** Helper method to allocate a garbage block in the memory pool */
-	void AllocGarbage(int num, GarbageType type);
-	
-	int NextFree();
 	void DropGarbage();
 
 	PlayField * const pf;
 	
-	GBInfo Blocks[MAX_GARBAGE];
-	/** Number of blocks waiting to be popped */
-	int numPopBlocks;
-	/** Number of blocks normal blocks. */
-	int numNormalBlocks;
-	/** Number of blocks waiting to be dropped. */
-	int numDropBlocks;
+	/** Blocks that a currently in play. */
+	std::vector<GarbageBlock*> activeBlocks;
+	/** Blocks waiting to be dropped into play. */
+	std::list<GarbageBlock*> normalDrops, chainDrops;
+	/** Additional information about blocks being popped. */
+	std::list<GBInfo> popBlocks;
 };
