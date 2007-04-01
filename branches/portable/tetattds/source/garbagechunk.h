@@ -10,7 +10,7 @@ class GarbageBlock;
  */
 class GarbageChunk
 {
-  public:
+public:
 	GarbageChunk(int num, GarbageBlock* newGB, GarbageType type);
 	~GarbageChunk();
 
@@ -20,8 +20,7 @@ class GarbageChunk
 
 	Garbage* GetBlock(int num) { return blocks[num]; }
 
-  private:
+private:
 	Garbage* blocks[6];
 	int numBlocks;
-	GarbageBlock* gb;
 };
