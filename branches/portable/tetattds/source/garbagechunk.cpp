@@ -16,9 +16,11 @@ GarbageChunk::~GarbageChunk()
 {
 }
 
-int GetGraphic(GarbageGraphicsType type, int block, int blockCount)
+static inline int GetGraphic(GarbageGraphicsType type, int block, int blockCount)
 {
-	if(block == 0)
+	if(type == GARBAGE_GRAPHICS_NONE)
+		return GARBAGE_GRAPHIC_DISABLED;
+	else if(block == 0)
 		return (int)type + 0;
 	else if(block == blockCount - 1)
 		return (int)type + 2;
@@ -42,17 +44,7 @@ void GarbageChunk::Pop(GarbageGraphicsType nextType, int delay, int total)
 {
 	ASSERT(nextType != GARBAGE_GRAPHICS_EVIL);
 	
-	if (nextType == GARBAGE_GRAPHICS_NONE)
-	{
-		// in case of turning into normal blocks
-		// we do a special loop and return
-		for(int i = 0; i < numBlocks; i++)
-			blocks[i]->Pop(delay + numBlocks - i - 1, total, -1);
-	}
-	else
-	{
-		for(int i = 0; i < numBlocks; i++)
-			blocks[i]->Pop(
-				delay + numBlocks - i - 1, total, GetGraphic(nextType, i, numBlocks));
-	}
+	for(int i = 0; i < numBlocks; i++)
+		blocks[i]->Pop(
+			delay + numBlocks - i - 1, total, GetGraphic(nextType, i, numBlocks));
 }
