@@ -10,7 +10,7 @@ enum GarbageType
 #include "baseblock.h"
 #include "garbageblock.h"
 
-
+#define GARBAGE_GRAPHIC_DISABLED (-1)
 
 /**
  * One block of garbage

@@ -11,7 +11,7 @@ Garbage::Garbage(GarbageType type, GarbageBlock * gb)
 	  	type == GARBAGE_EVIL ? BLC_EVILGARBAGE : BLC_GARBAGE),
 		blockType(BLC_GARBAGE),
 		gb(gb),
-		nextGraphic(-1),
+		nextGraphic(GARBAGE_GRAPHIC_DISABLED),
 		bWantToDrop(false)
 {
 	BaseBlock::bNeedPopCheck = false;
@@ -108,19 +108,19 @@ void Garbage::ChangeState(enum BlockState newState)
 		stateDelay = 1;
 		break;
 	case BST_POP3:
-		anim = Anim(nextGraphic == -1 ? blockType : nextGraphic);
+		anim = Anim(nextGraphic == GARBAGE_GRAPHIC_DISABLED ? blockType : nextGraphic);
 		state = BST_POP3;
 		nextState = BST_DEAD;
 		stateDelay = dieOffset;
 		break;
 	case BST_DEAD:
-		if(nextGraphic == -1)
+		if(nextGraphic == GARBAGE_GRAPHIC_DISABLED)
 		{
 			state = BST_DEAD;
 		}
 		else
 		{
-			nextGraphic = -1;
+			nextGraphic = GARBAGE_GRAPHIC_DISABLED;
 			state = BST_FALLING;
 			dropTimer = BLOCK_DROP_TIMER;
 		}
