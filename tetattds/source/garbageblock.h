@@ -22,7 +22,7 @@ enum GarbageGraphicsType
  */
 class GarbageBlock
 {
-  public:
+public:
 	GarbageBlock(int num, GarbageType type);
 	~GarbageBlock();
 
@@ -34,14 +34,19 @@ class GarbageBlock
 	void Tick();
 
 	void SetGraphic();
+	/**
+	 * Called from Garbage::~Garbage, to signal that the block goes away
+	 * The Garbage is in turn destroyed in PlayField when it is replaced
+	 * by a normal block (i.e. right after the call to Garbage::CreateBlock)
+	 */
 	void RemoveBlock();
 
 	BaseBlock* GetBlock(int num);
-	int GetNum();
-	bool IsEmpty() {return GetNum() <= 0;}
-	GarbageType GetType() {return type;}
+	inline int GetNum() const { return numBlocks; };
+	inline bool IsEmpty() const { return GetNum() <= 0; }
+	inline GarbageType GetType() const { return type; }
 
-  private:
+private:
 	GarbageChunk* chunks[MAX_GARBAGE_SIZE];
 	int lines;
 	int numBlocks;
