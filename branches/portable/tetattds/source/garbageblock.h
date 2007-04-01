@@ -2,6 +2,7 @@
 
 #include "baseblock.h"
 #include "garbage.h"
+#include <vector>
 
 class GarbageChunk;
 class Garbage;
@@ -47,11 +48,11 @@ public:
 	inline GarbageType GetType() const { return type; }
 
 private:
-	GarbageChunk* chunks[MAX_GARBAGE_SIZE];
 	int lines;
 	int numBlocks;
+	std::vector<GarbageChunk*> chunks;
 	int numFalling;
-	enum BlockState state;
+	BlockState state;
 	int popDelay;
 	GarbageType type;
 };

@@ -6,39 +6,26 @@
 #include "playfield.h"
 
 GarbageBlock::GarbageBlock(int num, GarbageType type)
+	: lines(type != GARBAGE_CHAIN ? 1 : num),
+	  numBlocks(type == GARBAGE_COMBO ? num : lines * PF_WIDTH),
+	  chunks(),
+	  numFalling(0),
+	  state(BST_IDLE),
+	  popDelay(0),
+	  type(type)
 {
-	for(int i = 0;i<MAX_GARBAGE_SIZE;i++)
-		chunks[i] = NULL;
-	
-	numFalling = 0;
-	state = BST_IDLE;
-	popDelay = 0;
-	numBlocks = 0;
-	lines = 0;
-	this->type = type;
-	
+	chunks.reserve(lines);
 	switch(type)
 	{
 		case GARBAGE_COMBO:
-			chunks[0] = new GarbageChunk(num, this, GARBAGE_COMBO);
-			lines = 1;
-			numBlocks = num;
+			chunks.push_back(new GarbageChunk(num, this, type));
 			break;
 		case GARBAGE_CHAIN:
-			if(num > MAX_GARBAGE_SIZE)
-				num=MAX_GARBAGE_SIZE;
-
 			for(int i = 0;i<num;i++)
-			{
-				chunks[i] = new GarbageChunk(PF_WIDTH, this, type);
-				lines++;
-			}
-			numBlocks = PF_WIDTH*num;
+				chunks.push_back(new GarbageChunk(PF_WIDTH, this, type));
 			break;
 		case GARBAGE_EVIL:
-			chunks[0] = new GarbageChunk(PF_WIDTH, this, type);
-			lines = 1;
-			numBlocks = PF_WIDTH;
+			chunks.push_back(new GarbageChunk(PF_WIDTH, this, type));
 			break;
 	}
 }
@@ -147,8 +134,9 @@ void GarbageBlock::RemoveBlock()
 	numBlocks--;
 	if(numBlocks%6 == 0)
 	{
-		delete chunks[lines];
-		chunks[lines] = NULL;
+		delete chunks.back();
+		chunks.back() = NULL;
+		chunks.pop_back();
 		lines--;
 	}
 }
