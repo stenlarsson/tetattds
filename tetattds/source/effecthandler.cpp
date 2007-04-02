@@ -21,11 +21,11 @@ void EffectHandler::Add(Effect* e)
 
 void EffectHandler::Tick()
 {
-	std::for_each(effects.begin(), effects.end(), std::mem_fun(&Effect::Tick));
+	for_each(effects, std::mem_fun(&Effect::Tick));
 	delete_and_erase_if(effects, std::mem_fun(&Effect::IsDone));
 }
 
 void EffectHandler::Draw()
 {
-	std::for_each(effects.begin(), effects.end(), std::mem_fun(&Effect::Draw));
+	for_each(effects, std::mem_fun(&Effect::Draw));
 }
