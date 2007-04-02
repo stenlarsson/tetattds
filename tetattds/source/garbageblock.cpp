@@ -29,14 +29,14 @@ GarbageBlock::~GarbageBlock()
 
 void GarbageBlock::InitPop(Chain* chain)
 {
-	for(unsigned int i = 0; i < blocks.size(); i++)
-	{
-		blocks[i]->SetPop();
-		blocks[i]->SetChain(chain); // Needed so adjacent garbageblocks triggered by this one gets the same chain.
-	}
+	for_each(blocks, std::mem_fun(&Garbage::SetPop));
+
+	// Needed so adjacent garbageblocks triggered by this one gets the same chain.
+	for_each(blocks, mem_fun_with(&Garbage::SetChain, chain));
 }
 
-inline static GarbageGraphicsType GetGraphic(int line, int lineCount)
+/** Get the correct graphics style specific line in a block of a certain size. */
+inline static GarbageGraphicsType GetLineGraphic(int line, int lineCount)
 {      
   if (lineCount == 1)
 		return GARBAGE_GRAPHICS_SINGLE;
@@ -48,16 +48,25 @@ inline static GarbageGraphicsType GetGraphic(int line, int lineCount)
 		return GARBAGE_GRAPHICS_MIDDLE;
 }
 
-static inline int GetChunkGraphic(GarbageGraphicsType type, int block, int blockCount)
+/** Adjust the tile number for block ends. */
+static inline int GetBlockGraphic(GarbageGraphicsType type, int block, int blockCount)
 {
-	if(type == GARBAGE_GRAPHICS_NONE)
-		return GARBAGE_GRAPHIC_DISABLED;
-	else if(block == 0)
+	if(block == 0)
 		return (int)type + 0;
 	else if(block == blockCount - 1)
 		return (int)type + 2;
 	else
 		return (int)type + 1;
+}
+
+/**
+ * Get the appropriate tile for block index given the number of lines and
+ * the number of blocks in each row.
+ */
+static inline int GetGraphic(int index, int lineCount, int blockCount)
+{
+	return GetBlockGraphic(
+		GetLineGraphic(index / PF_WIDTH, lineCount), index % PF_WIDTH, blockCount);
 }
 
 /**
@@ -71,19 +80,16 @@ static inline int GetLines(int count)
 
 void GarbageBlock::Pop(int delay, int total, Chain* newchain)
 {
-	int i;
-	for(i = 0; i < (int)blocks.size()-PF_WIDTH; i++)
-		blocks[i]->Pop(
-			delay + blocks.size() - i - 1,
-			total,
-			GetChunkGraphic(
-				GetGraphic(i/PF_WIDTH, GetLines(blocks.size())-1),
-				i % PF_WIDTH,
-				blocks.size() < PF_WIDTH ? blocks.size() : PF_WIDTH));
+	// int required here since we're stopping on less then 0
+	int firstRemoved = std::max<size_t>(blocks.size(), PF_WIDTH) - PF_WIDTH;
 
-	for( ; i < (int)blocks.size(); i++)
+	for(int i = blocks.size() - 1; i >= firstRemoved; i--)
+		blocks[i]->Pop(delay++, total, GARBAGE_GRAPHIC_DISABLED);
+
+	for(int i = firstRemoved - 1; i >= 0; i--)
 		blocks[i]->Pop(
-			delay + blocks.size() - i - 1, total, GARBAGE_GRAPHIC_DISABLED);
+			delay++, total,
+			GetGraphic(i, GetLines(blocks.size()) - 1, PF_WIDTH));
 
 	state = BST_POP;
 	const LevelData* data = g_game->GetLevelData();
@@ -93,14 +99,14 @@ void GarbageBlock::Pop(int delay, int total, Chain* newchain)
 void GarbageBlock::SetGraphic()
 {
 	if(type == GARBAGE_EVIL)
-		for(int i = 0; i < PF_WIDTH; i++)
-			blocks[i]->SetGraphic(GetChunkGraphic(GARBAGE_GRAPHICS_EVIL, i, PF_WIDTH));
+		for(unsigned int i = 0; i < PF_WIDTH; i++)
+			blocks[i]->SetGraphic(
+				GetBlockGraphic(GARBAGE_GRAPHICS_EVIL, i, PF_WIDTH));
 	else
 		for(unsigned int i = 0; i < blocks.size(); i++)
 			blocks[i]->SetGraphic(
-				GetChunkGraphic(
-					GetGraphic(i/PF_WIDTH, GetLines(blocks.size())),
-					i % PF_WIDTH,
+				GetGraphic(
+					i, GetLines(blocks.size()),
 					blocks.size() < PF_WIDTH ? blocks.size() : PF_WIDTH));
 }
 
@@ -114,10 +120,9 @@ BaseBlock* GarbageBlock::GetBlock(int num)
 void GarbageBlock::Drop()
 {
 	numFalling++;
-	if((numFalling == (int)blocks.size() || numFalling == PF_WIDTH) && state != BST_POP)
+	if((numFalling == blocks.size() || numFalling == PF_WIDTH) && state != BST_POP)
 	{
-		for(unsigned int i = 0; i < blocks.size(); i++)
-			blocks[i]->ChangeState(BST_FALLING);
+		for_each(blocks, mem_fun_with(&Garbage::ChangeState, BST_FALLING));
 		state = BST_FALLING;
 		numFalling = 0;
 	}
@@ -127,30 +132,25 @@ void GarbageBlock::Land()
 {
 	if(state == BST_FALLING)
 	{
-		for(unsigned int i = 0; i < blocks.size(); i++)
-			blocks[i]->ChangeState(BST_IDLE);
+		for_each(blocks, mem_fun_with(&Garbage::ChangeState, BST_IDLE));
 		state = BST_IDLE;
 	}
 }
 
 void GarbageBlock::Hover(int delay)
 {
-	for(unsigned int i = 0; i < blocks.size(); i++)
-		blocks[i]->ChangeState(BST_IDLE);
+	for_each(blocks, mem_fun_with(&Garbage::ChangeState, BST_IDLE));
 }
 
 void GarbageBlock::Tick()
 {
 	if(state == BST_IDLE && numFalling != 0)
-	{
-		for(unsigned int i = 0; i < blocks.size(); i++)
-			blocks[i]->ChangeState(BST_IDLE);
-	}
+		for_each(blocks, mem_fun_with(&Garbage::ChangeState, BST_IDLE));
+
 	if(state == BST_POP && --popDelay <= 0)
 	{
 		state = BST_FALLING;
-		for(int i = 0; i < (int)blocks.size()-PF_WIDTH; i++)
-			blocks[i]->SetChain(NULL);
+		for_each(blocks, mem_fun_with(&Garbage::SetChain, (Chain*)NULL));
 	}
 	numFalling = 0;
 }

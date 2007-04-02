@@ -48,7 +48,7 @@ public:
 
 private:
 	std::vector<Garbage*> blocks;
-	int numFalling;
+	unsigned int numFalling;
 	BlockState state;
 	int popDelay;
 	GarbageType type;
