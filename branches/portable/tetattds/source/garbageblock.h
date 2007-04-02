@@ -4,7 +4,6 @@
 #include "garbage.h"
 #include <vector>
 
-class GarbageChunk;
 class Garbage;
 class Chain;
 
@@ -43,14 +42,12 @@ public:
 	void RemoveBlock();
 
 	BaseBlock* GetBlock(int num);
-	inline int GetNum() const { return numBlocks; };
+	inline int GetNum() const { return blocks.size(); };
 	inline bool IsEmpty() const { return GetNum() <= 0; }
 	inline GarbageType GetType() const { return type; }
 
 private:
-	int lines;
-	int numBlocks;
-	std::vector<GarbageChunk*> chunks;
+	std::vector<Garbage*> blocks;
 	int numFalling;
 	BlockState state;
 	int popDelay;
