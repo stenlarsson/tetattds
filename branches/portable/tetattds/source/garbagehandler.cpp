@@ -94,10 +94,8 @@ void GarbageHandler::Tick()
 	if(!normalDrops.empty() || !chainDrops.empty())
 		DropGarbage();
 	
-	std::for_each(
-		activeBlocks.begin(), activeBlocks.end(),
-		std::mem_fun(&GarbageBlock::Tick));
-	
+	for_each(activeBlocks, std::mem_fun(&GarbageBlock::Tick));
+
 	delete_and_erase_if(activeBlocks, std::mem_fun(&GarbageBlock::IsEmpty));
 }
 
