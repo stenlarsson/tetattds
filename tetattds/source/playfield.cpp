@@ -9,6 +9,7 @@
 #include "block.h"
 #include "popper.h"
 #include "garbage.h"
+#include "garbageblock.h"
 #include "game.h"
 #include "sound.h"
 
@@ -43,6 +44,10 @@ static inline bool IsTopmostVisible(int pos, int amount = 1)
 static inline bool IsBottommostVisible(int pos, int amount = 1)
 {
 	return Below(pos, amount) >= PF_FIRST_BLOCK_LAST_ROW;
+}
+static inline bool IsVisible(int pos)
+{
+	return (pos >= PF_FIRST_BLOCK_FIRST_VISIBLE_ROW);
 }
 static inline bool IsTopmost(int pos)
 {
@@ -408,12 +413,12 @@ bool PlayField::SwapBlocks(int pos)
 	
 	if (right != NULL)
 	{
-		right->Move();
+		((Block*)right)->Move();
 		effects->Add(new EffMoveBlock(DIR_LEFT, right, fieldX[RightOf(pos)], fieldY[RightOf(pos)]+(int)scrollOffset));
 	}
 	if (left != NULL)
 	{
-		left->Move();
+		((Block*)left)->Move();
 		effects->Add(new EffMoveBlock(DIR_RIGHT, left, fieldX[pos], fieldY[pos]+(int)scrollOffset));
 	}
 	return true;
@@ -492,7 +497,7 @@ void PlayField::DropBlocks()
 			{
 				//hover a bit before dropping  and don't pop
 				field[i]->Hover(4);
-				field[i]->PopCheck();
+				field[i]->PopChecked();
 				continue;
 			}
 
@@ -601,25 +606,18 @@ void PlayField::CheckForPops()
 			if(fieldHeight[i%PF_WIDTH] == -1)//if we haven't already found one in the same column
 				fieldHeight[i%PF_WIDTH] = PF_HEIGHT - i / PF_WIDTH - 1;//set height
 
-		if(IsGarbage(field[i]))//and we don't really want to pop garbage like this =)
+		if(IsGarbage(field[i]) || !field[i]->NeedPopCheck())
 		{
 			if(field[i]->IsState(BST_POP2))//but we want to check if we need to 'pop' it
 			{
-				if(i/PF_WIDTH >= PF_FIRST_VISIBLE_ROW)// only if it's onscreen
-					effects->Add(new EffPop(fieldX[i], fieldY[i]+(int)scrollOffset, 0));
-				Sound::PlayPopEffect(field[i]->GetChain());
-			}
-			continue;
-		}
-
-		if(!field[i]->NeedPopCheck())//and if the block doesn't need a check
-		{
-			//maybe this part shouldn't be here?
-			if(field[i]->IsState(BST_POP2))//check if it's popping and we should insert gfx
-			{
-				score += 10;  //add score
-				if(i/PF_WIDTH >= PF_FIRST_VISIBLE_ROW)// only if it's onscreen
-					effects->Add(new EffPop(fieldX[i], fieldY[i]+(int)scrollOffset, field[i]->GetChain()->length));//pop-effect
+				int chainlength = 0;
+				if(!IsGarbage(field[i]))
+				{
+					score += 10;
+					chainlength = field[i]->GetChain()->length;
+				}
+				if(IsVisible(i))
+					effects->Add(new EffPop(fieldX[i], fieldY[i]+(int)scrollOffset, chainlength));
 				Sound::PlayPopEffect(field[i]->GetChain());
 			}
 			continue;
@@ -652,7 +650,7 @@ void PlayField::CheckForPops()
 				if(!field[check]->IsPopped())
 				{
 					field[check]->SetChain(tmpChain);
- 					popper->AddBlock(field[check], check);
+ 					popper->AddBlock((Block*)field[check], check);
 					field[check]->SetPop();
 				}
 			}
@@ -687,7 +685,7 @@ void PlayField::CheckForPops()
 				if(!field[check]->IsPopped())
 				{
 					field[check]->SetChain(tmpChain);
-					popper->AddBlock(field[check], check);
+					popper->AddBlock((Block*)field[check], check);
 					field[check]->SetPop();
 				}
 			}
@@ -695,7 +693,7 @@ void PlayField::CheckForPops()
 			bPop = true;
 		}
 
-		field[i]->PopCheck();//flag current block as checked
+		field[i]->PopChecked();
 		if(bClearChain && !field[i]->IsState(BST_HOVER))
 			field[i]->SetChain(NULL);
 	}
@@ -907,12 +905,12 @@ void PlayField::CheckHeight()
 			bDanger = true; // music stuff
 			for(int o = i; !IsForthcoming(o); o = Below(o))
 			{
-				if(field[o] != NULL)
+				if(field[o] != NULL && !IsGarbage(field[o]))
 				{
 					if(bTooHigh || iScrollPause > 0)
-						field[o]->Stop(true);
+						((Block*)field[o])->Stop(true);
 					else
-						field[o]->Stress(true);
+						((Block*)field[o])->Stress(true);
 				}
 			}
 		}
@@ -920,10 +918,10 @@ void PlayField::CheckHeight()
 		{
 			for(int o = i; !IsForthcoming(o); o = Below(o))
 			{
-				if(field[o] != NULL)
+				if(field[o] != NULL && !IsGarbage(field[o]))
 				{
-					field[o]->Stop(false);
-					field[o]->Stress(false);
+					((Block*)field[o])->Stop(false);
+					((Block*)field[o])->Stress(false);
 				}
 			}
 		}

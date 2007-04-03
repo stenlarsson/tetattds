@@ -4,12 +4,22 @@
 
 class Block : public BaseBlock
 {
-  public:
-	Block(enum BlockType Type);
-	~Block();
+public:
+	Block(BlockType type, BlockState state = BST_IDLE, Chain* chain = NULL, bool needPopCheck = true);
+	virtual ~Block();
 
-	void Tick();
+	virtual void Drop();
+	virtual void Land();
+	virtual void Hover(int delay);
+	virtual void Pop(int num, int total);
+	
+	void Move();
+	void Stress(bool stress);
+	void Stop(bool stop);
 
-  private:
-	void ChangeState(enum BlockState newState);
+private:
+	virtual void ChangeState(BlockState newState);
+	
+	bool stress;
+	bool stop;
 };

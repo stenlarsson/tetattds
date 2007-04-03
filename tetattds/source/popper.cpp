@@ -2,7 +2,7 @@
 #include "popper.h"
 #include "playfield.h"
 #include "effecthandler.h"
-#include "baseblock.h"
+#include "block.h"
 #include "effcombo.h"
 #include "game.h"
 #include "sound.h"
@@ -31,7 +31,7 @@ Popper::~Popper()
 
 }
 
-void Popper::AddBlock(BaseBlock* block, int blocknum)
+void Popper::AddBlock(Block* block, int blocknum)
 {
 	Chain* addToChain = block->GetChain();
 	
@@ -165,7 +165,7 @@ Chain* Popper::GetFreeChain()
 void Popper::SortChain(Chain* chain)
 {
 	int tmp;
-	BaseBlock* block;
+	Block* block;
 	int i;
 	int ii;
 	bool bChanged = false;

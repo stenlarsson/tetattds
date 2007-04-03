@@ -8,7 +8,7 @@ enum GarbageType
 };
 
 #include "baseblock.h"
-#include "garbageblock.h"
+class GarbageBlock;
 
 #define GARBAGE_GRAPHIC_DISABLED (-1)
 
@@ -17,29 +17,26 @@ enum GarbageType
  */
 class Garbage : public BaseBlock
 {
-  public:
-	Garbage(GarbageType type, GarbageBlock * gb);
+public:
+	Garbage(GarbageType type, BlockType blockType, GarbageBlock * gb);
 	~Garbage();
 
-	void Drop();
-	void Land();
-	void Hover(int delay);
-	void Pop(int num, int total, int nextGraph);
+	virtual void Drop();
+	virtual void Land();
+	virtual void Hover(int delay);
+	virtual void Pop(int num, int total, int nextGraph);
 
-	void Tick();
+	virtual void Tick();
 
-	void SetBlockType(enum BlockType newType);
 	void SetGraphic(int newGraphic);
-	GarbageBlock* GetGB(){ return gb; }
-
-	void SetChain(Chain* newChain) { if(chain != NULL) chain->activeBlocks--; chain = newChain; if(chain != NULL) chain->activeBlocks++;}
+	GarbageBlock* GetGB() const { return gb; }
 
 	BaseBlock* CreateBlock();
 
-	void ChangeState(enum BlockState newState);
+	virtual void ChangeState(BlockState newState);
 
-  private:
-	enum BlockType blockType;
+private:
+	const BlockType blockType;
 	GarbageBlock* gb;
 	int nextGraphic;
 	bool bWantToDrop;

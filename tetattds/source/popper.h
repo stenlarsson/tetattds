@@ -4,7 +4,7 @@
 
 class PlayField;
 class EffectHandler;
-class BaseBlock;
+class Block;
 
 class Popper
 {
@@ -12,7 +12,7 @@ class Popper
 	Popper(PlayField* newPF, EffectHandler* newEH);
 	~Popper();
 
-	void AddBlock(BaseBlock* block, int blocknum);
+	void AddBlock(Block* block, int blocknum);
 	void Pop();
 	void Tick();
 

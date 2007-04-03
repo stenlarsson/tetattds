@@ -16,10 +16,7 @@ GarbageBlock::GarbageBlock(int num, GarbageType type)
 	int blockCount = (type == GARBAGE_COMBO) ? num : lineCount * PF_WIDTH;
 	blocks.reserve(blockCount);
 	for(int i = 0; i<blockCount; i++)
-	{
-		blocks.push_back(new Garbage(type, this));
-		blocks.back()->SetBlockType(g_game->GetRandomBlockType(false));
-	}
+		blocks.push_back(new Garbage(type, g_game->GetRandomBlockType(false), this));
 }
 
 GarbageBlock::~GarbageBlock()

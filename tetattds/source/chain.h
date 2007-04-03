@@ -1,11 +1,11 @@
 #pragma once
 #include <vector>
 
-class BaseBlock;
+class Block;
 
 struct Chain
 {
-	BaseBlock* blocks[100];
+	Block* blocks[100];
 	int blockNum[100];
 	int numBlocks;
 	int length;

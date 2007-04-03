@@ -3,20 +3,18 @@
 #include "game.h"
 #include "playfield.h"
 
-BaseBlock::BaseBlock(Anim const & anim, BlockType type)
+BaseBlock::BaseBlock(Anim const & anim, BlockType type, BlockState state, Chain* chain, bool needPopCheck)
 	: anim(anim),
 		type(type),
-		state(BST_IDLE),
-		bNeedPopCheck(true),
+		state(state),
 		popOffset(0),
 		dieOffset(0),
-		dropTimer(-1),
+		dropTimer(BLOCK_DROP_TIMER),
 		stateDelay(-1),
 		nextState(BST_IDLE),
-		chain(NULL),
-		bPopped(false),
-		bStress(false),
-		bStop(false)
+		needPopCheck(needPopCheck),
+		chain(chain),
+		popped(false)
 {
 	ASSERT(g_game != NULL);
 }
@@ -51,78 +49,19 @@ int BaseBlock::GetTile()
 	return tile;
 }
 
-void BaseBlock::Drop()
+void BaseBlock::Tick()
 {
-	ChangeState(BST_FALLING);
-}
+	if(dropTimer > 0)
+		dropTimer--;
 
-void BaseBlock::Land()
-{
-	ChangeState(BST_IDLE);
-}
+	if(stateDelay > 0)
+		stateDelay--;
 
-void BaseBlock::Move()
-{
-	ChangeState(BST_MOVING);
-}
-
-void BaseBlock::Hover(int delay)
-{
-	stateDelay = delay;
-	ChangeState(BST_HOVER);
-}
-
-void BaseBlock::Pop(int num, int total)
-{
-	ChangeState(BST_FLASH);
-	const LevelData* data = g_game->GetLevelData();
-	popOffset = data->popStartOffset+data->popTime*num;
-	dieOffset = data->popStartOffset+data->popTime*total - popOffset - 1;
-}
-
-void BaseBlock::Stop(bool stop)
-{
-	if(type == BLC_GARBAGE || type == BLC_EVILGARBAGE)
-		return;
-
-	if(!bStop && stop && state == BST_IDLE)
+	if(stateDelay == 0)
 	{
-		anim = Anim(type+TILE_BLOCK_BOUNCE_3_OFFSET);
-		bStress = false;
-		bStop = true;
+		stateDelay = -1;
+		ChangeState(nextState);
 	}
-	else if((bStop || bStress) && !stop && state == BST_IDLE)
-	{
-		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
-		;
-		bStress = false;
-		bStop = false;
-	}
-}
-
-void BaseBlock::Stress(bool stress)
-{
-	if(type == BLC_GARBAGE || type == BLC_EVILGARBAGE)
-		return;
-
-	if(!bStress && stress && state == BST_IDLE)
-	{
-		AnimFrame frames[] = {
-			AnimFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET, 5),
-			AnimFrame(type+TILE_BLOCK_BOUNCE_2_OFFSET, 5),
-			AnimFrame(type+TILE_BLOCK_BOUNCE_1_OFFSET, 5),
-			AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET, 5),
-		};
-		anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));
-		;
-		bStop = false;
-		bStress = true;
-	}
-	else if((bStress || bStop) && !stress && state == BST_IDLE)
-	{
-		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
-		;
-		bStop = false;
-		bStress = false;
-	}
+	anim.Tick();
+	popped = false;
 }

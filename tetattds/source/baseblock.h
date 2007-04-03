@@ -35,50 +35,48 @@ enum BlockState
 
 class BaseBlock
 {
-  public:
-	BaseBlock(Anim const & anim, BlockType type);
+public:
+	BaseBlock(Anim const & anim, BlockType type, BlockState state, Chain* chain, bool needPopCheck);
 	virtual ~BaseBlock();
 
-	virtual void Tick() = 0;
+	virtual void Tick();
+	
 	virtual enum BlockType GetType() { return type; }
 	virtual enum BlockState GetState() { return state; }
 	inline bool IsState(enum BlockState const & s) { return GetState() == s; } 
 	inline bool SameType(BaseBlock * other) { return other->GetType() == GetType(); }
 
-	virtual void Drop();
-	virtual void Land();
+	virtual void Drop() = 0;
+	virtual void Land() = 0;
+	virtual void Hover(int delay) = 0;
 	inline void DropAndLand() { Drop(); Land(); }
-	virtual void Move();
-	virtual void Hover(int delay);
-	virtual void Pop(int num, int total);
-	virtual void Stress(bool stress);
-	virtual void Stop(bool stop);
 
-	virtual bool NeedPopCheck() { return bNeedPopCheck; }
-	virtual void PopCheck() { bNeedPopCheck = false; }
-	virtual void SetPop() { bPopped = true; }
-	virtual bool IsPopped() { return bPopped; }
-	virtual Chain* GetChain() { return chain; }
-	virtual void SetChain(Chain* newChain) { if(chain != NULL) chain->activeBlocks--; chain = newChain; if(chain != NULL) chain->activeBlocks++;}
+	inline bool NeedPopCheck() const { return needPopCheck; }
+	inline void PopChecked() { needPopCheck = false; }
+	inline void ForcePopCheck() { needPopCheck = true; }
+	inline void SetPop() { popped = true; }
+	inline bool IsPopped() const { return popped; }
+	inline Chain* GetChain() const { return chain; }
+	void SetChain(Chain* newChain) { if(chain != NULL) chain->activeBlocks--; chain = newChain; if(chain != NULL) chain->activeBlocks++;}
 
-	virtual bool CheckDrop() { if(dropTimer <= 0) { dropTimer = BLOCK_DROP_TIMER; return true; } return false; }
-	virtual void ChangeState(enum BlockState newState) = 0;
+	bool CheckDrop() { if(dropTimer <= 0) { dropTimer = BLOCK_DROP_TIMER; return true; } return false; }
 
 	int GetTile();
 
-  protected:
-
+protected:
+	virtual void ChangeState(BlockState newState) = 0;
+	
 	Anim anim;
-	enum BlockType type;
-	enum BlockState state;
-	bool bNeedPopCheck;
+	BlockType type;
+	BlockState state;
 	int popOffset;
 	int dieOffset;
 	int dropTimer;
 	int stateDelay;
-	enum BlockState nextState;
+	BlockState nextState;
+
+private:
+	bool needPopCheck;
 	Chain* chain;
-	bool bPopped;
-	bool bStress;
-	bool bStop;
+	bool popped;
 };
