@@ -3,34 +3,95 @@
 #include "game.h"
 #include "playfield.h"
 
-Block::Block(enum BlockType type)
+Block::Block(
+	BlockType type, BlockState state, Chain* chain, bool needPopCheck)
 	: BaseBlock(
 			AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET),
-			type)
+			type,
+			state,
+			chain,
+			needPopCheck),
+		stress(false),
+		stop(false)			
 {
 }
 
 Block::~Block()
 {
-	if(chain != NULL)
-		chain->activeBlocks--;
+	SetChain(NULL);
 }
 
-void Block::Tick()
+void Block::Drop()
 {
-	if(dropTimer > 0)
-		dropTimer--;
+	ChangeState(BST_FALLING);
+}
 
-	if(stateDelay > 0)
-		stateDelay--;
+void Block::Land()
+{
+	ChangeState(BST_IDLE);
+}
 
-	if(stateDelay == 0)
+void Block::Hover(int delay)
+{
+	stateDelay = delay;
+	ChangeState(BST_HOVER);
+}
+
+void Block::Pop(int num, int total)
+{
+	ChangeState(BST_FLASH);
+	const LevelData* data = g_game->GetLevelData();
+	popOffset = data->popStartOffset+data->popTime*num;
+	dieOffset = data->popStartOffset+data->popTime*total - popOffset - 1;
+}
+
+void Block::Move()
+{
+	ChangeState(BST_MOVING);
+}
+
+void Block::Stop(bool newStop)
+{
+	if(state != BST_IDLE)
+		return;
+
+	if(!stop && newStop)
 	{
-		stateDelay = -1;
-		ChangeState(nextState);
+		anim = Anim(type+TILE_BLOCK_BOUNCE_3_OFFSET);
+		stress = false;
+		stop = true;
 	}
-	anim.Tick();
-	bPopped = false;
+	else if((stop || stop) && !newStop)
+	{
+		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
+		stress = false;
+		stop = false;
+	}
+}
+
+void Block::Stress(bool newStress)
+{
+	if(state != BST_IDLE)
+		return;
+
+	if(!stress && newStress)
+	{
+		AnimFrame frames[] = {
+			AnimFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET, 5),
+			AnimFrame(type+TILE_BLOCK_BOUNCE_2_OFFSET, 5),
+			AnimFrame(type+TILE_BLOCK_BOUNCE_1_OFFSET, 5),
+			AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET, 5),
+		};
+		anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));
+		stop = false;
+		stress = true;
+	}
+	else if((stress || stop) && !newStress)
+	{
+		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
+		stop = false;
+		stress = false;
+	}
 }
 
 void Block::ChangeState(enum BlockState newState)
@@ -46,14 +107,14 @@ void Block::ChangeState(enum BlockState newState)
 				AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET,5)
 			};
 			
-			if(bStress)
+			if(stress)
 				anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));
 			else if(state == BST_FALLING)
 				anim = Anim(ANIM_ONCE, frames, COUNT_OF(frames));
 
 			state = BST_IDLE;
 			stateDelay = -1;
-			bNeedPopCheck = true;
+			ForcePopCheck();
 		}
 		break;
 	case BST_FALLING:
@@ -64,7 +125,7 @@ void Block::ChangeState(enum BlockState newState)
 	case BST_HOVER:
 		state = BST_HOVER;
 		nextState = BST_FALLING;
-		bNeedPopCheck = true; // needed for lateslip-technique
+		ForcePopCheck(); // needed for lateslip-technique
 		break;
 	case BST_MOVING:
 		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);

@@ -5,22 +5,23 @@
 #include "game.h"
 #include "playfield.h"
 
-Garbage::Garbage(GarbageType type, GarbageBlock * gb)
+Garbage::Garbage(GarbageType type, BlockType blockType, GarbageBlock * gb)
 	: BaseBlock(
 			AnimFrame(GARBAGE_GRAPHICS_SINGLE),
-	  	type == GARBAGE_EVIL ? BLC_EVILGARBAGE : BLC_GARBAGE),
-		blockType(BLC_GARBAGE),
+	  	type == GARBAGE_EVIL ? BLC_EVILGARBAGE : BLC_GARBAGE,
+			BST_IDLE,
+			NULL,
+			false),
+		blockType(blockType),
 		gb(gb),
 		nextGraphic(GARBAGE_GRAPHIC_DISABLED),
 		bWantToDrop(false)
 {
-	BaseBlock::bNeedPopCheck = false;
 }
 
 Garbage::~Garbage()
 {
-	if(chain != NULL)
-		chain->activeBlocks--;
+	SetChain(NULL);
 	gb->RemoveBlock();
 	gb = NULL;
 }
@@ -28,11 +29,6 @@ Garbage::~Garbage()
 void Garbage::SetGraphic(int newGraphic)
 {
 	anim = Anim(newGraphic);
-}
-
-void Garbage::SetBlockType(enum BlockType newType)
-{
-	blockType = newType;
 }
 
 void Garbage::Drop()
@@ -67,8 +63,8 @@ void Garbage::Pop(int num, int total, int nextGraph)
 	nextGraphic = nextGraph;
 }
 
-void Garbage::ChangeState(enum BlockState newState)
-{
+void Garbage::ChangeState(BlockState newState)
+{	
 	switch(newState)
 	{
 	case BST_IDLE:
@@ -134,27 +130,11 @@ void Garbage::ChangeState(enum BlockState newState)
 
 void Garbage::Tick()
 {
-	if(dropTimer > 0)
-		dropTimer--;
-
-	if(stateDelay > 0)
-		stateDelay--;
-
-	if(stateDelay == 0)
-	{
-		stateDelay = -1;
-		ChangeState(nextState);
-	}
-	anim.Tick();
-	bPopped = false;
+	BaseBlock::Tick();
 	bWantToDrop = false;
 }
 
 BaseBlock* Garbage::CreateBlock()
 {
-	BaseBlock* newBlock = new Block(blockType);
-	newBlock->SetChain(chain);
-	newBlock->PopCheck(); // Withouth this, BIG NOO~~!
-	newBlock->Drop();
-	return newBlock;
+	return new Block(blockType, BST_FALLING, GetChain(), false);
 }
