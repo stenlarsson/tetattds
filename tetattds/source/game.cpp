@@ -60,7 +60,7 @@ Game::Game(int level,
 		heldKeys[i] = false;
 	}
 
-	field->Init(88, 0);
+	field->Init(PLAYFIELD_OFFSET_X, PLAYFIELD_OFFSET_Y);
 }
 
 Game::~Game()

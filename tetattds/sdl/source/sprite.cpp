@@ -48,10 +48,6 @@ void Sprite::Draw()
 	// TODO: This doesn't really work, since we need to process
 	//       the sprites in a very specific order?
 	
-	// No drawing of sprites offscreen please
-	if(y < -16 || y > 192 || x < -16 || x > 256)
-		return;
-		
 	int tile = anim.GetFrame();
 
 	// TODO: Deal with flipped sprites
