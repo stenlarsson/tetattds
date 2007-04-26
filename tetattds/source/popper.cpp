@@ -212,6 +212,8 @@ void Popper::Tick()
 {
 	for(int i = 0;i<MAX_CHAINS;i++)
 	{
+		ASSERT(chains[i].activeBlocks >= 0);
+		
 		if(!bFree[i] && chains[i].activeBlocks == 0)
 		{
 			// Chain done, so we send it, if there's a chain to send.

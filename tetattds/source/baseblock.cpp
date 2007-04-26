@@ -13,10 +13,11 @@ BaseBlock::BaseBlock(Anim const & anim, BlockType type, BlockState state, Chain*
 		stateDelay(-1),
 		nextState(BST_IDLE),
 		needPopCheck(needPopCheck),
-		chain(chain),
+		chain(NULL),
 		popped(false)
 {
 	ASSERT(g_game != NULL);
+	SetChain(chain);
 }
 
 BaseBlock::~BaseBlock()
