@@ -116,6 +116,7 @@ int main(int,char **)
 		if(!StateTick()) {
 			break;
 		}
+		g_fieldGraphics->DrawSubScreen();
 		SDL_Flip(surface);
 		// Emulate swiWaitForVBlank...
 		SDL_Delay(16 - (SDL_GetTicks() - ticks) % 16);
