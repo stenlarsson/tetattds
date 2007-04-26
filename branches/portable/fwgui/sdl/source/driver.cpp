@@ -28,7 +28,7 @@ namespace FwGui
 		framebuffer = SDL_CreateRGBSurface(
 			SDL_SWSURFACE, //Uint32 flags
 			256,           //int width
-			384,           //int height
+			192,           //int height
 			15,            //int bitsPerPixel
 			0x0000001f,    //Uint32 Rmask
 			0x000003e0,    //Uint32 Gmask
@@ -107,17 +107,17 @@ namespace FwGui
 				
 			case SDL_MOUSEBUTTONDOWN:
 				if(listener != NULL)
-					listener->TouchDown(event.button.x, event.button.y);
+					listener->TouchDown(event.button.x, event.button.y-192);
 				break;
 				
 			case SDL_MOUSEBUTTONUP:
 				if(listener != NULL)
-					listener->TouchUp(event.button.x, event.button.y);
+					listener->TouchUp(event.button.x, event.button.y-192);
 				break;
 
 			case SDL_MOUSEMOTION:
 				if(listener != NULL && event.motion.state)
-					listener->TouchDrag(event.motion.x, event.motion.y);
+					listener->TouchDrag(event.motion.x, event.motion.y-192);
 				break;
 
 			case SDL_QUIT:
@@ -156,12 +156,13 @@ namespace FwGui
 				delete graphics;
 				dialog->SetRepaint(false);
 			}
-				  
+			
+			SDL_Rect dstrect = {0, 192, 256, 192};
 			SDL_BlitSurface(
 				surface,               //SDL_Surface *src
 				NULL,                  //SDL_Rect *srcrect
 				SDL_GetVideoSurface(), //SDL_Surface *dst
-				NULL);                 //SDL_Rect *dstrect
+				&dstrect);             //SDL_Rect *dstrect
 		}
 
 		return true;

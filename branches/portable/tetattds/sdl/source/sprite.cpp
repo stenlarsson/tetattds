@@ -32,7 +32,7 @@ Sprite::Sprite(
 	Anim const & anim,
 	bool flipX, bool flipY)
 	: anim(anim),
-		x(x), y(y),
+		x(x), y(y+192),
 	  priority(priority),
 		size(size),
 		flipX(flipX), flipY(flipY)
@@ -78,7 +78,7 @@ void Sprite::Draw()
 			tilerect.x = ((tile + 1) % 8) * 16;
 			destrect.y = y + 8;
 			SDL_BlitSurface(sprites, &tilerect, g_fieldGraphics->framebuffer, &destrect);
-			tilerect.y = ((tile + 1) / 8) * 16;
+			tilerect.y = (tile / 8) * 16 + 8;
 			destrect.x = x + 16;
 			SDL_BlitSurface(sprites, &tilerect, g_fieldGraphics->framebuffer, &destrect);
 			tilerect.x = (tile % 8) * 16;

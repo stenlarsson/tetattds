@@ -13,7 +13,8 @@ extern SDL_Surface
 	*singlebackground,
 	*wifibackground,
 	*sprites,
-	*font;
+	*font,
+	*smalltiles;
 static SDL_Surface *subbackground = NULL;
 
 void FieldGraphics::InitMainScreen()
@@ -47,9 +48,12 @@ FieldGraphics::FieldGraphics()
 		exit(1);
 	}
   
+	for(int i = 0; i < 4; i++) {
+		ClearSmallField(i);
+		smallFields[i].player = NULL;
+	}
+
 	memset(chatBuffer,0,sizeof(chatBuffer));
-	
-	g_fieldGraphics = this;
 }
 
 FieldGraphics::~FieldGraphics()
@@ -60,7 +64,6 @@ FieldGraphics::~FieldGraphics()
 
 void FieldGraphics::Draw(PlayField *pf)
 {
-	SDL_BlitSurface(subbackground, NULL, framebuffer, NULL);
 	SDL_Rect dstrect = {0, 192, 256, 192};
 	SDL_BlitSurface(background, NULL, framebuffer, &dstrect);
 
@@ -86,7 +89,7 @@ void FieldGraphics::Draw(PlayField *pf)
 		tilerect.x = (tile % 8) * BLOCKSIZE;
 		tilerect.y = (tile / 8) * BLOCKSIZE;
 		destrect.x = pf->GetFieldX(i);
-		destrect.y = pf->GetFieldY(i) + scrollOffset;
+		destrect.y = pf->GetFieldY(i) + scrollOffset + 192;
 	
 		SDL_BlitSurface(sprites, &tilerect, framebuffer, &destrect);
 	}
@@ -140,27 +143,109 @@ void FieldGraphics::Draw(PlayField *pf)
 		touchMarker->Disable();
 	}
 	
-	SDL_BlitSurface(framebuffer, NULL, SDL_GetVideoSurface(), NULL);
+	SDL_Rect rect = {0, 192, 256, 192};
+	SDL_BlitSurface(framebuffer, &rect, SDL_GetVideoSurface(), &rect);
+}
+
+void FieldGraphics::DrawSubScreen()
+{
+	SDL_BlitSurface(subbackground, NULL, framebuffer, NULL);
+	PrintChat();
+	for(int i = 0; i < 4; i++) {
+		ReallyDrawSmallField(i);
+		ReallyPrintPlayerInfo(i);
+	}
+
+	SDL_Rect rect = {0, 0, 256, 192};
+	SDL_BlitSurface(framebuffer, &rect, SDL_GetVideoSurface(), &rect);
 }
 
 void FieldGraphics::DrawSmallField(int fieldNum, char* field, bool shaded)
 {
-	// TODO: Implement, no problem except placement
+	ASSERT(fieldNum >= 0);
+	ASSERT(fieldNum < 4);
+	ASSERT(field != NULL);
+	memcpy(smallFields[fieldNum].field, field, 12*6);
+	smallFields[fieldNum].shaded = shaded;
+}
+
+void FieldGraphics::ReallyDrawSmallField(int fieldNum)
+{
+	SDL_Rect tilerect, destrect;
+	tilerect.w = destrect.w = tilerect.h = destrect.h = 8;
+	uint32_t cell = SMALL_FIELD_OFFSET + fieldNum * 8;
+	for(int i = 0; i < 12*6; i++)
+	{
+		uint32_t tile = smallFields[fieldNum].field[i];
+		//if(smallFields[fieldNum].shaded)
+		//	tile |= (1 << 12);
+		destrect.x = (cell % BLOCKMAP_STRIDE) * 8;
+		destrect.y = (cell / BLOCKMAP_STRIDE) * 8;
+		tilerect.x = (tile % 8) * 8;
+		tilerect.y = (tile / 8) * 8;
+		SDL_BlitSurface(smalltiles, &tilerect, framebuffer, &destrect);
+		cell++;
+		if((i+1) % PF_WIDTH == 0)
+		{
+			cell += BLOCKMAP_STRIDE - PF_WIDTH;
+		}
+	}
 }
 
 void FieldGraphics::ClearSmallField(int fieldNum)
 {
-	// TODO: Implement, no problem except placement
+	memset(smallFields[fieldNum].field, TILE_BLANK, 12*6);
+	smallFields[fieldNum].shaded = false;
 }
 
 void FieldGraphics::PrintPlayerInfo(PlayerInfo* player)
 {
-	// TODO: Implement
+	ASSERT(player != NULL);
+	smallFields[player->fieldNum].player = player;
+}
+
+void FieldGraphics::ReallyPrintPlayerInfo(int fieldNum)
+{
+	PlayerInfo* player = smallFields[fieldNum].player;
+	if(player == NULL)
+		return;
+
+	// name
+	char name[8+1];
+	snprintf(name, sizeof(name), "%-8.8s", player->name);
+	PrintSmall(NAME_TEXT_OFFSET + player->fieldNum * 8, name);
+	
+	// wins
+	char wins[8+1];
+	snprintf(wins, sizeof(wins), "%02i wins", player->wins);
+	PrintSmall(WINS_TEXT_OFFSET + player->fieldNum * 8, wins);
+
+	// level
+	char level[8+1];
+	snprintf(level, sizeof(level), "lv %02i", player->level+1);
+	PrintSmall(LEVEL_TEXT_OFFSET + player->fieldNum * 8, level);
+
+	// ready/typing
+	char ready[8+1];
+	snprintf(ready, sizeof(ready), (player->ready ? "READY" : (player->typing ? "typing" : "      ")));
+	PrintSmall(READY_TEXT_OFFSET + player->fieldNum * 8, ready);
+
+	// place
+	const char* digit[] = {" ", "1", "2", "3", "4", "5"};
+	const char* suffix[] = {"  ", "ST", "ND", "RD", "TH", "TH"};
+	PrintLarge(
+		PLACE_TEXT_OFFSET + player->fieldNum * 8,
+		digit[player->place]);
+	PrintSmall(
+		PLACE_TEXT_OFFSET + player->fieldNum * 8 + TEXTMAP_STRIDE + 1,
+		suffix[player->place]);
 }
 
 void FieldGraphics::ClearPlayer(PlayerInfo* player)
 {
-	// TODO: Implement
+	ASSERT(player != NULL);
+
+	smallFields[player->fieldNum].player = NULL;
 }
 
 void FieldGraphics::PrintScore(int score)
@@ -264,27 +349,82 @@ void FieldGraphics::PrintSmall(uint32_t cell, const char* text)
 	}
 }
 
-void FieldGraphics::ClearTextLine(uint32_t cell)
-{
-	// No action required, we always repaint everything
-}
-
-void FieldGraphics::ClearText(uint32_t cell, int length)
-{
-	// No action required, we always repaint everything
-}
-
 void FieldGraphics::AddChat(char* text)
 {
-	// TODO: Implement
+	ASSERT(text != NULL);
+	
+	int textLen = strlen(text);
+	if(textLen > 32) // Too long, try to break it up
+	{
+		char* space = NULL;
+		char* nextSpace = NULL;
+		// Skip to the first space (if any)
+		space = strchr(text, ' ');
+		if(space != NULL && (textLen - strlen(space) <= 32) ) // If there is at least one space and the first word isn't horribly long
+			nextSpace = strchr(space+1, ' ');	// Find the next space (if any)
+		if(nextSpace != NULL)
+			if(textLen - strlen(nextSpace) > 32)
+				nextSpace = NULL;
+		if(nextSpace == NULL)
+		{
+			// We end up here if theres 33+ characters of junk and no space. (probably shouldn't happen at all)
+			// Or if the first two words are too long. (happens when someone types a long word in chat, the first word being the nickname)
+			if(text[32] == ' ') // takes care of case with words exactly 32 chars long.
+			{
+				text[32] = '\0';
+				AddChat(text);
+				AddChat(text+33);
+				return;
+			}
+	
+			char buf[32+1];
+			strncpy(buf, text, 32); // Get the first 32 characters
+			buf[32] = '\0';
+			AddChat(buf);
+			AddChat(text+32);
+			return;
+		}
+
+		while(true) // Search for where to break up the line.
+		{
+			if(nextSpace == NULL)
+				break;
+			if(textLen - strlen(nextSpace) > 32)
+				break;
+
+			space = nextSpace;
+			nextSpace = strchr(space+1, ' ');
+		}
+		// Breakpoint found, do some magic!
+		*space = '\0';
+		AddChat(text);
+		AddChat(space+1);
+	}
+	else // A nice short line, add it to the buffer
+	{
+		lastChatLine++;
+		if(lastChatLine == MAX_CHAT_LINES)
+			lastChatLine = 0;
+		strcpy(chatBuffer[lastChatLine], text);
+	}
 }
 
 void FieldGraphics::PrintChat()
 {
-	// TODO: Implement
+	int cursor = 0;
+	int curChatLine = lastChatLine + 1;
+	for(int i=0;i<MAX_CHAT_LINES;i++)
+	{
+		if(curChatLine == MAX_CHAT_LINES)
+			curChatLine = 0;
+		PrintSmall(cursor, chatBuffer[curChatLine]);
+		cursor+=TEXTMAP_STRIDE;
+		curChatLine++;
+	}
 }
 
 void FieldGraphics::ClearChat()
 {
-	// TODO: Implement
+	memset(chatBuffer, 0, sizeof(chatBuffer));
+	lastChatLine = -1;
 }
