@@ -147,7 +147,9 @@ void GarbageBlock::Tick()
 	if(state == BST_POP && --popDelay <= 0)
 	{
 		state = BST_FALLING;
-		for_each(blocks, mem_fun_with(&Garbage::SetChain, (Chain*)NULL));
+		// Clear the chain from all but the bottom blocks
+		for(int i = 0; i < (int)blocks.size()-PF_WIDTH; i++)
+			blocks[i]->SetChain(NULL);
 	}
 	numFalling = 0;
 }
