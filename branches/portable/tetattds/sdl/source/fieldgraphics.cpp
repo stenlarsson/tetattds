@@ -35,7 +35,7 @@ FieldGraphics::FieldGraphics()
 	framebuffer = SDL_CreateRGBSurface(
     SDL_SWSURFACE, //Uint32 flags
     256,           //int width
-    192,           //int height
+    384,           //int height
     15,            //int bitsPerPixel
     0x0000001f,    //Uint32 Rmask
     0x000003e0,    //Uint32 Gmask
@@ -60,7 +60,9 @@ FieldGraphics::~FieldGraphics()
 
 void FieldGraphics::Draw(PlayField *pf)
 {
-	SDL_BlitSurface(background, NULL, framebuffer, NULL);
+	SDL_BlitSurface(subbackground, NULL, framebuffer, NULL);
+	SDL_Rect dstrect = {0, 192, 256, 192};
+	SDL_BlitSurface(background, NULL, framebuffer, &dstrect);
 
 	int scrollOffset = (int)pf->GetScrollOffset();
 	
@@ -93,7 +95,7 @@ void FieldGraphics::Draw(PlayField *pf)
 	if (SDL_MUSTLOCK(framebuffer))
 		SDL_LockSurface(framebuffer);
 	
-	for (int y = (state == PFS_DEAD) ? 0 : 192 + scrollOffset; y < 192; y++)
+	for (int y = (state == PFS_DEAD) ? 192 : 384 + scrollOffset; y < 384; y++)
 	{
 		uint16_t* p = ((uint16_t*)(((uint8_t*)framebuffer->pixels) + y * framebuffer->pitch)) + 88;
 		for (int x = 0; x < PF_WIDTH * BLOCKSIZE; x++)

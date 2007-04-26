@@ -28,7 +28,7 @@ namespace FwGui
 		framebuffer = SDL_CreateRGBSurface(
 			SDL_SWSURFACE, //Uint32 flags
 			256,           //int width
-			192,           //int height
+			384,           //int height
 			15,            //int bitsPerPixel
 			0x0000001f,    //Uint32 Rmask
 			0x000003e0,    //Uint32 Gmask

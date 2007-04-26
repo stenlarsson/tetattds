@@ -82,7 +82,7 @@ int main(int,char **)
 
 	SDL_Surface* surface = SDL_SetVideoMode(
 		256, //int width
-		192, //int height
+		384, //int height
 		0,   //int bitsperpixel
 		0);  //Uint32 flags
 	if(surface == NULL) {
