@@ -40,7 +40,7 @@ extern "C" {
  * ========== Compiler magic for shared libraries
  */
 
-#if 0 && defined WIN32 && defined _DLL
+#if defined WIN32 && defined _DLL
 #ifdef DLL_EXPORTS
 #define MIKMODAPI __declspec(dllexport)
 #else

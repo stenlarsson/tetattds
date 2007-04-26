@@ -15,7 +15,9 @@
 #include "settings.h"
 #include "statusdialog.h"
 #include "state.h"
+#include "sound.h"
 #include "sprite.h"
+#include "udpsocket.h"
 
 char name[10];
 Settings* settings = NULL;
@@ -105,6 +107,7 @@ int main(int,char **)
 	
 	GetName();
 	
+	if(!UdpSocket::InitSockets()) return 1;
 	Sprite::InitSprites();
 	g_fieldGraphics = new FieldGraphics();
 	InitGui();
@@ -118,7 +121,11 @@ int main(int,char **)
 		}
 		g_fieldGraphics->DrawSubScreen();
 		SDL_Flip(surface);
+
+		//while(SDL_GetTicks() - ticks < 16)
+		//	Sound::UpdateMusic();
 		// Emulate swiWaitForVBlank...
+		Sound::UpdateMusic();
 		SDL_Delay(16 - (SDL_GetTicks() - ticks) % 16);
 	}
 

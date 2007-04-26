@@ -44,7 +44,7 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;&quot;VERSION_STRING=\&quot;Tetattsdl 2.0\&quot;&quot;;&quot;ABOUT_STRING=\&quot;http://blog.dev-scene.com/flatware\&quot;&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
-				RuntimeLibrary="2"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -61,7 +61,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib mikmod.lib wsock32.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib mikmod.lib wsock32.lib dsound.lib"
 				OutputFile="$(OutDir)\tetattsdl.exe"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\win32deps\lib"
@@ -120,8 +120,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="source;sdl\source;network\include;..\fwgui\include;..\win32deps\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;&quot;VERSION_STRING=&quot;Tetattsdl 2.0&quot;;ABOUT_STRING=&quot;http://blog.dev-scene.com/flatware&quot;"
-				RuntimeLibrary="2"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;&quot;VERSION_STRING=\&quot;Tetattsdl 2.0\&quot;&quot;;&quot;ABOUT_STRING=\&quot;http://blog.dev-scene.com/flatware\&quot;&quot;"
+				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
@@ -138,7 +138,8 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="SDL.lib SDLmain.lib mikmod.lib wsock32.lib"
+				AdditionalDependencies="SDL.lib SDLmain.lib mikmod.lib wsock32.lib dsound.lib"
+				OutputFile="$(OutDir)\tetattsdl.exe"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\win32deps\lib"
 				GenerateDebugInformation="true"
@@ -277,14 +278,6 @@
 			</File>
 			<File
 				RelativePath=".\source\garbageblock.h"
-				>
-			</File>
-			<File
-				RelativePath=".\source\garbagechunk.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\source\garbagechunk.h"
 				>
 			</File>
 			<File
