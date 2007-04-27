@@ -705,7 +705,6 @@ void PlayField::CheckForPops()
 		popper->Pop();//initiate popping
 
 		bool bDoOver = true;
-		int order = 0;
 		bool bReverse = false;
 		while(bDoOver) // Check again to catch garbage popping garbage below itself
 		{
@@ -772,20 +771,13 @@ void PlayField::CheckForPops()
 	
 				if(tmpChain != NULL)
 				{
-					gh->AddPop(((Garbage*)field[i])->GetGB(), tmpChain, order);
+					gh->AddPop(((Garbage*)field[i])->GetGB(), tmpChain, bReverse);
 					bDoOver = true;
 					tmpChain = NULL;
-					if(bReverse)
-						order--;
-					else
-						order++;
 				}
 			}
 			if(bDoOver && !bReverse)
-			{
 				bReverse = true;
-				order = -1;
-			}
 		}
 		
 		gh->Pop();

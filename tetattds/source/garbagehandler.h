@@ -28,11 +28,11 @@ public:
 	/** Call Tick for all active blocks, and remove redundant ones. */
 	void Tick();
 	/**
-	 * Add another garbage block to the pop check. If order is positive
-	 * the block is placed after existing blocks. if order is negative,
-	 * it is placed before existing blocks.
+	 * Add another garbage block to the pop check. If first is false
+	 * the block is placed after existing blocks. If first is true,
+	 * the block is placed before existing blocks.
 	 */
-	void AddPop(GarbageBlock* newPop, Chain* chain, int order);
+	void AddPop(GarbageBlock* newPop, Chain* chain, bool first);
 	/** Run Pop for the blocks collected using AddPop. */
 	void Pop();
 
