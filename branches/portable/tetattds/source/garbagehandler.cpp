@@ -99,15 +99,13 @@ void GarbageHandler::Tick()
 	delete_and_erase_if(activeBlocks, std::mem_fun(&GarbageBlock::IsEmpty));
 }
 
-void GarbageHandler::AddPop(GarbageBlock* newPop, Chain* chain, int order)
+void GarbageHandler::AddPop(GarbageBlock* newPop, Chain* chain, bool first)
 {
 	GBInfo info = {newPop, chain};
-	if (order < 0) {
+	if (first)
 		popBlocks.push_front(info);
-	}
-	else {
+	else
 		popBlocks.push_back(info);
-	}
 }
 
 void GarbageHandler::Pop()
