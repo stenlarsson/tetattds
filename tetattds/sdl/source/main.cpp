@@ -81,6 +81,9 @@ int main(int,char **)
 	}
 
 	SDL_WM_SetCaption(VERSION_STRING, VERSION_STRING);
+	SDL_Surface* icon = SDL_LoadBMP("images/icon.bmp");
+	SDL_SetColorKey(icon, SDL_SRCCOLORKEY, 15);
+	SDL_WM_SetIcon(icon, NULL);
 
 	SDL_Surface* surface = SDL_SetVideoMode(
 		256, //int width
