@@ -114,9 +114,9 @@ Chain* SamePopChain(Garbage* g, BaseBlock *block, Chain *chain)
 }
 
 PlayField::PlayField(EffectHandler *effects)
-:	effects(effects)
+:	effects(effects),
+  gh(new GarbageHandler())
 {
-	gh = new GarbageHandler(this);
 	popper = NULL;
 	markerPos = PF_MARKER_START;
 	scrollOffset = 0;
@@ -241,6 +241,7 @@ void PlayField::Tick()
 				field[i]->Tick();
 		}
 		DEBUGVERBOSE("PlayField: gh.tick\n");
+		gh->DropGarbage(this);
 		gh->Tick();
 		DEBUGVERBOSE("PlayField: popper.tick\n");
 		popper->Tick();
@@ -365,7 +366,7 @@ template<typename T> T max(T a, T b) { return (a > b) ? a : b; }
 template<typename T> T min(T a, T b) { return (a < b) ? a : b; }
 #endif
 
-void PlayField::PixelsToColRow(int x, int y, int& col, int& row)
+void PlayField::PixelsToColRow(int x, int y, int& col, int& row) const
 {
 	col = fieldX[PF_FIRST_BLOCK_FIRST_VISIBLE_ROW];
 	row = fieldY[PF_FIRST_BLOCK_FIRST_VISIBLE_ROW] + (int)scrollOffset;
@@ -380,7 +381,7 @@ void PlayField::PixelsToColRow(int x, int y, int& col, int& row)
 	col = max(col, 0);
 }
 
-int PlayField::ColRowToPos(int col, int row)
+int PlayField::ColRowToPos(int col, int row) const
 {
 	int pos = col + row*PF_WIDTH;
 	pos += PF_FIRST_BLOCK_FIRST_VISIBLE_ROW;
@@ -916,13 +917,13 @@ void PlayField::CheckHeight()
 	}
 }
 
-void PlayField::GetFieldState(char* dest)
+void PlayField::GetFieldState(char* dest) const
 {
 	for(int i = PF_FIRST_BLOCK_FIRST_VISIBLE_ROW; !IsForthcoming(i); i++)
 		*dest++ = (field[i] != NULL) ? field[i]->GetTile() : TILE_BLANK;
 }
 
-bool PlayField::IsLineOfFieldEmpty(int x) {
+bool PlayField::IsLineOfFieldEmpty(int x) const {
 	for(int i = 0;i<PF_WIDTH;i++)
 	{
 		if(field[LeftOf(x,i)] != NULL)

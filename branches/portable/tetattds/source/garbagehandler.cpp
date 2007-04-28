@@ -13,9 +13,8 @@ struct GBInfo
 	Chain* chain;
 };
 
-GarbageHandler::GarbageHandler(PlayField* pf)
-	: pf(pf),
-		activeBlocks(),
+GarbageHandler::GarbageHandler()
+	: activeBlocks(),
 		normalDrops(), chainDrops(),
 		popBlocks()
 {
@@ -57,8 +56,11 @@ void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
 	}
 }
 
-void GarbageHandler::DropGarbage()
+void GarbageHandler::DropGarbage(PlayField * pf)
 {
+	if(normalDrops.empty() && chainDrops.empty())
+		return;
+	
 	int startField = PF_GARBAGE_DROP_START;
 	int fieldHeight = pf->GetHeight();
 	if(fieldHeight > 14)
@@ -91,9 +93,6 @@ void GarbageHandler::DropGarbage()
 
 void GarbageHandler::Tick()
 {
-	if(!normalDrops.empty() || !chainDrops.empty())
-		DropGarbage();
-	
 	for_each(activeBlocks, std::mem_fun(&GarbageBlock::Tick));
 
 	delete_and_erase_if(activeBlocks, std::mem_fun(&GarbageBlock::IsEmpty));
