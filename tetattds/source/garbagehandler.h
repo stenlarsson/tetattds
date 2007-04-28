@@ -15,7 +15,7 @@ class GBInfo;
 class GarbageHandler
 {
 public:
-	GarbageHandler(PlayField* newPF);
+	GarbageHandler();
 	~GarbageHandler();
 
 	/**
@@ -35,12 +35,10 @@ public:
 	void AddPop(GarbageBlock* newPop, Chain* chain, bool first);
 	/** Run Pop for the blocks collected using AddPop. */
 	void Pop();
+	
+	void DropGarbage(PlayField * pf);
 
 private:
-	void DropGarbage();
-
-	PlayField * const pf;
-	
 	/** Blocks that a currently in play. */
 	std::vector<GarbageBlock*> activeBlocks;
 	/** Blocks waiting to be dropped into play. */
