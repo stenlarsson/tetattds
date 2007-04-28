@@ -101,6 +101,17 @@ static inline bool IsPopableWith(
 {
 	return IsHoverOrIdle(candidate) && candidate->SameType(reference);
 }
+Chain* SamePopChain(Garbage* g, BaseBlock *block, Chain *chain)
+{
+	if(block != NULL && block->IsPopped())
+		if(!g->IsOtherGarbageType(block))
+		{
+			if(chain == NULL)
+				chain = block->GetChain();
+			g->GetGB()->InitPop(chain);
+		}
+	return chain;
+}
 
 PlayField::PlayField(EffectHandler *effects)
 :	effects(effects)
@@ -712,6 +723,7 @@ void PlayField::CheckForPops()
 			for(int i = PF_LAST_BLOCK_SECOND_LAST_ROW; !IsTopmost(i); i--)//loop, bottom to top
 			{
 				// This checks if there are GarbageBlocks that needs to pop
+				// TODO: Do this in terms of the larger GarbageBlocks instead of the individual fields
 				if(field[i] == NULL)
 					continue;
 				if(!IsGarbage(field[i]))
@@ -721,57 +733,20 @@ void PlayField::CheckForPops()
 				if(field[i]->IsPopped())
 					continue;
 
-				BlockType curType = field[i]->GetType();	// Stores type of current block for easy access
-				BlockType notCurType = curType==BLC_GARBAGE?BLC_EVILGARBAGE:BLC_GARBAGE;	// Stores the other type of garbage block for easy syntax
-				BlockType otherType;	// The type of the block we're checking against
+				Garbage *g = (Garbage*)field[i];
+				tmpChain = SamePopChain(g, field[Below(i)], tmpChain);
+				tmpChain = SamePopChain(g, field[Above(i)], tmpChain);
+				if(!IsRightmost(i))
+					tmpChain = SamePopChain(g, field[RightOf(i)], tmpChain);
+				if(!IsLeftmost(i))
+					tmpChain = SamePopChain(g, field[LeftOf(i)], tmpChain);
 				
-				if(field[Below(i)] != NULL && field[Below(i)]->IsPopped())
-				{
-					otherType = field[Below(i)]->GetType();				// Get blocktype, and...
-					if(otherType == curType || otherType != notCurType)	// If it's the same garbagetype, or, not the other kind of garbage (== any other block)
-					{														// Popping is GO!
-						if(tmpChain == NULL)
-							tmpChain = field[Below(i)]->GetChain();
-						((Garbage*)field[i])->GetGB()->InitPop(tmpChain);
-					}
-				}
-				if(field[Above(i)] != NULL && field[Above(i)]->IsPopped())
-				{
-					otherType = field[Above(i)]->GetType();
-					if(otherType == curType || otherType != notCurType)
-					{
-						if(tmpChain == NULL)
-							tmpChain = field[Above(i)]->GetChain();
-						((Garbage*)field[i])->GetGB()->InitPop(tmpChain);
-					}
-				}
-				if(!IsRightmost(i) && field[RightOf(i)] != NULL && field[RightOf(i)]->IsPopped())
-				{
-					otherType = field[RightOf(i)]->GetType();
-					if(otherType == curType || otherType != notCurType)
-					{
-						if(tmpChain == NULL)
-							tmpChain = field[RightOf(i)]->GetChain();
-						((Garbage*)field[i])->GetGB()->InitPop(tmpChain);
-					}
-				}
-				if(!IsLeftmost(i) && field[LeftOf(i)] != NULL && field[LeftOf(i)]->IsPopped())
-				{
-					otherType = field[LeftOf(i)]->GetType();
-					if(otherType == curType || otherType != notCurType)
-					{
-						if(tmpChain == NULL)
-							tmpChain = field[LeftOf(i)]->GetChain();
-						((Garbage*)field[i])->GetGB()->InitPop(tmpChain);
-					}
-				}
-				
-				if(!field[i]->IsPopped()) // If it didn't pop, next!
+				if(!g->IsPopped()) // If it didn't pop, next!
 					continue;
 	
 				if(tmpChain != NULL)
 				{
-					gh->AddPop(((Garbage*)field[i])->GetGB(), tmpChain, bReverse);
+					gh->AddPop(g->GetGB(), tmpChain, bReverse);
 					bDoOver = true;
 					tmpChain = NULL;
 				}

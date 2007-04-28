@@ -34,6 +34,11 @@ public:
 	BaseBlock* CreateBlock();
 
 	virtual void ChangeState(BlockState newState);
+	
+	inline bool IsOtherGarbageType(BaseBlock *block) const {
+		return block->GetType() ==
+			(type == BLC_GARBAGE ? BLC_EVILGARBAGE : BLC_GARBAGE);
+	}
 
 private:
 	const BlockType blockType;
