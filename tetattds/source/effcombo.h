@@ -16,7 +16,7 @@ enum ComboType
 class EffCombo : public Effect
 {
 public:
-	EffCombo(int x, int y, LevelData const * const level, ComboType type, int count);
+	EffCombo(int x, int y, ComboType type, int count);
 	~EffCombo();
 
 	void Draw();

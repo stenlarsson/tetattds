@@ -6,8 +6,8 @@
 #include "game.h"
 #include "playfield.h"
 
-EffCombo::EffCombo(int x, int y, LevelData const * const level, ComboType type, int count)
-	: Effect(x, y, level->effComboDuration),
+EffCombo::EffCombo(int x, int y, ComboType type, int count)
+	: Effect(x, y, g_game->GetLevelData()->effComboDuration),
 		eggRad(COMBO_EGG_RADIUS)
 {
 	Anim anim(type + count);
