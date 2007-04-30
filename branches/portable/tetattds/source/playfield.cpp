@@ -114,6 +114,11 @@ Chain* SamePopChain(Garbage* g, BaseBlock *block, Chain *chain)
 	return chain;
 }
 
+bool IsDropable(BaseBlock *b)
+{
+	return (b != NULL) && !IsGarbage(b) && (b->IsState(BST_IDLE) || IsHoverOrMove(b));
+}
+
 PlayField::PlayField(EffectHandler *effects)
 :	effects(effects),
   gh(new GarbageHandler())
@@ -763,48 +768,30 @@ void PlayField::CheckForPops()
 
 void PlayField::ClearDeadBlocks()
 {
-	BaseBlock* tmpBlock = NULL;
-	Chain* tChain = NULL;	//keeps track of deleted blocks' chain
-
-	//loop, top to bottom
 	for(int i = PF_WIDTH; !IsForthcoming(i); i++)
 	{
-		if(field[i] == NULL)
-			continue;//break if empty
+		if(field[i] == NULL || !field[i]->IsState(BST_DEAD))
+			continue;
 
-		if(field[i]->IsState(BST_DEAD))
-		{//if block is dead
-			if(!IsGarbage(field[i]))//if it's an ordinary block
+		if(IsGarbage(field[i]))
+		{
+			// Replace garbage with a real block
+			BaseBlock *b = ((Garbage*)field[i])->CreateBlock();
+			delete field[i];
+			field[i] = b;
+		}
+		else
+		{
+			Chain *tChain = field[i]->GetChain();
+			delete field[i];
+			field[i] = NULL;
+			
+			// Propagate chain upwards, and drop idle blocks
+			for(int y = Above(i); !IsTopmost(y) && IsDropable(field[y]); y = Above(y))
 			{
-				tChain = field[i]->GetChain();//store chain
-				delete field[i];//delete block
-				field[i] = NULL;//clear field
-				for(int y = Above(i); !IsTopmost(y); y = Above(y))
-				{//loop through upwards
-					if(field[y] != NULL)//if there's a block
-					{
-						if(!IsGarbage(field[y]) && (field[y]->IsState(BST_IDLE) || IsHoverOrMove(field[y])))
-						{//and if it's idle, moving or hovering, and not a garbage block
-							field[y]->SetChain(tChain);//set chain
-							if(field[y]->IsState(BST_IDLE))
-								field[y]->Drop();//and drop it if it's idle
-						}
-						else
-						{
-							break;
-						}//if we encounter a popping/falling block or an empty field, break
-					}
-					else
-					{
-						break;
-					}
-				}
-			}
-			else//if it's a garbage block
-			{
-				tmpBlock = ((Garbage*)field[i])->CreateBlock();
-				delete field[i];
-				field[i] = tmpBlock;
+				field[y]->SetChain(tChain); 
+				if(field[y]->IsState(BST_IDLE))
+					field[y]->Drop();
 			}
 		}
 	}
