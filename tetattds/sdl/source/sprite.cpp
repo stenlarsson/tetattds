@@ -1,6 +1,6 @@
 #include "tetattds.h"
 #include "sprite.h"
-#include "fieldgraphics.h"
+#include "platformgraphics.h"
 #include <SDL.h>
 
 #define MAX_SPRITES 128
@@ -61,7 +61,7 @@ void Sprite::Draw()
 			tilerect.y = (tile / 8) * 16;
 			destrect.x = x;
 			destrect.y = y;
-			SDL_BlitSurface(sprites, &tilerect, g_fieldGraphics->framebuffer, &destrect);
+			SDL_BlitSurface(sprites, &tilerect, ((PlatformGraphics*)g_fieldGraphics)->framebuffer, &destrect);
 		}
 		break;
 	
@@ -74,16 +74,16 @@ void Sprite::Draw()
 			tilerect.y = (tile / 8) * 16;
 			destrect.x = x;
 			destrect.y = y;
-			SDL_BlitSurface(sprites, &tilerect, g_fieldGraphics->framebuffer, &destrect);
+			SDL_BlitSurface(sprites, &tilerect, ((PlatformGraphics*)g_fieldGraphics)->framebuffer, &destrect);
 			tilerect.x = ((tile + 1) % 8) * 16;
 			destrect.y = y + 8;
-			SDL_BlitSurface(sprites, &tilerect, g_fieldGraphics->framebuffer, &destrect);
+			SDL_BlitSurface(sprites, &tilerect, ((PlatformGraphics*)g_fieldGraphics)->framebuffer, &destrect);
 			tilerect.y = (tile / 8) * 16 + 8;
 			destrect.x = x + 16;
-			SDL_BlitSurface(sprites, &tilerect, g_fieldGraphics->framebuffer, &destrect);
+			SDL_BlitSurface(sprites, &tilerect, ((PlatformGraphics*)g_fieldGraphics)->framebuffer, &destrect);
 			tilerect.x = (tile % 8) * 16;
 			destrect.y = y;
-			SDL_BlitSurface(sprites, &tilerect, g_fieldGraphics->framebuffer, &destrect);
+			SDL_BlitSurface(sprites, &tilerect, ((PlatformGraphics*)g_fieldGraphics)->framebuffer, &destrect);
 		}		
 		break;
 

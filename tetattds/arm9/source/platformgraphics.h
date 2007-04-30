@@ -1,9 +1,7 @@
 #pragma once
 
 #include "ds.h"
-
-#include "protocol.h"
-#include "effecthandler.h"
+#include "fieldgraphics.h"
 
 // map baseblocks, the same are used for both main and sub
 // 32 blocks of 0x800 bytes each starting at 0x6000000
@@ -40,31 +38,14 @@
 #define PLAYFIELD_OFFSET_X 88
 #define PLAYFIELD_OFFSET_Y 0
 
-class Sprite;
-class PlayField;
-
-struct PlayerInfo
-{
-	char name[64];
-	int fieldNum;
-	bool dead;
-	int place;
-	int level;
-	int wins;
-	bool ready;
-	bool connected;
-	bool typing;
-};
-
-class FieldGraphics
+class PlatformGraphics : public FieldGraphics
 {
 public:
 	static void InitMainScreen();
 	static void InitSubScreen(bool wifi);
-	FieldGraphics();
-	~FieldGraphics();
-
-	void SetScrollOffset(int scrollOffset);
+	PlatformGraphics();
+	~PlatformGraphics();
+	static void CreateShadedPalette(uint16_t* dest, uint16_t* src);
 
 	void DrawSmallField(int fieldNum, char* field, bool shaded);
 	void PrintPlayerInfo(PlayerInfo* player);
@@ -72,34 +53,22 @@ public:
 	void ClearSmallField(int fieldNum);
 
 	void Draw(PlayField *pf);
-	void PrintCountdown(int count);
+	void DrawField(PlayField *pf, int x, int y, int tile, bool shaded);
+	void DrawSubScreen();
 	void AddChat(char* text);
 	void ClearChat();
-	
-	EffectHandler *GetEffectHandler() { return &effects; }
 
 private:
-	void PrintScore(int score);
-	void PrintTime(int ticks);
-	void PrintStopTime(int ticks);
-
-	static void CreateShadedPalette(uint16_t* dest, uint16_t* src);
-	void PrintSmall(uint16_t* startCell, const char* text);
-	void PrintLarge(uint16_t* startCell, const char* text);
-	void ClearText(uint16_t* startCell, int length);
-	void ClearTextLine(uint16_t* startCell);
+	void PrintSmall(uint32_t offset, const char* text);
+	void PrintLarge(uint32_t offset, const char* text);
 	void PrintChat();
 	
+	void ClearText(uint16_t* cell, int length);
+	void ClearTextLine(uint32_t cell);
+
 	uint16_t* mainBlockMap;
 	uint16_t* subBlockMap;
 	uint16_t* mainTextMap;
 	uint16_t* subTextMap;
-	EffectHandler effects;
-	Sprite* marker;
-	Sprite* touchMarker;
-	
-	char chatBuffer[MAX_CHAT_LINES][32+1];
-	int lastChatLine;
 };
 
-extern FieldGraphics* g_fieldGraphics;

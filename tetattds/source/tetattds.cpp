@@ -25,6 +25,7 @@
 #include "serverconnection.h"
 #include "connectionmanager.h"
 #include "state.h"
+#include "platformgraphics.h"
 
 // TODO: Put these prototypes someplace else
 void ShowSplashScreen();
@@ -100,7 +101,7 @@ public:
 		gui->SetActiveDialog(dialog);
 
 		settings->Save();
-		FieldGraphics::InitSubScreen(false);
+		PlatformGraphics::InitSubScreen(false);
 	}
 	virtual void Tick() {
 
@@ -322,7 +323,7 @@ public:
 		: finishState(finishState) {
 	}
 	virtual void Enter() {
-		FieldGraphics::InitMainScreen();
+		PlatformGraphics::InitMainScreen();
 		gameEndTimer = GAME_END_DELAY;
 	}
 	virtual void Tick() {
@@ -452,7 +453,7 @@ public:
 		: dialog(NULL) {
 	}
 	virtual void Enter() {
-		FieldGraphics::InitSubScreen(true);
+		PlatformGraphics::InitSubScreen(true);
 		g_fieldGraphics->ClearChat();
 
 		dialog = new StatusDialog("PLEASE WAIT");
