@@ -63,6 +63,6 @@ struct Anim : public BaseAnim
 	}
 
 	void Tick();
-	bool IsDone() { return type == ANIM_STATIC; }
-	int GetFrame() { return curFrame->tile; }
+	bool IsDone() const { return type == ANIM_STATIC; }
+	int GetFrame() const { return curFrame->tile; }
 };

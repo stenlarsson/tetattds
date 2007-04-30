@@ -67,7 +67,7 @@ public:
 		return dropTime;
 	}
 
-	int GetTile();
+	int GetTile() const;
 
 protected:
 	virtual void ChangeState(BlockState newState) = 0;
