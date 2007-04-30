@@ -56,6 +56,24 @@ void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
 	}
 }
 
+template <typename Queue, typename Active>
+bool DropGarbageHelper(Queue & q, Active & active, PlayField * pf, bool & leftAlign, int & curField)
+{
+	for( ; !q.empty(); q.pop_front())
+	{
+		// Abort if we cannot place all garbage.
+		if (!pf->InsertGarbage(curField, q.front(), leftAlign))
+			return false;
+
+		curField -= PF_WIDTH;
+		leftAlign = !leftAlign;
+		q.front()->SetGraphic();
+		
+		active.push_back(q.front());
+	}
+	return true;
+}
+
 void GarbageHandler::DropGarbage(PlayField * pf)
 {
 	if(normalDrops.empty() && chainDrops.empty())
@@ -72,24 +90,12 @@ void GarbageHandler::DropGarbage(PlayField * pf)
 		curField -= PF_WIDTH;
 
 	// Process all garbage blocks about to drop.
-	bool bLeftAlign = true;
-	std::list<GarbageBlock*> * queues[] = {&normalDrops, &chainDrops};
-	for(int i = 0; i < 2; i++)
-	{
-		for(std::list<GarbageBlock*> & q = *(queues[i]) ; !q.empty(); q.pop_front())
-		{
-			// Abort if we cannot place all garbage.
-			if (!pf->InsertGarbage(curField, q.front(), bLeftAlign))
-				break;
-
-			bLeftAlign = !bLeftAlign;
-			curField -= PF_WIDTH;
-			q.front()->SetGraphic();
-			
-			activeBlocks.push_back(q.front());
-		}
-	}
+	bool leftAlign = true;
+	if (DropGarbageHelper(normalDrops, activeBlocks, pf, leftAlign, curField))
+		DropGarbageHelper(chainDrops, activeBlocks, pf, leftAlign, curField);
 }
+
+
 
 void GarbageHandler::Tick()
 {
