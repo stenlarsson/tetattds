@@ -29,7 +29,6 @@
 		28BBD0640BE49486009E47F1 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A300BAAA8790048D645 /* images */; };
 		28BBD0650BE49486009E47F1 /* music in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A530BAAA8790048D645 /* music */; };
 		28BBD0660BE49486009E47F1 /* sound in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A560BAAA8790048D645 /* sound */; };
-		28BBD0670BE49495009E47F1 /* fieldgraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D0D0BA9594B00673C7C /* fieldgraphics.cpp */; };
 		28BBD0680BE49495009E47F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D0F0BA9594B00673C7C /* main.cpp */; };
 		28BBD0690BE49495009E47F1 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D110BA9594B00673C7C /* sound.cpp */; };
 		28BBD06A0BE49495009E47F1 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D130BA9594B00673C7C /* sprite.cpp */; };
@@ -65,6 +64,8 @@
 		28BBD0AA0BE494AB009E47F1 /* libmikmod-coreaudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FE2A100BA9A6C50048D645 /* libmikmod-coreaudio.framework */; };
 		28BBD1940BE4AFEE009E47F1 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 28BBD1930BE4AFEE009E47F1 /* icon.icns */; };
 		28EDCC840BE646BF000A6937 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28EDCC830BE646BF000A6937 /* Info.plist */; };
+		28EDCC8F0BE69171000A6937 /* platformgraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28EDCC8D0BE69171000A6937 /* platformgraphics.cpp */; };
+		28EDCC920BE69189000A6937 /* fieldgraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28EDCC900BE69189000A6937 /* fieldgraphics.cpp */; };
 		28FE29C50BA99E2A0048D645 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FE29C30BA99E2A0048D645 /* SDL.framework */; };
 		28FE2A120BA9A6C50048D645 /* libmikmod-coreaudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FE2A100BA9A6C50048D645 /* libmikmod-coreaudio.framework */; };
 /* End PBXBuildFile section */
@@ -111,8 +112,6 @@
 		2862A8050BA98F2200C4C204 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = xcode/SDLMain.h; sourceTree = "<group>"; };
 		2862A8060BA98F2200C4C204 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = xcode/SDLMain.m; sourceTree = "<group>"; };
 		2862A83D0BA998F600C4C204 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		28AC9D0D0BA9594B00673C7C /* fieldgraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fieldgraphics.cpp; path = tetattds/sdl/source/fieldgraphics.cpp; sourceTree = SOURCE_ROOT; };
-		28AC9D0E0BA9594B00673C7C /* fieldgraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fieldgraphics.h; path = tetattds/sdl/source/fieldgraphics.h; sourceTree = SOURCE_ROOT; };
 		28AC9D0F0BA9594B00673C7C /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = tetattds/sdl/source/main.cpp; sourceTree = SOURCE_ROOT; };
 		28AC9D110BA9594B00673C7C /* sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sound.cpp; path = tetattds/sdl/source/sound.cpp; sourceTree = SOURCE_ROOT; };
 		28AC9D120BA9594B00673C7C /* sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sound.h; path = tetattds/sdl/source/sound.h; sourceTree = SOURCE_ROOT; };
@@ -187,6 +186,10 @@
 		28BBD0570BE49233009E47F1 /* tetattds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tetattds.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		28BBD1930BE4AFEE009E47F1 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = tetattds/images/icon.icns; sourceTree = "<group>"; };
 		28EDCC830BE646BF000A6937 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Info.plist; path = xcode/Info.plist; sourceTree = "<group>"; };
+		28EDCC8D0BE69171000A6937 /* platformgraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = platformgraphics.cpp; sourceTree = "<group>"; };
+		28EDCC8E0BE69171000A6937 /* platformgraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platformgraphics.h; sourceTree = "<group>"; };
+		28EDCC900BE69189000A6937 /* fieldgraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fieldgraphics.cpp; sourceTree = "<group>"; };
+		28EDCC910BE69189000A6937 /* fieldgraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fieldgraphics.h; sourceTree = "<group>"; };
 		28FE29C30BA99E2A0048D645 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
 		28FE2A100BA9A6C50048D645 /* libmikmod-coreaudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "libmikmod-coreaudio.framework"; path = "/Library/Frameworks/libmikmod-coreaudio.framework"; sourceTree = "<absolute>"; };
 		28FE2A300BAAA8790048D645 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = tetattds/images; sourceTree = SOURCE_ROOT; };
@@ -269,8 +272,8 @@
 		28AC9D0C0BA9594B00673C7C /* sdl */ = {
 			isa = PBXGroup;
 			children = (
-				28AC9D0D0BA9594B00673C7C /* fieldgraphics.cpp */,
-				28AC9D0E0BA9594B00673C7C /* fieldgraphics.h */,
+				28EDCC8D0BE69171000A6937 /* platformgraphics.cpp */,
+				28EDCC8E0BE69171000A6937 /* platformgraphics.h */,
 				28AC9D0F0BA9594B00673C7C /* main.cpp */,
 				28AC9D110BA9594B00673C7C /* sound.cpp */,
 				28AC9D120BA9594B00673C7C /* sound.h */,
@@ -285,6 +288,8 @@
 		28AC9D1F0BA959B900673C7C /* common */ = {
 			isa = PBXGroup;
 			children = (
+				28EDCC900BE69189000A6937 /* fieldgraphics.cpp */,
+				28EDCC910BE69189000A6937 /* fieldgraphics.h */,
 				28AC9D200BA959B900673C7C /* anim.cpp */,
 				28AC9D210BA959B900673C7C /* anim.h */,
 				28AC9D220BA959B900673C7C /* baseblock.cpp */,
@@ -585,7 +590,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				28BBD0670BE49495009E47F1 /* fieldgraphics.cpp in Sources */,
 				28BBD0680BE49495009E47F1 /* main.cpp in Sources */,
 				28BBD0690BE49495009E47F1 /* sound.cpp in Sources */,
 				28BBD06A0BE49495009E47F1 /* sprite.cpp in Sources */,
@@ -615,6 +619,8 @@
 				28BBD0820BE49495009E47F1 /* connectionmanager.cpp in Sources */,
 				28BBD0830BE49495009E47F1 /* udpsocket.cpp in Sources */,
 				28BBD0840BE49495009E47F1 /* SDLMain.m in Sources */,
+				28EDCC8F0BE69171000A6937 /* platformgraphics.cpp in Sources */,
+				28EDCC920BE69189000A6937 /* fieldgraphics.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
