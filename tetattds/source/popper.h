@@ -8,7 +8,7 @@ class Block;
 
 class Popper
 {
-  public:
+public:
 	Popper(PlayField* newPF, EffectHandler* newEH);
 	~Popper();
 
@@ -16,13 +16,12 @@ class Popper
 	void Pop();
 	void Tick();
 
-  private:
+private:
 	void SortChain(Chain* chain);
 	void ClearChain(Chain* chain);
 	Chain* GetFreeChain();
 
 	Chain chains[MAX_CHAINS];
-	bool bUsedThisFrame[MAX_CHAINS];
 	bool bFree[MAX_CHAINS];
 	Chain* newChain;
 	PlayField* pf;

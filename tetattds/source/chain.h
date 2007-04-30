@@ -13,5 +13,6 @@ struct Chain
 	int activeBlocks;
 	bool bSentCombo;
 	int popCount;
+	bool bUsedThisFrame;
 	std::vector<unsigned int> garbage;
 };
