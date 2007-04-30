@@ -15,7 +15,6 @@ struct Chain
 	Chain() 
 		: numBlocks(0),
 		  length(0),
-		  chainNum(0),
 		  activeBlocks(0),
 		  bSentCombo(false),
 		  popCount(0),
@@ -24,7 +23,7 @@ struct Chain
 	{
 		ClearBlocks();
 	}
-	
+
 	~Chain()
 	{
 		ASSERT(activeBlocks == 0);
@@ -92,7 +91,6 @@ struct Chain
 	int blockNum[100];
 	int numBlocks;
 	int length;
-	int chainNum;
 	int activeBlocks;
 	bool bSentCombo;
 	int popCount;

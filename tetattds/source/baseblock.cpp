@@ -25,30 +25,9 @@ BaseBlock::~BaseBlock()
 {
 }
 
-int BaseBlock::GetTile()
+int BaseBlock::GetTile() const
 {
-	int tile = anim.GetFrame();
-#ifdef DEBUG
-	// Makes blockgraphic tied to some other attribute, useful when debugging
-	if(keysHeld() & KEY_L)
-	{
-		if(keysHeld() & KEY_UP)			// Shows current state of block
-			tile = state*8;
-		else if(keysHeld() & KEY_DOWN)		// Shows the statedelay
-		{
-			if(stateDelay == -1)
-				tile = TILE_EGG;
-			else
-				tile = (stateDelay>13?13:stateDelay)*8;
-		}
-		else								// Shows which chain the block is involved in
-			if(chain)
-				tile = chain->chainNum*8;
-			else
-				tile = TILE_EGG;
-	}
-#endif//DEBUG
-	return tile;
+	return anim.GetFrame();
 }
 
 void BaseBlock::Tick()
