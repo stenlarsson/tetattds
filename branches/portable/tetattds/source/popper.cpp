@@ -87,7 +87,6 @@ void Popper::Pop()
 					new EffCombo(
 						pf->GetFieldX((*it)->blockNum[0]),
 						pf->GetFieldY((*it)->blockNum[0]),
-						g_game->GetLevelData(),
 						COMBO_4,
 						(*it)->numBlocks));
 			if((*it)->length > 1)
@@ -100,7 +99,6 @@ void Popper::Pop()
 						new EffCombo(
 							pf->GetFieldX((*it)->blockNum[0]-PF_WIDTH),
 							pf->GetFieldY((*it)->blockNum[0]-PF_WIDTH),
-							g_game->GetLevelData(),
 							COMBO_2X,
 							(*it)->length));
 			}
@@ -116,7 +114,6 @@ void Popper::Pop()
 					new EffCombo(
 						pf->GetFieldX((*it)->blockNum[0]),
 						pf->GetFieldY((*it)->blockNum[0]),
-						g_game->GetLevelData(),
 						COMBO_2X,
 						(*it)->length));
 			if(pf->GetHeight() > PF_STRESS_HEIGHT)
