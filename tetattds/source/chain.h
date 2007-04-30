@@ -1,7 +1,14 @@
 #pragma once
 #include <vector>
+#include "garbage.h"
 
 class Block;
+
+struct GarbageInfo
+{
+	int size;
+	GarbageType type;
+};
 
 struct Chain
 {
@@ -35,6 +42,52 @@ struct Chain
 		std::fill_n(blockNum, 100, -1);
 	}
 	
+	void AddBlock(Block* block, int blocknum)
+	{
+		blocks[numBlocks] = block;
+		blockNum[numBlocks] = blocknum;
+		numBlocks++;
+		if(!bUsedThisFrame) 
+		{
+			// Increases chain length every frame it's involved in popping new blocks
+			length++;
+			popCount = 0;
+			bUsedThisFrame = true;
+		}
+	}
+	
+	void Sort()
+	{
+		bool changed = true;
+		while(changed)
+		{
+			changed = false;
+			for(int i = 0; i < numBlocks-1; i++)
+			{
+				if(blockNum[i+1] < blockNum[i])
+				{
+					std::swap(blockNum[i], blockNum[i+1]);
+					std::swap(blocks[i], blocks[i+1]);
+					changed = true;
+				}
+				else if(blockNum[i] == blockNum[i+1])
+				{
+					for(int ii = i; ii < numBlocks-1; ii++)
+					{
+						blockNum[ii] = blockNum[ii+1];
+						blocks[ii] = blocks[ii+1];
+					}
+
+					numBlocks--;
+					blockNum[numBlocks] = -1;
+					blocks[numBlocks] = NULL;
+
+					changed = true;
+				}
+			}
+		}
+	}
+	
 	Block* blocks[100];
 	int blockNum[100];
 	int numBlocks;
@@ -44,5 +97,5 @@ struct Chain
 	bool bSentCombo;
 	int popCount;
 	bool bUsedThisFrame;
-	std::vector<unsigned int> garbage;
+	std::vector<GarbageInfo> garbage;
 };

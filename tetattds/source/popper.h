@@ -18,8 +18,6 @@ public:
 	void Tick();
 
 private:
-	void SortChain(Chain* chain);
-
 	std::vector<Chain*> chains;
 	Chain* newChain;
 	PlayField* pf;

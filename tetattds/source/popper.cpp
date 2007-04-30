@@ -38,15 +38,7 @@ void Popper::AddBlock(Block* block, int blocknum)
 		block->SetChain(newChain);
 	}
 
-	addToChain->blocks[addToChain->numBlocks] = block;
-	addToChain->blockNum[addToChain->numBlocks] = blocknum;
-	addToChain->numBlocks++;
-	if(!addToChain->bUsedThisFrame) // Increases chain length every frame it's involved in popping new blocks
-	{
-		addToChain->length++;
-		addToChain->popCount = 0;
-		addToChain->bUsedThisFrame = true;
-	}
+	addToChain->AddBlock(block, blocknum);
 }
 
 void Popper::Pop()
@@ -59,7 +51,7 @@ void Popper::Pop()
 		if(!(*it)->bUsedThisFrame)
 			continue;
 
-		SortChain(*it);
+		(*it)->Sort();
 
 		for(int curBlock = 0; curBlock < (*it)->numBlocks; curBlock++)
 		{
@@ -71,7 +63,8 @@ void Popper::Pop()
 		// Check add evil garbage
 		if(evil > 0)
 		{
-			(*it)->garbage.push_back(evil-2 | GARBAGE_EVIL ); // -2 to specify number of garbage lines
+			GarbageInfo g = {evil-2, GARBAGE_EVIL}; // -2 to specify number of garbage lines
+			(*it)->garbage.push_back(g); 
 			(*it)->bSentCombo = true;
 		}
 		
@@ -81,7 +74,8 @@ void Popper::Pop()
 		{
 			// A combo.
 			// -1 to specify number of garbage blocks instead of combo size
-			(*it)->garbage.push_back((*it)->numBlocks-1 | GARBAGE_COMBO);
+			GarbageInfo g = {(*it)->numBlocks-1, GARBAGE_COMBO};
+			(*it)->garbage.push_back(g);
 			(*it)->bSentCombo = true;
 			pf->DelayScroll((*it)->numBlocks*5);
 			if(pf->GetHeight() > PF_STRESS_HEIGHT)
@@ -142,35 +136,6 @@ void Popper::Pop()
 	newChain = NULL;
 }
 
-void Popper::SortChain(Chain* chain)
-{
-	bool bChanged;
-
-	do
-	{
-		bChanged = false;
-		for(int i = 0; i < chain->numBlocks-1; i++)
-		{
-			if(chain->blockNum[i+1] < chain->blockNum[i])
-			{
-				std::swap(chain->blockNum[i], chain->blockNum[i+1]);
-				std::swap(chain->blocks[i], chain->blocks[i+1]);
-				bChanged = true;
-			}
-			if(chain->blockNum[i] == chain->blockNum[i+1])
-			{
-				for(int ii = i; ii < chain->numBlocks; ii++)
-				{
-					chain->blockNum[ii] = chain->blockNum[ii+1];
-					chain->blocks[ii] = chain->blocks[ii+1];
-				}
-				chain->numBlocks--;
-				bChanged = true;
-			}
-		}
-	}while(bChanged);
-}
-
 void Popper::Tick()
 {
 	std::vector<Chain*>::iterator keep =
@@ -181,8 +146,8 @@ void Popper::Tick()
 	{
 		if((*it)->bSentCombo || (*it)->length > 1)
 		{
-			for(std::vector<unsigned int>::iterator j = (*it)->garbage.begin(); j != (*it)->garbage.end(); j++)
-				g_game->SendGarbage(*j&0xFFFF, (GarbageType)(*j&0xFFFF0000));
+			for(std::vector<GarbageInfo>::iterator j = (*it)->garbage.begin(); j != (*it)->garbage.end(); j++)
+				g_game->SendGarbage(j->size, j->type);
 			if((*it)->length > 1)
 				g_game->SendGarbage((*it)->length-1, GARBAGE_CHAIN);
 			Sound::PlayChainEndEffect(*it);
