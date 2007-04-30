@@ -56,10 +56,8 @@ Game::Game(int level,
 	col(0),
 	row(0)
 {
-	for(int i = 0; i < FWGUI_NUM_KEYS; i++) {
-		heldKeys[i] = false;
-	}
-
+	std::fill_n(heldKeys, FWGUI_NUM_KEYS, false);
+	
 	field->Init(PLAYFIELD_OFFSET_X, PLAYFIELD_OFFSET_Y);
 }
 

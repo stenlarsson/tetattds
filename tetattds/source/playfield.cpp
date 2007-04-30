@@ -13,6 +13,8 @@
 #include "game.h"
 #include "sound.h"
 #include "chain.h"
+#include "util.h"
+#include <functional>
 
 static inline int RightOf(int i, int amount = 1)
 {
@@ -144,8 +146,7 @@ PlayField::PlayField(EffectHandler *effects)
 
 PlayField::~PlayField()
 {
-	for(int i = 0; i < PF_NUM_BLOCKS; i++)
-		DEL(field[i]);
+	delete_each(field, field+PF_NUM_BLOCKS);
 
 	DEL(gh);
 	DEL(popper);
@@ -169,8 +170,7 @@ void PlayField::Init(int xOffset, int yOffset)
 		}
 	}
 
-	for(int i = 0; i < PF_NUM_BLOCKS; i++)
-		field[i] = NULL;
+	std::fill_n(field, PF_NUM_BLOCKS, (BaseBlock*)NULL);
 
 	popper = new Popper(this, effects);
 }
@@ -455,8 +455,7 @@ void PlayField::ScrollField()
 
 		if(scrollOffset <= -BLOCKSIZE)
 		{
-			for(int i=0; IsTopmost(i); i++)
-				DEL(field[i]);
+			delete_each(field, field+PF_WIDTH);
 
 			for(int i = 0; !IsForthcoming(i); i++)
 				field[i] = field[Below(i)];
@@ -584,20 +583,8 @@ void PlayField::DropBlocks()
 		{
 			if(field[i]->CheckDrop())	//if it's time to really drop the block
 			{
-				if(field[Below(i)] == NULL)
-					std::swap(field[i], field[Below(i)]);
-#ifdef DEBUG
-				else
-				{
-					printf("Fan i satan, vi ramlar! %d, %d\n", i%PF_WIDTH, i/PF_WIDTH); // DEBUG
-					while(!(keysDown() & KEY_SELECT))
-					{
-						Draw();
-						scanKeys();
-						swiWaitForVBlank();
-					}
-				}
-#endif
+				ASSERT(field[Below(i)] == NULL)
+				std::swap(field[i], field[Below(i)]);
 			}
 		}
 	}
@@ -611,8 +598,7 @@ void PlayField::CheckForPops()
 
 	//here's a good place to update the height
 	
-	for(int i = 0; i < PF_WIDTH; i++)
-		fieldHeight[i] = -1;
+	std::fill_n(fieldHeight, PF_WIDTH, -1);
 
 	for(int i = PF_WIDTH; !IsForthcoming(i); i++)//loop, top to bottom
 	{
@@ -933,10 +919,7 @@ bool PlayField::InsertGarbage(int x, GarbageBlock *b, bool leftAlign) {
 		x -= PF_WIDTH - b->GetNum();
 	for(int i = b->GetNum()-1; i >= 0; i--,x = LeftOf(x))
 	{
-#ifdef DEBUG
-		if( field[x] != NULL)
-			printf("Fanfanfan!");
-#endif
+		ASSERT( field[x] == NULL)
 		field[x] = b->GetBlock(i);
 	}
 	
