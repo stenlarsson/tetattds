@@ -1,6 +1,5 @@
 #pragma once
 
-#include "chain.h"
 #include "garbagehandler.h"
 
 enum ControlMode

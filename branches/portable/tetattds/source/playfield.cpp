@@ -12,6 +12,7 @@
 #include "garbageblock.h"
 #include "game.h"
 #include "sound.h"
+#include "chain.h"
 
 static inline int RightOf(int i, int amount = 1)
 {

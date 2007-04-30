@@ -1,8 +1,8 @@
 #pragma once
 
 #include "anim.h"
-#include "chain.h"
 
+class Chain;
 class GarbageBlock;
 class Sprite;
 
@@ -57,14 +57,7 @@ public:
 	inline void SetPop() { popped = true; }
 	inline bool IsPopped() const { return popped; }
 	inline Chain* GetChain() const { return chain; }
-	void SetChain(Chain* newChain)
-	{
-		if(chain != NULL)
-			chain->activeBlocks--;
-		chain = newChain;
-		if(chain != NULL)
-			chain->activeBlocks++;
-	}
+	void SetChain(Chain* newChain);
 
 	bool CheckDrop()
 	{

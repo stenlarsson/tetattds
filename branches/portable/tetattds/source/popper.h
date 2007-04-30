@@ -1,10 +1,11 @@
 #pragma once
 
-#include "chain.h"
+#include <vector>
 
 class PlayField;
 class EffectHandler;
 class Block;
+class Chain;
 
 class Popper
 {
@@ -18,11 +19,8 @@ public:
 
 private:
 	void SortChain(Chain* chain);
-	void ClearChain(Chain* chain);
-	Chain* GetFreeChain();
 
-	Chain chains[MAX_CHAINS];
-	bool bFree[MAX_CHAINS];
+	std::vector<Chain*> chains;
 	Chain* newChain;
 	PlayField* pf;
 	EffectHandler* eh;
