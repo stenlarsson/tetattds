@@ -2,6 +2,7 @@
 #include "baseblock.h"
 #include "game.h"
 #include "playfield.h"
+#include "chain.h"
 
 BaseBlock::BaseBlock(Anim const & anim, BlockType type, BlockState state, Chain* chain, bool needPopCheck)
 	: anim(anim),
@@ -66,3 +67,14 @@ void BaseBlock::Tick()
 	anim.Tick();
 	popped = false;
 }
+
+void BaseBlock::SetChain(Chain* newChain)
+{
+	if(chain != NULL)
+		chain->activeBlocks--;
+	chain = newChain;
+	if(chain != NULL)
+		chain->activeBlocks++;
+}
+
+

@@ -1,6 +1,5 @@
 #pragma once
 
-#include "chain.h"
 #include "garbage.h"
 #include <vector>
 #include <list>
