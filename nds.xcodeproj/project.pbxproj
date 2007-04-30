@@ -100,7 +100,6 @@
 /* End PBXBuildStyle section */
 
 /* Begin PBXFileReference section */
-		08FB7796FE84155DC02AAC07 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		2862A6A30BA969BF00C4C204 /* gunship_12.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = gunship_12.bin; path = fwgui/data/gunship_12.bin; sourceTree = "<group>"; };
 		2862A6A40BA969BF00C4C204 /* vera_11.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = vera_11.bin; path = fwgui/data/vera_11.bin; sourceTree = "<group>"; };
 		2862A71E0BA97EA400C4C204 /* libfwgui.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfwgui.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -115,7 +114,6 @@
 		28AC9D0D0BA9594B00673C7C /* fieldgraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = fieldgraphics.cpp; path = tetattds/sdl/source/fieldgraphics.cpp; sourceTree = SOURCE_ROOT; };
 		28AC9D0E0BA9594B00673C7C /* fieldgraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fieldgraphics.h; path = tetattds/sdl/source/fieldgraphics.h; sourceTree = SOURCE_ROOT; };
 		28AC9D0F0BA9594B00673C7C /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = tetattds/sdl/source/main.cpp; sourceTree = SOURCE_ROOT; };
-		28AC9D100BA9594B00673C7C /* nds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = nds.h; path = tetattds/sdl/source/nds.h; sourceTree = SOURCE_ROOT; };
 		28AC9D110BA9594B00673C7C /* sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sound.cpp; path = tetattds/sdl/source/sound.cpp; sourceTree = SOURCE_ROOT; };
 		28AC9D120BA9594B00673C7C /* sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sound.h; path = tetattds/sdl/source/sound.h; sourceTree = SOURCE_ROOT; };
 		28AC9D130BA9594B00673C7C /* sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sprite.cpp; path = tetattds/sdl/source/sprite.cpp; sourceTree = SOURCE_ROOT; };
@@ -241,7 +239,6 @@
 				2862A8060BA98F2200C4C204 /* SDLMain.m */,
 				28AC9D9D0BA95C8600673C7C /* fwgui */,
 				28AC9D9C0BA95C7500673C7C /* tetattds */,
-				08FB7796FE84155DC02AAC07 /* main.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -275,7 +272,6 @@
 				28AC9D0D0BA9594B00673C7C /* fieldgraphics.cpp */,
 				28AC9D0E0BA9594B00673C7C /* fieldgraphics.h */,
 				28AC9D0F0BA9594B00673C7C /* main.cpp */,
-				28AC9D100BA9594B00673C7C /* nds.h */,
 				28AC9D110BA9594B00673C7C /* sound.cpp */,
 				28AC9D120BA9594B00673C7C /* sound.h */,
 				28AC9D130BA9594B00673C7C /* sprite.cpp */,
