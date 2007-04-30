@@ -10,7 +10,7 @@
 
 #include <stdio.h>
 
-#include "fieldgraphics.h"
+#include "platformgraphics.h"
 #include "util.h"
 #include "settings.h"
 #include "statusdialog.h"
@@ -112,7 +112,7 @@ int main(int,char **)
 	
 	if(!UdpSocket::InitSockets()) return 1;
 	Sprite::InitSprites();
-	g_fieldGraphics = new FieldGraphics();
+	g_fieldGraphics = new PlatformGraphics();
 	InitGui();
 	InitStates();
 	
@@ -122,7 +122,7 @@ int main(int,char **)
 		if(!StateTick()) {
 			break;
 		}
-		g_fieldGraphics->DrawSubScreen();
+		((PlatformGraphics*)g_fieldGraphics)->DrawSubScreen();
 		SDL_Flip(surface);
 
 		//while(SDL_GetTicks() - ticks < 16)

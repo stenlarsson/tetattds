@@ -1,6 +1,7 @@
 #include "tetattds.h"
 #include "game.h"
 #include "playfield.h"
+#include "platformgraphics.h"
 #include "serverconnection.h"
 #include "connectionmanager.h"
 #include "sound.h"

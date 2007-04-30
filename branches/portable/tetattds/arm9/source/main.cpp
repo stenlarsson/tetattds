@@ -12,7 +12,7 @@
 #include "splash2_map_bin.h"
 #include "splash2_pal_bin.h"
 
-#include "fieldgraphics.h"
+#include "platformgraphics.h"
 #include "util.h"
 #include "settings.h"
 #include "sramsettings.h"
@@ -176,7 +176,7 @@ int main(void)
 	
 	InitConsole();
 	Sprite::InitSprites();
-	g_fieldGraphics = new FieldGraphics();
+	g_fieldGraphics = new PlatformGraphics();
 	InitGui();
 	InitStates();
 	

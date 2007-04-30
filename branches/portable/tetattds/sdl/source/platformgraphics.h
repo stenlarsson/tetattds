@@ -1,5 +1,6 @@
 #pragma once
 
+#include "fieldgraphics.h"
 #include "protocol.h"
 #include "effecthandler.h"
 
@@ -24,32 +25,15 @@
 #define PLAYFIELD_OFFSET_X 88
 #define PLAYFIELD_OFFSET_Y 0
 
-class Sprite;
-class PlayField;
 struct SDL_Surface;
 
-struct PlayerInfo
-{
-	char name[64];
-	int fieldNum;
-	bool dead;
-	int place;
-	int level;
-	int wins;
-	bool ready;
-	bool connected;
-	bool typing;
-};
-
-class FieldGraphics
+class PlatformGraphics : public FieldGraphics
 {
 public:
 	static void InitMainScreen();
 	static void InitSubScreen(bool wifi);
-	FieldGraphics();
-	~FieldGraphics();
-
-	void SetScrollOffset(int scrollOffset);
+	PlatformGraphics();
+	~PlatformGraphics();
 
 	void DrawSmallField(int fieldNum, char* field, bool shaded);
 	void PrintPlayerInfo(PlayerInfo* player);
@@ -57,32 +41,19 @@ public:
 	void ClearSmallField(int fieldNum);
 
 	void Draw(PlayField *pf);
+	void DrawField(PlayField *pf, int x, int y, int tile, bool shaded);
 	void DrawSubScreen();
-	void PrintCountdown(int count);
 	void AddChat(char* text);
 	void ClearChat();
 	
-	EffectHandler *GetEffectHandler() { return &effects; }
-
 	SDL_Surface *framebuffer;
 private:
 	void ReallyDrawSmallField(int fieldNum);
-	void ReallyPrintPlayerInfo(int fieldNum);
-
-	void PrintScore(int score);
-	void PrintTime(int ticks);
-	void PrintStopTime(int ticks);
 
 	void PrintSmall(uint32_t offset, const char* text);
 	void PrintLarge(uint32_t offset, const char* text);
 	void PrintChat();
 	
-	EffectHandler effects;
-	Sprite* marker;
-	Sprite* touchMarker;
-	
-	char chatBuffer[MAX_CHAT_LINES][32+1];
-	int lastChatLine;
 	struct {
 		char field[12*6];
 		bool shaded;
@@ -90,4 +61,4 @@ private:
 	} smallFields[4];
 };
 
-extern FieldGraphics* g_fieldGraphics;
+extern PlatformGraphics* g_PlatformGraphics;
