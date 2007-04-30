@@ -5,6 +5,7 @@
 #include "anim.h"
 #include "game.h"
 #include "playfield.h"
+#include "util.h"
 
 EffCombo::EffCombo(int x, int y, ComboType type, int count)
 	: Effect(x, y, g_game->GetLevelData()->effComboDuration),
@@ -21,14 +22,12 @@ EffCombo::EffCombo(int x, int y, ComboType type, int count)
 EffCombo::~EffCombo()
 {
 	delete sign;
-	for(int i = 0; i < COMBO_NUM_EGGS; i++)
-		delete eggs[i];
+	delete_each(eggs, eggs+COMBO_NUM_EGGS);
 }
 
 void EffCombo::Draw()
 {
-	for(int i = 0; i < COMBO_NUM_EGGS; i++)
-		eggs[i]->Draw();
+	std::for_each(eggs, eggs+COMBO_NUM_EGGS, std::mem_fun(&Sprite::Draw));
 	sign->Draw();
 }
 
