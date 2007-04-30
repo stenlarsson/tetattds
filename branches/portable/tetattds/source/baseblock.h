@@ -57,9 +57,22 @@ public:
 	inline void SetPop() { popped = true; }
 	inline bool IsPopped() const { return popped; }
 	inline Chain* GetChain() const { return chain; }
-	void SetChain(Chain* newChain) { if(chain != NULL) chain->activeBlocks--; chain = newChain; if(chain != NULL) chain->activeBlocks++;}
+	void SetChain(Chain* newChain)
+	{
+		if(chain != NULL)
+			chain->activeBlocks--;
+		chain = newChain;
+		if(chain != NULL)
+			chain->activeBlocks++;
+	}
 
-	bool CheckDrop() { if(dropTimer <= 0) { dropTimer = BLOCK_DROP_TIMER; return true; } return false; }
+	bool CheckDrop()
+	{
+		bool dropTime = (dropTimer <= 0);
+		if(dropTime)
+			dropTimer = BLOCK_DROP_TIMER;
+		return dropTime;
+	}
 
 	int GetTile();
 
