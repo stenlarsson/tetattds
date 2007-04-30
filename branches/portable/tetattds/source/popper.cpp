@@ -11,9 +11,9 @@ Popper::Popper(PlayField* newpf, EffectHandler* neweh)
 {
 	for(int i = 0;i < MAX_CHAINS;i++)
 	{
-		bUsedThisFrame[i] = false;
 		bFree[i] = true;
 		ClearChain(&chains[i]);
+		chains[i].bUsedThisFrame = false;
 		chains[i].chainNum = i;
 		chains[i].activeBlocks = 0;
 		chains[i].length = 0;
@@ -46,11 +46,11 @@ void Popper::AddBlock(Block* block, int blocknum)
 	addToChain->blocks[addToChain->numBlocks] = block;
 	addToChain->blockNum[addToChain->numBlocks] = blocknum;
 	addToChain->numBlocks++;
-	if(!bUsedThisFrame[addToChain->chainNum]) // Increases chain length every frame it's involved in popping new blocks
+	if(!addToChain->bUsedThisFrame) // Increases chain length every frame it's involved in popping new blocks
 	{
 		addToChain->length++;
 		addToChain->popCount = 0;
-		bUsedThisFrame[addToChain->chainNum] = true;
+		addToChain->bUsedThisFrame = true;
 	}
 }
 
@@ -63,7 +63,7 @@ void Popper::Pop()
 
 	for(curChain = 0;curChain<MAX_CHAINS;curChain++)
 	{
-		if(bFree[curChain] || !bUsedThisFrame[curChain])
+		if(bFree[curChain] || !chains[curChain].bUsedThisFrame)
 			continue;
 
 		SortChain(&chains[curChain]);
@@ -144,7 +144,7 @@ void Popper::Pop()
 		}
 		chains[curChain].numBlocks = 0;
 		ClearChain(&chains[curChain]);
-		bUsedThisFrame[curChain] = false;
+		chains[curChain].bUsedThisFrame = false;
 	}
 	newChain = NULL;
 }
@@ -164,30 +164,22 @@ Chain* Popper::GetFreeChain()
 
 void Popper::SortChain(Chain* chain)
 {
-	int tmp;
-	Block* block;
-	int i;
-	int ii;
-	bool bChanged = false;
+	bool bChanged;
 
 	do
 	{
 		bChanged = false;
-		for(i = 0;i < chain->numBlocks-1;i++)
+		for(int i = 0; i < chain->numBlocks-1; i++)
 		{
 			if(chain->blockNum[i+1] < chain->blockNum[i])
 			{
-				tmp = chain->blockNum[i];
-				chain->blockNum[i] = chain->blockNum[i+1];
-				chain->blockNum[i+1] = tmp;
-				block = chain->blocks[i];
-				chain->blocks[i] = chain->blocks[i+1];
-				chain->blocks[i+1] = block;
+				std::swap(chain->blockNum[i], chain->blockNum[i+1]);
+				std::swap(chain->blocks[i], chain->blocks[i+1]);
 				bChanged = true;
 			}
 			if(chain->blockNum[i] == chain->blockNum[i+1])
 			{
-				for(ii = i;ii < chain->numBlocks;ii++)
+				for(int ii = i; ii < chain->numBlocks; ii++)
 				{
 					chain->blockNum[ii] = chain->blockNum[ii+1];
 					chain->blocks[ii] = chain->blocks[ii+1];
