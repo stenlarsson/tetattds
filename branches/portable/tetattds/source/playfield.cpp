@@ -915,7 +915,7 @@ bool PlayField::InsertGarbage(int x, GarbageBlock *b, bool leftAlign) {
 		return false;
 	}
 	
-	if (leftAlign)
+	if (leftAlign && b->GetNum() < PF_WIDTH)
 		x -= PF_WIDTH - b->GetNum();
 	for(int i = b->GetNum()-1; i >= 0; i--,x = LeftOf(x))
 	{
