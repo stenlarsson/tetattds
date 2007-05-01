@@ -68,6 +68,10 @@ static inline bool IsGarbage(BaseBlock *b)
 {
 	return b != NULL && (b->GetType() == BLC_GARBAGE || b->GetType() == BLC_EVILGARBAGE);
 }
+static inline bool IsBlock(BaseBlock *b)
+{
+	return b != NULL && b->GetType() != BLC_GARBAGE && b->GetType() != BLC_EVILGARBAGE;
+}
 static inline bool IsOfState(BaseBlock *b, BlockState s)
 {
 	return b != NULL && b->IsState(s);
@@ -118,7 +122,7 @@ Chain* SamePopChain(Garbage* g, BaseBlock *block, Chain *chain)
 
 bool IsDropable(BaseBlock *b)
 {
-	return (b != NULL) && !IsGarbage(b) && (b->IsState(BST_IDLE) || IsHoverOrMove(b));
+	return IsBlock(b) && (b->IsState(BST_IDLE) || IsHoverOrMove(b));
 }
 
 PlayField::PlayField(EffectHandler *effects)
@@ -538,7 +542,7 @@ void PlayField::DropBlocks()
 			else if(field[Below(i)]->IsState(BST_FALLING))
 			{
 				field[i]->Drop();
-				if(!IsGarbage(field[i]))
+				if(IsBlock(field[i]))
 					field[i]->SetChain(field[Below(i)]->GetChain());
 			}
 		}
@@ -717,11 +721,7 @@ void PlayField::CheckForPops()
 			{
 				// This checks if there are GarbageBlocks that needs to pop
 				// TODO: Do this in terms of the larger GarbageBlocks instead of the individual fields
-				if(field[i] == NULL)
-					continue;
-				if(!IsGarbage(field[i]))
-					continue;
-				if(!field[i]->IsState(BST_IDLE))
+				if(!IsGarbage(field[i]) || !field[i]->IsState(BST_IDLE))
 					continue;
 				if(field[i]->IsPopped())
 					continue;
@@ -847,7 +847,7 @@ void PlayField::CheckHeight()
 			bDanger = true; // music stuff
 			for(int o = i; !IsForthcoming(o); o = Below(o))
 			{
-				if(field[o] != NULL && !IsGarbage(field[o]))
+				if(IsBlock(field[o]))
 				{
 					if(bTooHigh || iScrollPause > 0)
 						((Block*)field[o])->Stop(true);
@@ -860,7 +860,7 @@ void PlayField::CheckHeight()
 		{
 			for(int o = i; !IsForthcoming(o); o = Below(o))
 			{
-				if(field[o] != NULL && !IsGarbage(field[o]))
+				if(IsBlock(field[o]))
 				{
 					((Block*)field[o])->Stop(false);
 					((Block*)field[o])->Stress(false);
