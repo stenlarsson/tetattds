@@ -85,8 +85,7 @@ void Popper::Pop()
 			if(!offscreen) // Only add effect if it's onscreen
 				eh->Add(
 					new EffCombo(
-						pf->GetFieldX((*it)->blockNum[0]),
-						pf->GetFieldY((*it)->blockNum[0]),
+						(*it)->blockNum[0],
 						COMBO_4,
 						(*it)->numBlocks));
 			if((*it)->length > 1)
@@ -97,8 +96,7 @@ void Popper::Pop()
 				if(!offscreen)
 					eh->Add(
 						new EffCombo(
-							pf->GetFieldX((*it)->blockNum[0]-PF_WIDTH),
-							pf->GetFieldY((*it)->blockNum[0]-PF_WIDTH),
+							(*it)->blockNum[0]-PF_WIDTH,
 							COMBO_2X,
 							(*it)->length));
 			}
@@ -112,8 +110,7 @@ void Popper::Pop()
 			if(!offscreen)
 				eh->Add(
 					new EffCombo(
-						pf->GetFieldX((*it)->blockNum[0]),
-						pf->GetFieldY((*it)->blockNum[0]),
+						(*it)->blockNum[0],
 						COMBO_2X,
 						(*it)->length));
 			if(pf->GetHeight() > PF_STRESS_HEIGHT)

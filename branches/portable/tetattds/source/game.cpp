@@ -59,7 +59,7 @@ Game::Game(int level,
 {
 	std::fill_n(heldKeys, FWGUI_NUM_KEYS, false);
 	
-	field->Init(PLAYFIELD_OFFSET_X, PLAYFIELD_OFFSET_Y);
+	field->Init();
 }
 
 Game::~Game()

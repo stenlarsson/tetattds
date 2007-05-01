@@ -1,5 +1,6 @@
 #pragma once
 
+#include "constants.h"
 #include "protocol.h"
 #include "effecthandler.h"
 
@@ -42,6 +43,14 @@ public:
 	FieldGraphics();
 	virtual ~FieldGraphics();
 
+	virtual int GetFieldX(int fieldNum) const {
+		return (fieldNum % 6) * BLOCKSIZE;
+	}
+	virtual int GetFieldY(int fieldNum, bool scrolled = false) const {
+		int scroll = scrolled ? scrollOffset : 0;
+		return (fieldNum / 6 - PF_FIRST_VISIBLE_ROW) * BLOCKSIZE + scroll;
+	}
+
 	virtual void DrawSmallField(int fieldNum, char* field, bool shaded) = 0;
 	virtual void PrintPlayerInfo(PlayerInfo* player) = 0;
 	virtual void ClearPlayer(PlayerInfo* player) = 0;
@@ -78,6 +87,7 @@ protected:
 	
 	char chatBuffer[MAX_CHAT_LINES][32+1];
 	int lastChatLine;
+	int scrollOffset;
 };
 
 extern FieldGraphics* g_fieldGraphics;

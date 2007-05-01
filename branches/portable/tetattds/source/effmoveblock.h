@@ -7,7 +7,7 @@
 class EffMoveBlock : public Effect
 {
 public:
-	EffMoveBlock(enum Direction dir, BaseBlock* block, int x, int y);
+	EffMoveBlock(enum Direction dir, BaseBlock* block, int pos);
 	~EffMoveBlock();
 
 	void Draw();

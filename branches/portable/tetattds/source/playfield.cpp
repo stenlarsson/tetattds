@@ -157,23 +157,8 @@ PlayField::~PlayField()
 	Sound::StopMusic();
 }
 
-void PlayField::Init(int xOffset, int yOffset)
+void PlayField::Init()
 {
-	int x = xOffset;
-	int y = yOffset - PF_FIRST_VISIBLE_ROW*BLOCKSIZE;
-
-	for(int i = 0; i < PF_NUM_BLOCKS; i++)
-	{
-		fieldX[i] = x;
-		fieldY[i] = y;
-		x += BLOCKSIZE;
-		if(((i+1) % PF_WIDTH) == 0)
-		{
-			x = xOffset;
-			y += BLOCKSIZE;
-		}
-	}
-
 	std::fill_n(field, PF_NUM_BLOCKS, (BaseBlock*)NULL);
 
 	popper = new Popper(this, effects);
@@ -378,8 +363,8 @@ template<typename T> T min(T a, T b) { return (a < b) ? a : b; }
 
 void PlayField::PixelsToColRow(int x, int y, int& col, int& row) const
 {
-	col = fieldX[PF_FIRST_BLOCK_FIRST_VISIBLE_ROW];
-	row = fieldY[PF_FIRST_BLOCK_FIRST_VISIBLE_ROW] + (int)scrollOffset;
+	col = g_fieldGraphics->GetFieldX(PF_FIRST_BLOCK_FIRST_VISIBLE_ROW);
+	row = g_fieldGraphics->GetFieldY(PF_FIRST_BLOCK_FIRST_VISIBLE_ROW) + (int)scrollOffset;
 
 	col = x - col;
 	row = y - row;
@@ -436,12 +421,12 @@ bool PlayField::SwapBlocks(int pos)
 	if (right != NULL)
 	{
 		((Block*)right)->Move();
-		effects->Add(new EffMoveBlock(DIR_LEFT, right, fieldX[RightOf(pos)], fieldY[RightOf(pos)]+(int)scrollOffset));
+		effects->Add(new EffMoveBlock(DIR_LEFT, right, RightOf(pos)));
 	}
 	if (left != NULL)
 	{
 		((Block*)left)->Move();
-		effects->Add(new EffMoveBlock(DIR_RIGHT, left, fieldX[pos], fieldY[pos]+(int)scrollOffset));
+		effects->Add(new EffMoveBlock(DIR_RIGHT, left, pos));
 	}
 	return true;
 }
@@ -625,7 +610,7 @@ void PlayField::CheckForPops()
 					chainlength = field[i]->GetChain()->length;
 				}
 				if(IsVisible(i))
-					effects->Add(new EffPop(fieldX[i], fieldY[i]+(int)scrollOffset, chainlength));
+					effects->Add(new EffPop(i, chainlength));
 				Sound::PlayPopEffect(field[i]->GetChain());
 			}
 			continue;

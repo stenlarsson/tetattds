@@ -23,21 +23,22 @@ FieldGraphics::~FieldGraphics()
 
 void FieldGraphics::DrawFields(PlayField *pf)
 {
+	scrollOffset = (int)pf->GetScrollOffset();
+	
 	for(int i = PF_FIRST_BLOCK_FIRST_VISIBLE_ROW; i < PF_NUM_BLOCKS; i++)
 	{
 		BaseBlock* block = pf->GetField(i);
-		int x = pf->GetFieldX(i), y = pf->GetFieldY(i);
+		
 		bool shaded = (i >= PF_FIRST_BLOCK_LAST_ROW) || (pf->GetState() == PFS_DEAD);
 		
 		int tile = (block != NULL && !block->IsState(BST_MOVING)) ?
 			block->GetTile() : TILE_BLANK;
-		DrawField(pf, x, y, tile, shaded);
+		DrawField(pf, GetFieldX(i), GetFieldY(i), tile, shaded);
 	}
 }
 
 void FieldGraphics::DrawMarkers(PlayField *pf)
 {
-	int scrollOffset = (int)pf->GetScrollOffset();
 
 	PFState state = pf->GetState();
 	if(state == PFS_PLAY || state == PFS_START)
@@ -51,7 +52,7 @@ void FieldGraphics::DrawMarkers(PlayField *pf)
 		case MM_KEY:
 			{
 				int markerPos = pf->GetMarkerPos();
-				marker->SetPos(pf->GetFieldX(markerPos), pf->GetFieldY(markerPos) + scrollOffset);
+				marker->SetPos(GetFieldX(markerPos), GetFieldY(markerPos, true));
 				marker->Draw();
 				touchMarker->Disable();
 			}
@@ -60,7 +61,7 @@ void FieldGraphics::DrawMarkers(PlayField *pf)
 		  {
 				marker->Disable();
 				int touchPos = pf->GetTouchPos();
-				touchMarker->SetPos(pf->GetFieldX(touchPos), pf->GetFieldY(touchPos) + scrollOffset);
+				touchMarker->SetPos(GetFieldX(touchPos), GetFieldY(touchPos, true));
 				touchMarker->Draw();
 			}
 			break;
