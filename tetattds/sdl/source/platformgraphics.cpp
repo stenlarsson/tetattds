@@ -15,9 +15,17 @@ extern SDL_Surface
 	*font,
 	*smalltiles;
 static SDL_Surface *subbackground = NULL;
+SDL_Color sprites_pal[2][256];
 
 void PlatformGraphics::InitMainScreen()
 {
+	memcpy(sprites_pal[0], sprites->format->palette->colors, sizeof(sprites_pal[0]));
+	for( unsigned int i = 0; i < 256; i += 1 )
+	{
+		sprites_pal[1][i].r = sprites_pal[0][i].r >> 1;
+		sprites_pal[1][i].b = sprites_pal[0][i].b >> 1;
+		sprites_pal[1][i].g = sprites_pal[0][i].g >> 1;
+	}
 }
 
 void PlatformGraphics::InitSubScreen(bool wifi)
@@ -51,8 +59,6 @@ PlatformGraphics::PlatformGraphics()
 
 PlatformGraphics::~PlatformGraphics()
 {
-	delete marker;
-	delete touchMarker;
 }
 
 void PlatformGraphics::DrawField(PlayField *pf, int x, int y, int tile, bool shaded)
@@ -63,8 +69,14 @@ void PlatformGraphics::DrawField(PlayField *pf, int x, int y, int tile, bool sha
 	tilerect.y = (tile / 8) * BLOCKSIZE;
 	destrect.x = x;
 	destrect.y = y + (int)pf->GetScrollOffset() + 192;
+	
+	if (shaded)
+		SDL_SetColors(sprites, sprites_pal[1], 0, 256);
 
 	SDL_BlitSurface(sprites, &tilerect, framebuffer, &destrect);
+
+	if (shaded)
+		SDL_SetColors(sprites, sprites_pal[0], 0, 256);
 }
 
 void PlatformGraphics::Draw(PlayField *pf)
@@ -77,22 +89,6 @@ void PlatformGraphics::Draw(PlayField *pf)
 	PrintStopTime(pf->GetScrollPause());
 
 	DrawFields(pf);
-
-	// Gray out bottom row tiles (or all tiles if we are dead)
-	if (SDL_MUSTLOCK(framebuffer))
-		SDL_LockSurface(framebuffer);
-	
-	int scrollOffset = (int)pf->GetScrollOffset();
-	for (int y = (pf->GetState() == PFS_DEAD) ? 192 : 384 + scrollOffset; y < 384; y++)
-	{
-		uint16_t* p = ((uint16_t*)(((uint8_t*)framebuffer->pixels) + y * framebuffer->pitch)) + 88;
-		for (int x = 0; x < PF_WIDTH * BLOCKSIZE; x++)
-			p[x] = (p[x] >> 1) & 0x3DEF;
-	}
-
-	if (SDL_MUSTLOCK(framebuffer))
-		SDL_UnlockSurface(framebuffer);
-
 	DrawEffects();
 	DrawMarkers(pf);
 	
