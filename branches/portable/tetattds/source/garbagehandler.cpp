@@ -79,23 +79,21 @@ void GarbageHandler::DropGarbage(PlayField * pf)
 	if(normalDrops.empty() && chainDrops.empty())
 		return;
 	
-	int startField = PF_GARBAGE_DROP_START;
-	int fieldHeight = pf->GetHeight();
-	if(fieldHeight > 14)
-		startField = PF_NUM_BLOCKS - fieldHeight*PF_WIDTH - 1;
+	int startField = std::min(
+		PF_GARBAGE_DROP_START,
+	 	PF_NUM_BLOCKS - pf->GetHeight()*PF_WIDTH - 1);
 
 	// Get the position where we should start inserting
+	// Unfortunately GetHeight only counts normal blocks..
 	int curField = startField;
-	while (curField >=2*PF_WIDTH-1 && !pf->IsLineOfFieldEmpty(curField))
-		curField -= PF_WIDTH;
+	while (curField >= 0 && !pf->IsLineOfFieldEmpty(curField))
+	 	curField -= PF_WIDTH;
 
 	// Process all garbage blocks about to drop.
 	bool leftAlign = true;
 	if (DropGarbageHelper(normalDrops, activeBlocks, pf, leftAlign, curField))
 		DropGarbageHelper(chainDrops, activeBlocks, pf, leftAlign, curField);
 }
-
-
 
 void GarbageHandler::Tick()
 {
