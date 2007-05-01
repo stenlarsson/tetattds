@@ -6,7 +6,7 @@
 class EffPop : public Effect
 {
 public:
-	EffPop(int x, int y, int strength);
+	EffPop(int pos, int strength);
 	~EffPop();
 
 	void Draw();

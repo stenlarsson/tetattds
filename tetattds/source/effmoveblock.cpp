@@ -1,12 +1,12 @@
 #include "tetattds.h"
 #include "effmoveblock.h"
 
-EffMoveBlock::EffMoveBlock(enum Direction dir, BaseBlock* block, int x, int y)
-	: Effect(x, y, 5),
+EffMoveBlock::EffMoveBlock(enum Direction dir, BaseBlock* block, int pos)
+	: Effect(pos, 5),
 		stepX(0), stepY(0)
 {
 	Anim anim(block->GetTile());
-	sprite =  new Sprite(x, y, BLOCKS_PRIORITY, SSIZE_16x16, anim, false, false);
+	sprite =  new Sprite(XOffset, YOffset, BLOCKS_PRIORITY, SSIZE_16x16, anim, false, false);
 	switch(dir)
 	{
 	case DIR_LEFT:

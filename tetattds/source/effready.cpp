@@ -3,7 +3,7 @@
 #include "fieldgraphics.h"
 
 EffReady::EffReady()
-	: Effect(0, 0, 150)
+	: Effect(0, 150)
 {
 }
 

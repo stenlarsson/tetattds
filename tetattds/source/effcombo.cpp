@@ -7,16 +7,16 @@
 #include "playfield.h"
 #include "util.h"
 
-EffCombo::EffCombo(int x, int y, ComboType type, int count)
-	: Effect(x, y, g_game->GetLevelData()->effComboDuration),
+EffCombo::EffCombo(int pos, ComboType type, int count)
+	: Effect(pos, g_game->GetLevelData()->effComboDuration),
 		eggRad(COMBO_EGG_RADIUS)
 {
 	Anim anim(type + count);
-	sign = new Sprite(x, y, COMBO_COUNTER_PRIORITY, SSIZE_16x16, anim, false, false);
+	sign = new Sprite(XOffset, YOffset, COMBO_COUNTER_PRIORITY, SSIZE_16x16, anim, false, false);
 
 	Anim anim2(TILE_EGG);
 	for(int i = 0; i < COMBO_NUM_EGGS; i++)
-		eggs[i] = new Sprite(x, y, COMBO_EGG_PRIORITY, SSIZE_16x16, anim2, false, false);
+		eggs[i] = new Sprite(XOffset, YOffset, COMBO_EGG_PRIORITY, SSIZE_16x16, anim2, false, false);
 }
 
 EffCombo::~EffCombo()

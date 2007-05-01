@@ -28,7 +28,7 @@ class PlayField
 	PlayField(EffectHandler *effects);
 	~PlayField();
 
-	void Init(int xOffset, int yOffset);
+	void Init();
 	void RandomizeField();
 	void Start();
 	void Tick();
@@ -44,8 +44,6 @@ class PlayField
 	
 	int GetHeight() const { int max=0; for(int i = 0;i<6;i++){if(fieldHeight[i] > max){max = fieldHeight[i];}}return max; }
 
-	int GetFieldX(int i) const { return fieldX[i]; }
-	int GetFieldY(int i) const { return fieldY[i]; }
 	BaseBlock* GetField(int i) const { return field[i]; }
 	PFState GetState() const { return state; }
 	bool IsState(PFState const & s) const { return state == s; }
@@ -89,8 +87,6 @@ class PlayField
 	void CheckHeight();
 
 	BaseBlock* field[PF_NUM_BLOCKS];
-	int fieldX[PF_NUM_BLOCKS];
-	int fieldY[PF_NUM_BLOCKS];
 	int fieldHeight[PF_WIDTH];
 	int markerPos;
 	Popper* popper;

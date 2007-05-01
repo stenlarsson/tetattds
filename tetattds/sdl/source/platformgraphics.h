@@ -35,6 +35,13 @@ public:
 	PlatformGraphics();
 	~PlatformGraphics();
 
+	virtual int GetFieldX(int fieldNum) const {
+		return PLAYFIELD_OFFSET_X + FieldGraphics::GetFieldX(fieldNum);
+	}
+	virtual int GetFieldY(int fieldNum, bool scrolled) const {
+		return PLAYFIELD_OFFSET_Y + FieldGraphics::GetFieldY(fieldNum, scrolled);
+	}
+
 	void DrawSmallField(int fieldNum, char* field, bool shaded);
 	void PrintPlayerInfo(PlayerInfo* player);
 	void ClearPlayer(PlayerInfo* player);

@@ -3,8 +3,8 @@
 #include "sprite.h"
 #include "anim.h"
 
-EffPop::EffPop(int x, int y, int /*strength*/)
-	: Effect(x, y, 9*3+1),
+EffPop::EffPop(int pos, int /*strength*/)
+	: Effect(pos, 9*3+1),
 		mov(3)
 {
 	AnimFrame frames[] = {
@@ -24,10 +24,10 @@ EffPop::EffPop(int x, int y, int /*strength*/)
 
 	int off = BLOCKSIZE>>1; // Offset
 	
-	spriteA = new Sprite(x - off, y - off, 1, SSIZE_16x16, anim, false, false);
-	spriteB = new Sprite(x + off, y - off, 1, SSIZE_16x16, anim, true, false);
-	spriteC = new Sprite(x - off, y + off, 1, SSIZE_16x16, anim, false, true);
-	spriteD = new Sprite(x + off, y + off, 1, SSIZE_16x16, anim, true, true);
+	spriteA = new Sprite(XOffset - off, YOffset - off, 1, SSIZE_16x16, anim, false, false);
+	spriteB = new Sprite(XOffset + off, YOffset - off, 1, SSIZE_16x16, anim, true, false);
+	spriteC = new Sprite(XOffset - off, YOffset + off, 1, SSIZE_16x16, anim, false, true);
+	spriteD = new Sprite(XOffset + off, YOffset + off, 1, SSIZE_16x16, anim, true, true);
 }
 
 EffPop::~EffPop()
