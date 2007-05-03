@@ -201,10 +201,10 @@ void Game::Draw()
 	g_fieldGraphics->Draw(field);
 }
 
-void Game::AddGarbage(int num, int player, GarbageType type)
+void Game::ReceiveGarbage(int num, int player, GarbageType type)
 {
 	if(field->IsState(PFS_PLAY))
-		field->AddGarbage(num, player, type);
+		field->ScheduleGarbage(num, player, type);
 }
 
 void Game::SendGarbage(int num, GarbageType type)
@@ -219,7 +219,7 @@ void Game::SendGarbage(int num, GarbageType type)
 	}
 	else if(sendToSelf)
 	{
-		field->AddGarbage(num, 0, type);
+		ReceiveGarbage(num, 0, type);
 	}
 }
 

@@ -28,7 +28,7 @@ public:
 		ServerConnection* connection);
 	~Game();
 
-	void AddGarbage(int num, int player, GarbageType type);
+	void ReceiveGarbage(int num, int player, GarbageType type);
 
 	void SendGarbage(int num, GarbageType type);
 

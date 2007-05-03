@@ -92,7 +92,7 @@ void ServerConnection::mGarbage(Connection* from, GarbageMessage* garbage)
 		garbage->num,
 		garbage->player,
 		garbage->type);
-	g_game->AddGarbage(
+	g_game->ReceiveGarbage(
 		garbage->num,
 		garbage->player,
 		(GarbageType)(int)garbage->type);
