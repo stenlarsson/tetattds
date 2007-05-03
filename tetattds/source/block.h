@@ -2,6 +2,13 @@
 
 #include "baseblock.h"
 
+enum StressState
+{
+	SS_NORMAL,
+	SS_STOP,
+	SS_STRESS,
+};
+
 class Block : public BaseBlock
 {
 public:
@@ -14,12 +21,10 @@ public:
 	virtual void Pop(int num, int total);
 	
 	void Move();
-	void Stress(bool stress);
-	void Stop(bool stop);
+	void SetStress(StressState stress);
 
 private:
 	virtual void ChangeState(BlockState newState);
-	
-	bool stress;
-	bool stop;
+
+	StressState stress;
 };

@@ -814,13 +814,7 @@ void PlayField::StateCheck()
 
 void PlayField::CheckHeight()
 {
-	bool bDanger = false; // music stuff
-	
-	bTooHigh = false;
-
-	for(int i = 0; i < PF_WIDTH; i++)
-		if(fieldHeight[i] >= PF_VISIBLE_HEIGHT)
-			bTooHigh = true;
+	bTooHigh = (GetHeight() >= PF_VISIBLE_HEIGHT);
 
 	if(!bTooHigh)
 		iDieTimer = 0;
@@ -829,16 +823,11 @@ void PlayField::CheckHeight()
 	{
 		if(fieldHeight[i] >= PF_STRESS_HEIGHT)
 		{
-			bDanger = true; // music stuff
 			for(int o = i; !IsForthcoming(o); o = Below(o))
 			{
 				if(IsBlock(field[o]))
-				{
-					if(bTooHigh || iScrollPause > 0)
-						((Block*)field[o])->Stop(true);
-					else
-						((Block*)field[o])->Stress(true);
-				}
+					((Block*)field[o])->SetStress(
+						(bTooHigh || iScrollPause > 0) ? SS_STOP : SS_STRESS);
 			}
 		}
 		else
@@ -846,16 +835,13 @@ void PlayField::CheckHeight()
 			for(int o = i; !IsForthcoming(o); o = Below(o))
 			{
 				if(IsBlock(field[o]))
-				{
-					((Block*)field[o])->Stop(false);
-					((Block*)field[o])->Stress(false);
-				}
+					((Block*)field[o])->SetStress(SS_NORMAL);
 			}
 		}
 	}
 	
 	// music stuff
-	if(bDanger)
+	if(GetHeight() >= PF_STRESS_HEIGHT)
 	{
 		if(!bMusicDanger)
 		{

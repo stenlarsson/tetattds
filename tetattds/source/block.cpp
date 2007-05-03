@@ -11,8 +11,7 @@ Block::Block(
 			state,
 			chain,
 			needPopCheck),
-		stress(false),
-		stop(false)			
+		stress(SS_NORMAL)
 {
 }
 
@@ -50,48 +49,32 @@ void Block::Move()
 	ChangeState(BST_MOVING);
 }
 
-void Block::Stop(bool newStop)
+void Block::SetStress(StressState newStress)
 {
-	if(state != BST_IDLE)
+	if(state != BST_IDLE || stress == newStress)
 		return;
 
-	if(!stop && newStop)
+	switch(newStress)
 	{
+	case SS_NORMAL:
+		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
+		break;
+	case SS_STOP:
 		anim = Anim(type+TILE_BLOCK_BOUNCE_3_OFFSET);
-		stress = false;
-		stop = true;
+		break;
+	case SS_STRESS:
+		{
+			AnimFrame frames[] = {
+				AnimFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET, 5),
+				AnimFrame(type+TILE_BLOCK_BOUNCE_2_OFFSET, 5),
+				AnimFrame(type+TILE_BLOCK_BOUNCE_1_OFFSET, 5),
+				AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET, 5),
+			};
+			anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));			
+		}
+		break;
 	}
-	else if((stop || stop) && !newStop)
-	{
-		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
-		stress = false;
-		stop = false;
-	}
-}
-
-void Block::Stress(bool newStress)
-{
-	if(state != BST_IDLE)
-		return;
-
-	if(!stress && newStress)
-	{
-		AnimFrame frames[] = {
-			AnimFrame(type+TILE_BLOCK_BOUNCE_3_OFFSET, 5),
-			AnimFrame(type+TILE_BLOCK_BOUNCE_2_OFFSET, 5),
-			AnimFrame(type+TILE_BLOCK_BOUNCE_1_OFFSET, 5),
-			AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET, 5),
-		};
-		anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));
-		stop = false;
-		stress = true;
-	}
-	else if((stress || stop) && !newStress)
-	{
-		anim = Anim(type+TILE_BLOCK_NORMAL_OFFSET);
-		stop = false;
-		stress = false;
-	}
+	stress = newStress;
 }
 
 void Block::ChangeState(enum BlockState newState)
@@ -107,7 +90,7 @@ void Block::ChangeState(enum BlockState newState)
 				AnimFrame(type+TILE_BLOCK_NORMAL_OFFSET,5)
 			};
 			
-			if(stress)
+			if(stress == SS_STRESS)
 				anim = Anim(ANIM_LOOPING, frames, COUNT_OF(frames));
 			else if(state == BST_FALLING)
 				anim = Anim(ANIM_ONCE, frames, COUNT_OF(frames));
