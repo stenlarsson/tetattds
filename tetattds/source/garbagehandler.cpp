@@ -57,16 +57,14 @@ void GarbageHandler::AddGarbage(int num, int player, GarbageType type)
 }
 
 template <typename Queue, typename Active>
-bool DropGarbageHelper(Queue & q, Active & active, PlayField * pf, bool & leftAlign, int & curField)
+bool DropGarbageHelper(Queue & q, Active & active, PlayField * pf)
 {
 	for( ; !q.empty(); q.pop_front())
 	{
 		// Abort if we cannot place all garbage.
-		if (!pf->InsertGarbage(curField, q.front(), leftAlign))
+		if (!pf->InsertGarbage(q.front()))
 			return false;
 
-		curField -= PF_WIDTH;
-		leftAlign = !leftAlign;
 		q.front()->SetGraphic();
 		
 		active.push_back(q.front());
@@ -79,20 +77,9 @@ void GarbageHandler::DropGarbage(PlayField * pf)
 	if(normalDrops.empty() && chainDrops.empty())
 		return;
 	
-	int startField = std::min(
-		PF_GARBAGE_DROP_START,
-	 	PF_NUM_BLOCKS - pf->GetHeight()*PF_WIDTH - 1);
-
-	// Get the position where we should start inserting
-	// Unfortunately GetHeight only counts normal blocks..
-	int curField = startField;
-	while (curField >= 0 && !pf->IsLineOfFieldEmpty(curField))
-	 	curField -= PF_WIDTH;
-
 	// Process all garbage blocks about to drop.
-	bool leftAlign = true;
-	if (DropGarbageHelper(normalDrops, activeBlocks, pf, leftAlign, curField))
-		DropGarbageHelper(chainDrops, activeBlocks, pf, leftAlign, curField);
+	if (DropGarbageHelper(normalDrops, activeBlocks, pf))
+		DropGarbageHelper(chainDrops, activeBlocks, pf);
 }
 
 void GarbageHandler::Tick()

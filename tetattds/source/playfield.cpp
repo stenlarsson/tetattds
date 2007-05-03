@@ -891,22 +891,33 @@ bool PlayField::IsLineOfFieldEmpty(int x) const {
 	return true;
 }
 
-bool PlayField::InsertGarbage(int x, GarbageBlock *b, bool leftAlign) {
-	if( IsTopmost(x - b->GetNum()) )
+bool PlayField::InsertGarbage(GarbageBlock *b) {
+	static bool leftAlign = false;
+	
+	int pos = std::min(
+		PF_GARBAGE_DROP_START,
+	 	PF_NUM_BLOCKS - GetHeight()*PF_WIDTH - 1);
+
+	// Get the position where we should start inserting
+	// Unfortunately GetHeight only counts normal blocks..
+	while (pos >= 0 && !IsLineOfFieldEmpty(pos))
+	 	pos = Above(pos);
+	
+	if( IsTopmost(pos - b->GetNum()) )
 	{
-#ifdef DEBUG
-		printf("Out of space to drop blocks.\n");
-#endif
+		DEBUGVERBOSE("Out of space to drop blocks.\n");
 		return false;
 	}
 	
 	if (leftAlign && b->GetNum() < PF_WIDTH)
-		x -= PF_WIDTH - b->GetNum();
-	for(int i = b->GetNum()-1; i >= 0; i--,x = LeftOf(x))
+		pos -= PF_WIDTH - b->GetNum();
+	for(int i = b->GetNum()-1; i >= 0; i--, pos = LeftOf(pos))
 	{
-		ASSERT( field[x] == NULL)
-		field[x] = b->GetBlock(i);
+		ASSERT( field[pos] == NULL );
+		field[pos] = b->GetBlock(i);
 	}
+	
+	leftAlign = !leftAlign;
 	
 	return true;
 }

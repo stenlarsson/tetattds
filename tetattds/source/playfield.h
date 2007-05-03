@@ -50,7 +50,7 @@ class PlayField
 	bool IsState(PFState const & s) const { return state == s; }
 	void SetState(PFState state) { this->state = state; }
 
-	void AddGarbage(int num, int player, GarbageType type) { gh->AddGarbage(num, player, type); }
+	void ScheduleGarbage(int num, int player, GarbageType type) { gh->AddGarbage(num, player, type); }
 	
 	bool SwapBlocks(int pos);
 
@@ -75,7 +75,7 @@ class PlayField
 	 * and false is returned.
 	 */
 	// TODO: Should really have row here and not position for x
-	bool InsertGarbage(int x, GarbageBlock *b, bool leftAlign);
+	bool InsertGarbage(GarbageBlock *b);
 
   private:
 	void RandomizeRow(int row);
