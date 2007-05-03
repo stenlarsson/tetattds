@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include "garbagehandler.h"
 
 enum ControlMode
@@ -39,10 +40,10 @@ class PlayField
 	void PixelsToColRow(int x, int y, int& col, int& row) const;
 	int ColRowToPos(int col, int row) const;
 	void AddScore(int Score) { score += Score; }
-	void DelayScroll(int delay) { iScrollPause += delay; if(iScrollPause > MAX_STOP_TIME) iScrollPause = MAX_STOP_TIME; }
-	const int* GetScore() const { return &score; }
+	void DelayScroll(int delay) { iScrollPause = std::min(MAX_STOP_TIME, iScrollPause+delay); }
+	const int GetScore() const { return score; }
 	
-	int GetHeight() const { int max=0; for(int i = 0;i<6;i++){if(fieldHeight[i] > max){max = fieldHeight[i];}}return max; }
+	int GetHeight() const { return *std::max_element(fieldHeight, fieldHeight+PF_WIDTH); }
 
 	BaseBlock* GetField(int i) const { return field[i]; }
 	PFState GetState() const { return state; }
