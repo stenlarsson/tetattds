@@ -251,5 +251,5 @@ enum BlockType Game::GetRandomBlockType(bool grayBlock)
 
 int Game::GetScore()
 {
-	return *field->GetScore();
+	return field->GetScore();
 }

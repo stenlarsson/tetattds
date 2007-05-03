@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>currentDocument</key>
-	<string>tetattds/source/garbageblock.cpp</string>
 	<key>documents</key>
 	<array>
 		<dict>
@@ -74,7 +72,7 @@
 					<key>filename</key>
 					<string>tetattds/Makefile</string>
 					<key>lastUsed</key>
-					<date>2007-03-19T13:48:47Z</date>
+					<date>2007-04-30T13:53:51Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -86,19 +84,19 @@
 					<key>filename</key>
 					<string>tetattds/source/anim.h</string>
 					<key>lastUsed</key>
-					<date>2007-03-19T13:48:42Z</date>
+					<date>2007-05-01T19:58:42Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/chain.h</string>
 					<key>lastUsed</key>
-					<date>2007-04-26T15:23:21Z</date>
+					<date>2007-05-01T19:58:48Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/constants.h</string>
 					<key>lastUsed</key>
-					<date>2007-04-02T13:04:48Z</date>
+					<date>2007-05-01T19:58:44Z</date>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -107,25 +105,25 @@
 							<key>filename</key>
 							<string>tetattds/source/effcombo.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-03-19T20:36:29Z</date>
+							<date>2007-05-01T20:30:43Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/effcombo.h</string>
 							<key>lastUsed</key>
-							<date>2007-03-19T20:13:44Z</date>
+							<date>2007-05-01T20:30:43Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/effect.h</string>
 							<key>lastUsed</key>
-							<date>2007-03-19T14:33:44Z</date>
+							<date>2007-05-01T20:30:42Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/effecthandler.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-04-02T13:35:37Z</date>
+							<date>2007-05-01T19:58:44Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
@@ -137,37 +135,37 @@
 							<key>filename</key>
 							<string>tetattds/source/effmoveblock.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-03-19T14:28:06Z</date>
+							<date>2007-05-01T20:30:42Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/effmoveblock.h</string>
 							<key>lastUsed</key>
-							<date>2007-03-19T13:59:53Z</date>
+							<date>2007-05-01T20:30:42Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/effpop.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-03-19T14:28:26Z</date>
+							<date>2007-05-01T20:30:41Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/effpop.h</string>
 							<key>lastUsed</key>
-							<date>2007-03-19T14:28:51Z</date>
+							<date>2007-05-01T20:30:42Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/effready.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-03-19T14:35:50Z</date>
+							<date>2007-05-01T20:30:42Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/effready.h</string>
 							<key>lastUsed</key>
-							<date>2007-03-19T14:28:52Z</date>
+							<date>2007-05-01T20:30:42Z</date>
 						</dict>
 					</array>
 					<key>name</key>
@@ -175,15 +173,27 @@
 				</dict>
 				<dict>
 					<key>filename</key>
+					<string>tetattds/source/fieldgraphics.cpp</string>
+					<key>lastUsed</key>
+					<date>2007-05-01T20:30:41Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
+					<string>tetattds/source/fieldgraphics.h</string>
+					<key>lastUsed</key>
+					<date>2007-05-01T20:30:41Z</date>
+				</dict>
+				<dict>
+					<key>filename</key>
 					<string>tetattds/source/game.cpp</string>
 					<key>lastUsed</key>
-					<date>2007-03-16T13:28:32Z</date>
+					<date>2007-05-01T20:30:40Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/game.h</string>
 					<key>lastUsed</key>
-					<date>2007-04-03T08:09:34Z</date>
+					<date>2007-05-01T19:58:40Z</date>
 				</dict>
 				<dict>
 					<key>children</key>
@@ -192,61 +202,61 @@
 							<key>filename</key>
 							<string>tetattds/source/baseblock.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-04-27T15:13:40Z</date>
+							<date>2007-05-01T19:58:42Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/baseblock.h</string>
 							<key>lastUsed</key>
-							<date>2007-04-27T18:23:34Z</date>
+							<date>2007-05-01T19:58:42Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/block.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-04-03T09:11:24Z</date>
+							<date>2007-05-01T19:58:48Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/block.h</string>
 							<key>lastUsed</key>
-							<date>2007-04-26T14:44:46Z</date>
+							<date>2007-05-01T19:58:40Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/garbage.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-04-27T18:43:55Z</date>
+							<date>2007-05-01T19:58:42Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/garbage.h</string>
 							<key>lastUsed</key>
-							<date>2007-04-28T09:57:52Z</date>
+							<date>2007-05-01T19:58:41Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/garbageblock.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-04-29T12:44:48Z</date>
+							<date>2007-05-01T19:58:45Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/garbageblock.h</string>
 							<key>lastUsed</key>
-							<date>2007-04-27T16:08:17Z</date>
+							<date>2007-05-01T19:58:49Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/garbagehandler.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-04-28T10:09:28Z</date>
+							<date>2007-05-01T19:58:43Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/garbagehandler.h</string>
 							<key>lastUsed</key>
-							<date>2007-04-28T10:18:29Z</date>
+							<date>2007-05-01T19:58:40Z</date>
 						</dict>
 					</array>
 					<key>name</key>
@@ -259,7 +269,7 @@
 							<key>filename</key>
 							<string>tetattds/source/leveldialog.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-03-16T10:43:21Z</date>
+							<date>2007-05-01T19:58:43Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
@@ -271,13 +281,13 @@
 							<key>filename</key>
 							<string>tetattds/source/mainmenudialog.cpp</string>
 							<key>lastUsed</key>
-							<date>2007-04-28T09:59:20Z</date>
+							<date>2007-05-01T19:58:41Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
 							<string>tetattds/source/mainmenudialog.h</string>
 							<key>lastUsed</key>
-							<date>2007-04-28T09:59:18Z</date>
+							<date>2007-05-01T19:58:41Z</date>
 						</dict>
 						<dict>
 							<key>filename</key>
@@ -315,45 +325,49 @@
 					<key>filename</key>
 					<string>tetattds/source/playfield.cpp</string>
 					<key>lastUsed</key>
-					<date>2007-04-28T10:18:22Z</date>
+					<date>2007-05-01T20:30:38Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/playfield.h</string>
 					<key>lastUsed</key>
-					<date>2007-04-28T10:09:09Z</date>
+					<date>2007-05-01T20:30:41Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/popper.cpp</string>
 					<key>lastUsed</key>
-					<date>2007-04-28T10:20:49Z</date>
+					<date>2007-05-01T20:30:41Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/popper.h</string>
 					<key>lastUsed</key>
-					<date>2007-04-28T10:18:59Z</date>
+					<date>2007-05-01T19:58:48Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/serverconnection.cpp</string>
+					<key>lastUsed</key>
+					<date>2007-05-01T19:58:41Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/serverconnection.h</string>
 					<key>lastUsed</key>
-					<date>2007-03-17T10:10:54Z</date>
+					<date>2007-05-01T19:58:45Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/settings.cpp</string>
+					<key>lastUsed</key>
+					<date>2007-05-01T19:58:40Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/settings.h</string>
 					<key>lastUsed</key>
-					<date>2007-03-17T10:10:53Z</date>
+					<date>2007-05-01T19:58:41Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
@@ -365,25 +379,25 @@
 					<key>filename</key>
 					<string>tetattds/source/tetattds.cpp</string>
 					<key>lastUsed</key>
-					<date>2007-04-03T08:07:43Z</date>
+					<date>2007-05-01T19:58:41Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/tetattds.h</string>
 					<key>lastUsed</key>
-					<date>2007-03-22T15:45:37Z</date>
+					<date>2007-05-01T19:58:47Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/util.cpp</string>
 					<key>lastUsed</key>
-					<date>2007-03-16T15:15:25Z</date>
+					<date>2007-05-01T19:58:43Z</date>
 				</dict>
 				<dict>
 					<key>filename</key>
 					<string>tetattds/source/util.h</string>
 					<key>lastUsed</key>
-					<date>2007-04-02T13:37:22Z</date>
+					<date>2007-05-01T19:58:43Z</date>
 				</dict>
 				<dict>
 					<key>name</key>
@@ -455,6 +469,8 @@
 					<string>fwgui/source</string>
 				</dict>
 			</array>
+			<key>expanded</key>
+			<true/>
 			<key>name</key>
 			<string>fwgui</string>
 		</dict>
@@ -635,62 +651,6 @@
 				<integer>25</integer>
 			</dict>
 		</dict>
-		<key>tetattds/network/source/udpsocket.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>51</integer>
-				<key>line</key>
-				<integer>31</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/sdl/source/fieldgraphics.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>63</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>42</integer>
-		</dict>
-		<key>tetattds/sdl/source/fieldgraphics.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>5</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/sdl/source/main.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>123</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>77</integer>
-		</dict>
 		<key>tetattds/source/anim.cpp</key>
 		<dict>
 			<key>caret</key>
@@ -699,146 +659,6 @@
 				<integer>10</integer>
 				<key>line</key>
 				<integer>10</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/baseblock.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>24</integer>
-				<key>line</key>
-				<integer>18</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>20</integer>
-		</dict>
-		<key>tetattds/source/baseblock.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>69</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>29</integer>
-		</dict>
-		<key>tetattds/source/block.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>94</integer>
-		</dict>
-		<key>tetattds/source/block.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>10</integer>
-				<key>line</key>
-				<integer>23</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/chain.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>6</integer>
-				<key>line</key>
-				<integer>3</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/constants.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>12</integer>
-				<key>line</key>
-				<integer>133</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>117</integer>
-		</dict>
-		<key>tetattds/source/effcombo.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>12</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/effcombo.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>12</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/effect.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>35</integer>
-				<key>line</key>
-				<integer>12</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/effecthandler.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>29</integer>
 			</dict>
 			<key>firstVisibleColumn</key>
 			<integer>0</integer>
@@ -859,363 +679,10 @@
 			<key>firstVisibleLine</key>
 			<integer>0</integer>
 		</dict>
-		<key>tetattds/source/effmoveblock.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>39</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/effmoveblock.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>16</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/effpop.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>62</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>17</integer>
-		</dict>
-		<key>tetattds/source/effpop.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>15</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/effready.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>20</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/effready.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>8</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/game.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>17</integer>
-				<key>line</key>
-				<integer>4</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/garbage.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>140</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>95</integer>
-		</dict>
-		<key>tetattds/source/garbage.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>25</integer>
-				<key>line</key>
-				<integer>25</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/garbageblock.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>23</integer>
-				<key>line</key>
-				<integer>26</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>19</integer>
-				<key>line</key>
-				<integer>26</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>26</integer>
-				<key>line</key>
-				<integer>26</integer>
-			</dict>
-		</dict>
-		<key>tetattds/source/garbageblock.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>27</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>10</integer>
-		</dict>
-		<key>tetattds/source/garbagehandler.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>43</integer>
-				<key>line</key>
-				<integer>58</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>43</integer>
-		</dict>
-		<key>tetattds/source/garbagehandler.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>28</integer>
-				<key>line</key>
-				<integer>38</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/mainmenudialog.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/mainmenudialog.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>0</integer>
-				<key>line</key>
-				<integer>0</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/playfield.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>48</integer>
-				<key>line</key>
-				<integer>925</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>890</integer>
-		</dict>
-		<key>tetattds/source/playfield.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>37</integer>
-				<key>line</key>
-				<integer>68</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>85</integer>
-		</dict>
-		<key>tetattds/source/popper.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>38</integer>
-				<key>line</key>
-				<integer>214</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>195</integer>
-		</dict>
-		<key>tetattds/source/popper.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>17</integer>
-				<key>line</key>
-				<integer>26</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/tetattds.cpp</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>21</integer>
-				<key>line</key>
-				<integer>19</integer>
-			</dict>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-		</dict>
-		<key>tetattds/source/util.h</key>
-		<dict>
-			<key>caret</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>39</integer>
-			</dict>
-			<key>columnSelection</key>
-			<false/>
-			<key>firstVisibleColumn</key>
-			<integer>0</integer>
-			<key>firstVisibleLine</key>
-			<integer>0</integer>
-			<key>selectFrom</key>
-			<dict>
-				<key>column</key>
-				<integer>1</integer>
-				<key>line</key>
-				<integer>39</integer>
-			</dict>
-			<key>selectTo</key>
-			<dict>
-				<key>column</key>
-				<integer>14</integer>
-				<key>line</key>
-				<integer>39</integer>
-			</dict>
-		</dict>
 	</dict>
-	<key>openDocuments</key>
-	<array>
-		<string>tetattds/source/garbageblock.cpp</string>
-		<string>tetattds/source/effecthandler.cpp</string>
-		<string>tetattds/source/constants.h</string>
-		<string>tetattds/source/util.h</string>
-		<string>tetattds/source/garbagehandler.cpp</string>
-		<string>tetattds/source/playfield.h</string>
-		<string>tetattds/source/garbage.cpp</string>
-		<string>tetattds/sdl/source/main.cpp</string>
-		<string>tetattds/source/baseblock.cpp</string>
-		<string>tetattds/source/baseblock.h</string>
-		<string>tetattds/source/garbage.h</string>
-		<string>tetattds/source/mainmenudialog.cpp</string>
-		<string>tetattds/source/mainmenudialog.h</string>
-		<string>tetattds/source/tetattds.cpp</string>
-		<string>tetattds/source/game.h</string>
-		<string>tetattds/source/block.h</string>
-		<string>tetattds/source/garbagehandler.h</string>
-		<string>tetattds/source/playfield.cpp</string>
-		<string>tetattds/source/popper.cpp</string>
-		<string>tetattds/network/source/udpsocket.cpp</string>
-		<string>tetattds/source/popper.h</string>
-		<string>tetattds/source/chain.h</string>
-		<string>tetattds/source/block.cpp</string>
-		<string>tetattds/source/garbageblock.h</string>
-	</array>
 	<key>showFileHierarchyDrawer</key>
 	<true/>
 	<key>windowFrame</key>
-	<string>{{432, 6}, {775, 872}}</string>
+	<string>{{44, 6}, {775, 872}}</string>
 </dict>
 </plist>

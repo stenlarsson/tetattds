@@ -231,7 +231,7 @@ void PlatformGraphics::Draw(PlayField *pf)
 {
 	BG1_Y0 = -(int)pf->GetScrollOffset();
 	
-	PrintScore(*pf->GetScore());
+	PrintScore(pf->GetScore());
 	PrintTime(pf->GetTimeTicks());
 	PrintStopTime(pf->GetScrollPause());
 

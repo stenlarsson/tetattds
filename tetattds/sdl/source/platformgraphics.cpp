@@ -84,7 +84,7 @@ void PlatformGraphics::Draw(PlayField *pf)
 	SDL_Rect dstrect = {0, 192, 256, 192};
 	SDL_BlitSurface(background, NULL, framebuffer, &dstrect);
 
-	PrintScore(*pf->GetScore());
+	PrintScore(pf->GetScore());
 	PrintTime(pf->GetTimeTicks());
 	PrintStopTime(pf->GetScrollPause());
 
