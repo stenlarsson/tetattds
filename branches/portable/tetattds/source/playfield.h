@@ -29,7 +29,6 @@ class PlayField
 	PlayField(EffectHandler *effects);
 	~PlayField();
 
-	void Init();
 	void RandomizeField();
 	void Start();
 	void Tick();

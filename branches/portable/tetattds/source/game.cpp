@@ -58,8 +58,6 @@ Game::Game(int level,
 	row(0)
 {
 	std::fill_n(heldKeys, FWGUI_NUM_KEYS, false);
-	
-	field->Init();
 }
 
 Game::~Game()
