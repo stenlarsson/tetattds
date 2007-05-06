@@ -81,6 +81,8 @@ void Sound::UnloadMusic()
 
 void Sound::UpdateMusic()
 {
+	if(getenv("TETATTDS_SILENT"))
+		MikMod_DisableOutput();
 	MikMod_Update();
 }
 
