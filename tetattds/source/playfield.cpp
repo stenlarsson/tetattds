@@ -96,7 +96,7 @@ static inline bool IsHoverOrIdle(BaseBlock *b)
 		return false;
 	switch (b->GetState())
 	{
-	case BST_HOVER:
+	case BST_HOVER:Å
 	case BST_IDLE:
 		return true;
 	default:
@@ -126,26 +126,30 @@ bool IsDropable(BaseBlock *b)
 }
 
 PlayField::PlayField(EffectHandler *effects)
-:	effects(effects),
-  gh(new GarbageHandler())
+:	markerPos(PF_MARKER_START),
+	popper(new Popper(this, effects)),
+	bFastScroll(false),
+	scrollOffset(0),
+	iScrollPause(0),
+	effects(effects),
+	iSwapTimer(0),
+	state(PFS_INIT),
+	stateDelay(-1),
+	bTooHigh(false),
+	iDieTimer(0),
+	bMusicNormal(false),
+	bMusicDanger(false),
+	normalMusicDelay(0),
+	score(0),
+	timeTicks(0),
+	scrolledRows(0),
+  gh(new GarbageHandler()),
+	touchCol(0),
+	touchRow(0),
+	controlMode(MM_KEY)
 {
-	popper = NULL;
-	markerPos = PF_MARKER_START;
-	scrollOffset = 0;
-	iScrollPause = 0;
-	iSwapTimer = 0;
-	bFastScroll = false;
-	state = PFS_INIT;
-	stateDelay = -1;
-	bTooHigh = false;
-	score = 0;
-	timeTicks = 0;
-	scrolledRows = 0;
-	iDieTimer = 0;
-	controlMode = MM_KEY;
-	bMusicNormal = false;
-	bMusicDanger = false;
-	normalMusicDelay = 0;
+	std::fill_n(field, PF_NUM_BLOCKS, (BaseBlock*)NULL);
+	std::fill_n(fieldHeight, PF_WIDTH, 0);
 }
 
 PlayField::~PlayField()
@@ -155,13 +159,6 @@ PlayField::~PlayField()
 	DEL(gh);
 	DEL(popper);
 	Sound::StopMusic();
-}
-
-void PlayField::Init()
-{
-	std::fill_n(field, PF_NUM_BLOCKS, (BaseBlock*)NULL);
-
-	popper = new Popper(this, effects);
 }
 
 void PlayField::RandomizeField()
