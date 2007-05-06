@@ -821,22 +821,14 @@ void PlayField::CheckHeight()
 
 	for(int i = 0; i < PF_WIDTH; i++)
 	{
-		if(fieldHeight[i] >= PF_STRESS_HEIGHT)
+		StressState stress =
+			(fieldHeight[i] >= PF_STRESS_HEIGHT) ?
+				((bTooHigh || iScrollPause > 0) ? SS_STOP : SS_STRESS) :
+				SS_NORMAL;
+		for(int o = i; !IsForthcoming(o); o = Below(o))
 		{
-			for(int o = i; !IsForthcoming(o); o = Below(o))
-			{
-				if(IsBlock(field[o]))
-					((Block*)field[o])->SetStress(
-						(bTooHigh || iScrollPause > 0) ? SS_STOP : SS_STRESS);
-			}
-		}
-		else
-		{
-			for(int o = i; !IsForthcoming(o); o = Below(o))
-			{
-				if(IsBlock(field[o]))
-					((Block*)field[o])->SetStress(SS_NORMAL);
-			}
+			if(IsBlock(field[o]))
+				((Block*)field[o])->SetStress(stress);
 		}
 	}
 	
