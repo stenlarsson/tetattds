@@ -96,7 +96,7 @@ static inline bool IsHoverOrIdle(BaseBlock *b)
 		return false;
 	switch (b->GetState())
 	{
-	case BST_HOVER:Å
+	case BST_HOVER:
 	case BST_IDLE:
 		return true;
 	default:
@@ -169,18 +169,14 @@ void PlayField::RandomizeField()
 
 void PlayField::RandomizeRow(int row)
 {
-	bool greyBlock = false;
+	bool grayBlock = false;
 	for(int i = row*PF_WIDTH;i < (row+1)*PF_WIDTH;i++)
 	{
-		bool blockAccepted = false;
-		do
+		field[i] = NULL;
+		while(field[i] == NULL)
 		{
-			BlockType type;
-			
-			if(greyBlock == false && scrolledRows > GRAY_BLOCK_DELAY)
-				type = g_game->GetRandomBlockType(true);
-			else
-				type = g_game->GetRandomBlockType(false);
+			BlockType type = g_game->GetRandomBlockType(
+				!grayBlock && scrolledRows > GRAY_BLOCK_DELAY);
 			
 			// make sure block won't pop immediately
 			
@@ -191,14 +187,10 @@ void PlayField::RandomizeRow(int row)
 			if(IsOfType(field[Above(i)], type) && IsOfType(field[Above(i,2)], type))
 				continue;
 			
+			grayBlock = grayBlock || (type == BLC_GRAY);
 			field[i] = new Block(type);
-			blockAccepted = true;
-			if(type == BLC_GRAY)
-				greyBlock = true;
 		}
-		while(!blockAccepted);
 	}
-	
 }
 
 void PlayField::Start()
