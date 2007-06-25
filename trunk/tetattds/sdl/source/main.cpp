@@ -1,3 +1,6 @@
+#define NOMINMAX
+#define _CRT_NONSTDC_NO_DEPRECATE
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #ifndef WIN32
 #include <unistd.h>

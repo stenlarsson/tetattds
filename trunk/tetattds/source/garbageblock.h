@@ -5,7 +5,7 @@
 #include <vector>
 
 class Garbage;
-class Chain;
+struct Chain;
 
 enum GarbageGraphicsType
 {

@@ -167,7 +167,7 @@ void FieldGraphics::AddChat(char* text)
 {
 	ASSERT(text != NULL);
 	
-	int textLen = strlen(text);
+	size_t textLen = strlen(text);
 	if(textLen > 32) // Too long, try to break it up
 	{
 		char* space = NULL;

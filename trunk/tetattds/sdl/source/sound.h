@@ -1,6 +1,6 @@
 #pragma once
 
-class Chain;
+struct Chain;
 
 #include <mikmod.h>
 struct MODULE;

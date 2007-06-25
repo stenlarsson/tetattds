@@ -5,7 +5,7 @@
 class PlayField;
 class EffectHandler;
 class Block;
-class Chain;
+struct Chain;
 
 class Popper
 {
