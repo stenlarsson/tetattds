@@ -41,7 +41,9 @@ struct UdpSocketInternal
 
 #define INTERNAL ((UdpSocketInternal*)internal)
 
-#ifdef WIN32
+#ifdef _WINDOWS
+#define NET_ERROR(msg) {char err[1024]; _snprintf(err, 1024, "%s failed error %i (%s:%i)\n", msg, ::WSAGetLastError(), __FILE__, __LINE__); MessageBox(NULL, err, NULL, MB_OK | MB_ICONERROR);}
+#elif WIN32
 #define NET_ERROR(msg) printf("%s failed error %i (%s:%i)\n", msg, ::WSAGetLastError(), __FILE__, __LINE__)
 #else
 #define NET_ERROR(msg) printf("%s failed error %i (%s:%i)\n", msg, errno, __FILE__, __LINE__)

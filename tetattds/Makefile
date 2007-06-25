@@ -19,7 +19,7 @@ export ABOUT_STRING   :=  http://blog.dev-scene.com/flatware/
 #---------------------------------------------------------------------------------
 export PATH		:=	$(DEVKITARM)/bin:$(PATH)
 
-.PHONY: $(TARGET).arm7 $(TARGET).arm9 music
+.PHONY: $(TARGET).arm7 $(TARGET).arm9 music sdl
 
 #---------------------------------------------------------------------------------
 # main targets
@@ -46,6 +46,9 @@ arm7/$(TARGET).elf:
 #---------------------------------------------------------------------------------
 arm9/$(TARGET).elf:
 	$(MAKE) -C arm9
+
+sdl:
+	$(MAKE) -C sdl
 
 #---------------------------------------------------------------------------------
 clean:

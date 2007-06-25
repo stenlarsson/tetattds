@@ -15,12 +15,12 @@ include $(DEVKITARM)/ds_rules
 # all directories are relative to this makefile
 #---------------------------------------------------------------------------------
 BUILD		:=	build
-SOURCES		:=	source ../network/source 
-INCLUDES	:=	include ../network/include
+SOURCES		:=	source ../network/source ../source
+INCLUDES	:=	../network/include ../source source
 DATA		:=  data
 IMAGES      :=  ../images
 MUSIC       :=  ../music
-SOUND       :=  ../sound
+SOUND       :=  ../sound/compressed
 
 # applications
 PIMPMYBMP   :=  pimpmybmp
@@ -37,7 +37,7 @@ export PATH := $(TOPDIR)/tools:$(TOPDIR)/../fwgui/tools:$(PATH)
 #---------------------------------------------------------------------------------
 ARCH	:=	-mthumb -mthumb-interwork
 
-CFLAGS	:=	-g -Wall -O2\
+CFLAGS	:=	-g -Wall -Werror -O2\
 			-march=armv5te -mtune=arm946e-s -fomit-frame-pointer\
 			-ffast-math \
 			$(ARCH)

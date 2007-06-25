@@ -4,7 +4,7 @@
 namespace FwGui
 {
 	Color backgroundColor = Color(255, 255, 255);
-	u16* backgroundImage = NULL;
+	void* backgroundImage = NULL;
 	Color titleBackgroundColor = Color(0, 0, 0);
 	Color titleTextColor = Color(255, 255, 255);
 	Color enabledButtonColor = Color(33, 171, 243);
@@ -16,5 +16,5 @@ namespace FwGui
 	Color disabledEditBoxColor = Color(171, 171, 171);
 	Color editBoxOutlineColor = Color(171, 171, 171);
 	Color editBoxTextColor = Color(0, 0, 0);
-	struct ::sTransferSoundData* keyClickSound = NULL;
+	void* keyClickSound = NULL;
 }

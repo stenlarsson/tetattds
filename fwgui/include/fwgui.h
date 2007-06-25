@@ -1,6 +1,11 @@
 #pragma once
 
-#include <nds.h>
+#ifndef WIN32
+#include <stdint.h>
+#else
+#define _CRT_SECURE_NO_DEPRECATE
+#include <SDL.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 
