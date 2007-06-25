@@ -1,5 +1,7 @@
 #pragma once
 
+#include "inputlistener.h"
+
 namespace FwGui
 {
 	class Dialog;
@@ -11,17 +13,19 @@ namespace FwGui
 		~Driver();
 		
 		void SetActiveDialog(Dialog* dialog);
+		void SetListener(InputListener* listener);
 		
-		void Tick();
+		bool Tick();
 	
 	private:
 		void InitGraphics();
 	
-		unsigned short* framebuffer;
+		void* framebuffer;
 		Dialog* dialog;
 		int lastX;
 		int lastY;
 		bool firstTouch;
 		bool needGraphicsInit;
+		InputListener* listener;
 	};
 }

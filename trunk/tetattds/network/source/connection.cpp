@@ -1,5 +1,9 @@
 #include "network.h"
 #include "connection.h"
+#ifdef _WIN32
+// SDL.h can be used instead of stdint.h
+#include <SDL.h>
+#endif
 
 #ifndef ARM9
 #include <time.h>
@@ -64,7 +68,7 @@ void Connection::Tick()
 	}
 
 	if(now - lastSendTime >= CONNECTION_KEEPALIVE_TIME) {
-		MessageHeader keepalive(PACKET_TYPE_KEEPALIVE, -1, -1);
+		MessageHeader keepalive(PACKET_TYPE_KEEPALIVE, 0, 0);
 		socket->Send(&keepalive, sizeof(keepalive), address);
 		lastSendTime = now;
 	}
@@ -106,7 +110,7 @@ void Connection::PacketIn(void* data, size_t size)
 	
 	case PACKET_TYPE_ORDERED:
 		{
-			MessageHeader ack(PACKET_TYPE_ACK, -1, header->sequence);
+			MessageHeader ack(PACKET_TYPE_ACK, 0, header->sequence);
 			socket->Send(&ack, sizeof(ack), address);
 
 			if(header->sequence < incomingSequence) {
@@ -115,7 +119,7 @@ void Connection::PacketIn(void* data, size_t size)
 			} else if(header->sequence > incomingSequence) {
 				// wrong order
 				futurePackets.push_back(CachedPacket(
-					-1,
+					(uint32_t)-1,
 					header->sequence,
 					data,
 					size));

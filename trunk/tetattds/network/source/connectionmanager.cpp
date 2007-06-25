@@ -59,7 +59,7 @@ void ConnectionManager::Tick()
 				printf("Connection from ");
 				fromAddress.Print();
 				printf(" rejected.\n");
-				MessageHeader reject(PACKET_TYPE_REJECT, -1, -1);
+				MessageHeader reject(PACKET_TYPE_REJECT, 0, 0);
 				socket->Send(&reject, sizeof(reject), fromAddress);
 				continue;
 			}

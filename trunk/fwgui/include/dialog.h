@@ -2,10 +2,11 @@
 
 #include "control.h"
 #include "graphics.h"
+#include "inputlistener.h"
 
 namespace FwGui
 {
-	class Dialog
+	class Dialog : public InputListener
 	{
 	public:
 		Dialog(const char* title, int numcontrols);
@@ -17,22 +18,13 @@ namespace FwGui
 		void SetRepaint(bool repaint) { this->repaint = repaint; }
 		void Select(Control* control);
 	
-		virtual void KeyA();
-		virtual void KeyB();
-		virtual void KeyStart();
-		virtual void KeyUp();
-		virtual void KeyDown();
-		virtual void KeyLeft();
-		virtual void KeyRight();
+		virtual void KeyDown(Key key);
 		virtual void TouchDown(int x, int y);
-		virtual void TouchHeld(int x, int y);
-		virtual void TouchUp(int x, int y);
 		virtual void ControlClicked(Control* control) = 0;
 	
 	protected:
 		void AddControl(Control* control);
-		void AddControl(Control* control, int defaultButton);
-		int ButtonToArray(int button);
+		void AddControl(Control* control, Key defaultKey);
 	
 		bool repaint;
 		char* title;
@@ -40,6 +32,6 @@ namespace FwGui
 		int nextcontrol;
 		Control** controls;
 		int selectedControl;
-		int defaultControl[14]; // 14 buttons in the KEYPAD_BITS enum
+		int defaultControl[FWGUI_NUM_KEYS];
 	};
 }

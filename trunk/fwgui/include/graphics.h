@@ -5,14 +5,14 @@ namespace FwGui
 {
 	struct Color
 	{
-		Color(u8 r, u8 g, u8 b, u8 a = 0xFF) : r(r), g(g), b(b), a(a) {}
-		u8 r, g, b, a;
+		Color(uint8_t r, uint8_t g, uint8_t b, uint8_t a = 0xFF) : r(r), g(g), b(b), a(a) {}
+		uint8_t r, g, b, a;
 	};
 	
 	class Graphics
 	{
 	public:
-		Graphics(u16* imagebuffer, int screenWidth, int screenHeight);
+		Graphics(uint16_t* imagebuffer, int screenWidth, int screenHeight);
 	
 		void SetPenColor(const Color& color);
 		void SetFillColor(const Color& color);
@@ -21,11 +21,11 @@ namespace FwGui
 		void DrawCenteredString(int x, int y, int width, const char* text);
 		void DrawRect(int x, int y, int width, int height);
 		void FillRect(int x, int y, int width, int height);
-		void BlitAlpha(int x, int y, int width, int height, const u8* bitmap);
-		void Blit(int x, int y, int width, int height, const u16* bitmap);
+		void BlitAlpha(int x, int y, int width, int height, const uint8_t* bitmap);
+		void Blit(int x, int y, int width, int height, const uint16_t* bitmap);
 	
 	private:
-		u16* screenBuffer;
+		uint16_t* screenBuffer;
 		int screenWidth;
 		int screenHeight;
 		const Font* font;

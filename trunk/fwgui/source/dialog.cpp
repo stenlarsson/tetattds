@@ -14,7 +14,7 @@ namespace FwGui
 		controls(new Control*[numcontrols]),
 		selectedControl(0)
 	{
-		for(int i = 0;i<14;i++)
+		for(int i = 0; i<FWGUI_NUM_KEYS; i++)
 			defaultControl[i] = -1;
 	}
 	
@@ -26,16 +26,6 @@ namespace FwGui
 	
 	void Dialog::Paint(Graphics* graphics)
 	{
-		if(backgroundImage == NULL)
-		{
-			graphics->SetFillColor(backgroundColor);
-			graphics->FillRect(0, 0, 256, 192);
-		}
-		else
-		{
-			graphics->Blit(0, 0, 256, 192, backgroundImage);
-		}
-	
 		graphics->SetFillColor(titleBackgroundColor);
 		graphics->FillRect(0, 0, 256, 24);
 		graphics->SetFont(Font::GUNSHIP_12);
@@ -58,16 +48,12 @@ namespace FwGui
 		nextcontrol++;
 	}
 	
-	void Dialog::AddControl(Control* control, int defaultButton)
+	void Dialog::AddControl(Control* control, Key defaultKey)
 	{
-		FWGUI_ASSERT(nextcontrol < numcontrols);
-	
-		controls[nextcontrol] = control;
+		FWGUI_ASSERT(defaultControl[defaultKey] == -1);
+		defaultControl[defaultKey] = nextcontrol;
 		
-		FWGUI_ASSERT(defaultControl[ButtonToArray(defaultButton)] == -1);
-		defaultControl[ButtonToArray(defaultButton)] = nextcontrol;
-		
-		nextcontrol++;
+		AddControl(control);
 	}
 	
 	void Dialog::Select(Control* control)
@@ -82,138 +68,86 @@ namespace FwGui
 		Repaint();
 	}
 
-	void Dialog::KeyA()
+	void Dialog::KeyDown(Key key)
 	{
-		if(controls[selectedControl]->IsEnabled())
-		{
-			ControlClicked(controls[selectedControl]);
-		}
-	}
-	
-	void Dialog::KeyB()
-	{
-		int control = defaultControl[ButtonToArray(KEY_B)];
-		if(control != -1)
-		{	
-			if(controls[control]->IsEnabled())
-			{
+		int control = defaultControl[key];
+		if(control != -1) {
+			if(controls[control]->IsEnabled()) {
 				ControlClicked(controls[control]);
 			}
+			return;
 		}
-	}
-	
-	void Dialog::KeyStart()
-	{
-		int control = defaultControl[ButtonToArray(KEY_START)];
-		if(control != -1)
-		{	
-			if(controls[control]->IsEnabled())
-			{
-				ControlClicked(controls[control]);
+
+		switch(key) {
+		case FWKEY_A:
+			if(controls[selectedControl]->IsEnabled()) {
+				ControlClicked(controls[selectedControl]);
 			}
-		}
-	}
-	
-	void Dialog::KeyUp()
-	{
-		int startX = controls[selectedControl]->x;
-		int startY = controls[selectedControl]->y;
-		
-		int distance = INT_MAX;
-		for(int i = 0; i < numcontrols; i++)
-		{
-			if(controls[i]->y + controls[i]->height < startY)
+			break;
+
+		case FWKEY_RIGHT:
+		case FWKEY_LEFT:
+		case FWKEY_UP:
+		case FWKEY_DOWN:
 			{
-				int dx = controls[i]->x - startX;
-				int dy = controls[i]->y + controls[i]->height - startY;
-				if(dx*dx + dy*dy < distance)
+				int bestControl = selectedControl;
+				int startX = controls[selectedControl]->x;
+				int startY = controls[selectedControl]->y;
+			
+				int distance = INT_MAX;
+				for(int i = 0; i < numcontrols; i++)
 				{
-					if(controls[i]->IsSelectable())
+					if(i == selectedControl || !controls[i]->IsSelectable())
+						continue;
+					
+					int dx = INT_MAX;
+					int dy = INT_MAX;
+					switch(key) {
+					case FWKEY_RIGHT:
+						if(controls[i]->x > startX) {
+							dx = controls[i]->x - startX;
+							dy = controls[i]->y - startY;
+						}
+						break;
+					case FWKEY_LEFT:
+						if(controls[i]->x + controls[i]->width < startX) {
+							dx = controls[i]->x + controls[i]->width - startX;
+							dy = controls[i]->y - startY;
+						}
+						break;
+					case FWKEY_UP:
+						if(controls[i]->y + controls[i]->height < startY) {
+							dx = controls[i]->x - startX;
+							dy = controls[i]->y + controls[i]->height - startY;
+						}
+						break;
+					case FWKEY_DOWN:
+						if(controls[i]->y > startY) {
+							dx = controls[i]->x - startX;
+							dy = controls[i]->y - startY;
+						}
+						break;
+					default:
+						break;
+					}
+					
+					if((dx < distance || dy < distance) && dx*dx + dy*dy < distance)
 					{
-						selectedControl = i;
+						bestControl = i;
 						distance = dx*dx + dy*dy;
 					}
 				}
+
+				selectedControl = bestControl;
+				Repaint();
 			}
+			break;
+
+		default:
+			break;
 		}
-		Repaint();
 	}
-	
-	void Dialog::KeyDown()
-	{
-		int startX = controls[selectedControl]->x;
-		int startY = controls[selectedControl]->y + controls[selectedControl]->height;
-		
-		int distance = INT_MAX;
-		for(int i = 0; i < numcontrols; i++)
-		{
-			if(controls[i]->y > startY)
-			{
-				int dx = controls[i]->x - startX;
-				int dy = controls[i]->y - startY;
-				if(dx*dx + dy*dy < distance)
-				{
-					if(controls[i]->IsSelectable())
-					{
-						selectedControl = i;
-						distance = dx*dx + dy*dy;
-					}
-				}
-			}
-		}
-		Repaint();
-	}
-	
-	void Dialog::KeyLeft()
-	{
-		int startX = controls[selectedControl]->x;
-		int startY = controls[selectedControl]->y;
-		
-		int distance = INT_MAX;
-		for(int i = 0; i < numcontrols; i++)
-		{
-			if(controls[i]->x + controls[i]->width < startX)
-			{
-				int dx = controls[i]->x + controls[i]->width - startX;
-				int dy = controls[i]->y - startY;
-				if(dx*dx + dy*dy < distance)
-				{
-					if(controls[i]->IsSelectable())
-					{
-						selectedControl = i;
-						distance = dx*dx + dy*dy;
-					}
-				}
-			}
-		}
-		Repaint();
-	}
-	
-	void Dialog::KeyRight()
-	{
-		int startX = controls[selectedControl]->x + controls[selectedControl]->width;
-		int startY = controls[selectedControl]->y;
-		
-		int distance = INT_MAX;
-		for(int i = 0; i < numcontrols; i++)
-		{
-			if(controls[i]->x > startX)
-			{
-				int dx = controls[i]->x - startX;
-				int dy = controls[i]->y - startY;
-				if(dx*dx + dy*dy < distance)
-				{
-					if(controls[i]->IsSelectable())
-					{
-						selectedControl = i;
-						distance = dx*dx + dy*dy;
-					}
-				}
-			}
-		}
-		Repaint();
-	}
-	
+
 	void Dialog::TouchDown(int x, int y)
 	{
 		for(int i = 0; i < numcontrols; i++)
@@ -231,25 +165,5 @@ namespace FwGui
 				Repaint();
 			}
 		}
-	}
-	
-	void Dialog::TouchHeld(int x, int y)
-	{
-	}
-	
-	void Dialog::TouchUp(int x, int y)
-	{
-	}
-	
-	int Dialog::ButtonToArray(int button)
-	{
-		int num = 0;
-		for(num = 0;num<14;num++)
-		{
-			if(button & BIT(0))
-				break;
-			button = button>>1;
-		}
-		return num;
 	}
 }

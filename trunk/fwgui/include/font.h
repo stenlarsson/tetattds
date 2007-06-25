@@ -13,10 +13,10 @@ namespace FwGui
 		int GetHeight() const;
 		int GetStringWidth(const char* string) const;
 		const Glyph* GetGlyph(int character) const;
-		const u8* GetBitmapBuffer(const Glyph* glyph) const;
+		const uint8_t* GetBitmapBuffer(const Glyph* glyph) const;
 	
 	private:
-		const u8* fontdata;
+		const uint8_t* fontdata;
 		const FontFileHeader* header;
 		const Glyph* glyphs;
 	};
