@@ -127,7 +127,7 @@ bool IsDropable(BaseBlock *b)
 
 PlayField::PlayField(EffectHandler *effects)
 :	markerPos(PF_MARKER_START),
-	popper(new Popper(this, effects)),
+	popper(NULL),
 	bFastScroll(false),
 	scrollOffset(0),
 	iScrollPause(0),
@@ -150,6 +150,7 @@ PlayField::PlayField(EffectHandler *effects)
 {
 	std::fill_n(field, PF_NUM_BLOCKS, (BaseBlock*)NULL);
 	std::fill_n(fieldHeight, PF_WIDTH, 0);
+	popper = new Popper(this, effects);
 }
 
 PlayField::~PlayField()
@@ -361,8 +362,8 @@ void PlayField::PixelsToColRow(int x, int y, int& col, int& row) const
 	col /= BLOCKSIZE;
 	row /= BLOCKSIZE;
 
-	col = min(col, PF_WIDTH - 1);
-	col = max(col, 0);
+	col = std::min(col, PF_WIDTH - 1);
+	col = std::max(col, 0);
 }
 
 int PlayField::ColRowToPos(int col, int row) const

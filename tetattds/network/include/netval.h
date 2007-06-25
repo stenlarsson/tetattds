@@ -36,9 +36,9 @@ private:
 template <>
 struct netval<bool> {
 	netval() {}
-  	netval(bool i) : val(htonl(i)) {}
-	void operator =(bool i) { val = htonl(i); }
-  	operator bool() const { return ntohl(val); }
+  	netval(bool i) : val(htonl(i) != 0) {}
+	void operator =(bool i) { val = htonl(i) != 0; }
+  	operator bool() const { return ntohl(val) != 0; }
 private:
 	bool val;
 };

@@ -130,8 +130,6 @@ public:
 		// to get a random field every time
 		SeedRandom();
 
-		printf("\e[2J");
-
 		gui->SetActiveDialog(NULL);
 		delete dialog;
 		dialog = NULL;
@@ -522,7 +520,6 @@ class WifiState : public State {
 		
 		currentSubState = waitForServerAcceptState;
 		currentSubState->Enter();
-		printf("\e[2J");		
 	}
 
 	virtual void Tick() {

@@ -6,7 +6,7 @@
 
 class PlayField;
 class GarbageBlock;
-class GBInfo;
+struct GBInfo;
 
 /**
  * GarbageHandler is a helper class for PlayField that handles garbage.

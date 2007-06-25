@@ -47,7 +47,7 @@
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="4"
 			/>
 			<Tool
@@ -124,7 +124,7 @@
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				Detect64BitPortabilityProblems="true"
+				Detect64BitPortabilityProblems="false"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -257,6 +257,14 @@
 				>
 			</File>
 			<File
+				RelativePath=".\source\fieldgraphics.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\fieldgraphics.h"
+				>
+			</File>
+			<File
 				RelativePath=".\source\game.cpp"
 				>
 			</File>
@@ -384,15 +392,15 @@
 				Name="source"
 				>
 				<File
-					RelativePath=".\sdl\source\fieldgraphics.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\sdl\source\fieldgraphics.h"
-					>
-				</File>
-				<File
 					RelativePath=".\sdl\source\main.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sdl\source\platformgraphics.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\sdl\source\platformgraphics.h"
 					>
 				</File>
 				<File

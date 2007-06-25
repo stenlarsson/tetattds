@@ -1,3 +1,4 @@
+#include "tetattds.h"
 #include "util.h"
 #include "effecthandler.h"
 #include "effect.h"

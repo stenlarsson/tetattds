@@ -57,7 +57,7 @@ class PlayField
 
 	int GetMarkerPos() const { return markerPos; }
 	int GetTouchPos() const { return ColRowToPos(touchCol, touchRow); }
-	float GetScrollOffset() const { return scrollOffset; }
+	double GetScrollOffset() const { return scrollOffset; }
 	int GetTimeTicks() const { return timeTicks; }
 	int GetScrollPause() const { return iScrollPause; }
 	ControlMode GetControlMode() const { return controlMode; }

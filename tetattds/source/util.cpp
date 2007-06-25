@@ -2,14 +2,6 @@
 #include "util.h"
 #include <stdarg.h>
 
-void PrintSpinner()
-{
-	static int frame = 0;
-	static char frames[] = {'|', '/', '-', '\\'};
-	printf("%c\e[1D", frames[frame]);
-	frame = (frame + 1) % sizeof(frames);
-}
-
 void PrintStatus(char* format, ...)
 {
 	va_list args;

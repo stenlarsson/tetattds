@@ -2,6 +2,10 @@
 #include <unistd.h>
 #include <stdint.h>
 #else
+#define NOMINMAX
+#define _CRT_NONSTDC_NO_DEPRECATE
+#define _CRT_SECURE_NO_WARNINGS
+#define _SCL_SECURE_NO_WARNINGS
 #define snprintf _snprintf
 // SDL.h can be used instead of stdint.h
 #include <SDL.h>

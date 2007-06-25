@@ -2,7 +2,7 @@
 
 #include "anim.h"
 
-class Chain;
+struct Chain;
 class GarbageBlock;
 class Sprite;
 
