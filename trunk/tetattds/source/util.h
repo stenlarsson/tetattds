@@ -5,7 +5,7 @@
 
 void* Decompress(const void* source, int* size);
 void Decompress(void* destination, const void* source);
-void PrintStatus(char* format, ...);
+void PrintStatus(const char* format, ...);
 
 template <typename It>
 static inline void delete_each(It begin, It end)

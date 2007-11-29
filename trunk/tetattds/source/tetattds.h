@@ -25,7 +25,7 @@
 	for(;;);\
 }
 
-extern void PrintStatus(char* format, ...);
+extern void PrintStatus(const char* format, ...);
 
 #define PROFILE(timer, function)\
 	{\

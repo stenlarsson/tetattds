@@ -20,7 +20,7 @@ void Sound::InitMusic()
 	MikMod_RegisterLoader(&load_xm);
 
 	/* initialize the library */
-	if (MikMod_Init(""))
+	if (MikMod_Init((char*)""))
 	{
 		fprintf(stderr, "Could not initialize sound, reason: %s\n",
 		        MikMod_strerror(MikMod_errno));
@@ -35,14 +35,14 @@ void Sound::InitMusic()
 
 void Sound::LoadMusic()
 {
-	song = Player_Load("music/tetattds.xm", 64, 0);
+	song = Player_Load((char*)"music/tetattds.xm", 64, 0);
 	if (!song){
 		fprintf(stderr,"Failed to load music\n");
 		exit(1);
 	}
 
 #define LOAD_SAMPLE(n) \
-  n = Sample_Load("sound/" #n ".wav"); \
+  n = Sample_Load((char*)"sound/" #n ".wav"); \
 	if (!n) { \
 		fprintf(stderr, "Failed to load sample %s\n", "sound/" #n ".wav"); \
 		exit(1); \
