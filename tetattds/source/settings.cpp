@@ -14,7 +14,7 @@ Settings::Settings()
 :	settings(new InternalSettings)
 {
 	memset(settings, 0, sizeof(InternalSettings));
-	strcpy(settings->serverAddress, "wallbraker.ath.cx");
+	strcpy(settings->serverAddress, "walkyrie.se");
 }
 
 Settings::~Settings()

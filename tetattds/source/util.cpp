@@ -2,7 +2,7 @@
 #include "util.h"
 #include <stdarg.h>
 
-void PrintStatus(char* format, ...)
+void PrintStatus(const char* format, ...)
 {
 	va_list args;
 	va_start( args, format );
