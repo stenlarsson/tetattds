@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="256"
+   height="192"
+   id="svg1937"
+   sodipodi:version="0.32"
+   inkscape:version="0.44"
+   sodipodi:docbase="C:\Projects\tetattds\images"
+   sodipodi:docname="garbage.svg"
+   version="1.0">
+  <defs
+     id="defs1939">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2846">
+      <stop
+         style="stop-color:#810081;stop-opacity:1;"
+         offset="0"
+         id="stop2848" />
+      <stop
+         style="stop-color:white;stop-opacity:0.41568628"
+         offset="1"
+         id="stop2850" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient2838">
+      <stop
+         style="stop-color:#810081;stop-opacity:1;"
+         offset="0"
+         id="stop2840" />
+      <stop
+         style="stop-color:white;stop-opacity:1"
+         offset="1"
+         id="stop2842" />
+    </linearGradient>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2838"
+       id="radialGradient2844"
+       cx="292.16287"
+       cy="403.78583"
+       fx="292.16287"
+       fy="403.78583"
+       r="163.85715"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.336119,-1.403924e-7,1.349876e-7,0.319266,-88.2017,25.56082)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2846"
+       id="radialGradient2870"
+       cx="560"
+       cy="663.79077"
+       fx="560"
+       fy="663.79077"
+       r="192.85715"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.499621,-3.130743e-7,3.461915e-7,0.552472,-239.7883,-182.7255)" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2846"
+       id="radialGradient2876"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.499621,-3.133963e-7,3.461915e-7,0.55304,-199.7883,-183.1026)"
+       cx="560"
+       cy="663.79077"
+       fx="560"
+       fy="663.79077"
+       r="192.85715" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2838"
+       id="radialGradient2878"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.347951,-1.524921e-7,1.397392e-7,0.346783,-51.65845,12.59535)"
+       cx="292.16287"
+       cy="403.78583"
+       fx="292.16287"
+       fy="403.78583"
+       r="163.85715" />
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient2838"
+       id="radialGradient1884"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(0.347951,-1.453343e-7,1.397392e-7,0.330504,-91.65845,20.54689)"
+       cx="292.16287"
+       cy="403.78583"
+       fx="292.16287"
+       fy="403.78583"
+       r="163.85715" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="13.041667"
+     inkscape:cx="44"
+     inkscape:cy="24"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     inkscape:window-width="1024"
+     inkscape:window-height="719"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     width="256px"
+     height="192px" />
+  <metadata
+     id="metadata1942">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:url(#radialGradient2870);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect1947"
+       width="32"
+       height="32"
+       x="8"
+       y="152"
+       inkscape:export-filename="/home/stonebone/projects/tetattds/images/garbage.png"
+       inkscape:export-xdpi="7.4699998"
+       inkscape:export-ydpi="7.4699998" />
+    <rect
+       style="fill:url(#radialGradient1884);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.6904937;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2836"
+       width="28"
+       height="28"
+       x="10"
+       y="154"
+       inkscape:export-filename="/home/stonebone/projects/tetattds/images/garbage.png"
+       inkscape:export-xdpi="7.4699998"
+       inkscape:export-ydpi="7.4699998" />
+    <rect
+       style="fill:url(#radialGradient2876);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:2;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2872"
+       width="32"
+       height="16"
+       x="48"
+       y="168"
+       inkscape:export-filename="/home/stonebone/projects/tetattds/images/garbage.png"
+       inkscape:export-xdpi="7.4699998"
+       inkscape:export-ydpi="7.4699998" />
+    <rect
+       style="fill:url(#radialGradient2878);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.6904937;stroke-linecap:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2874"
+       width="28"
+       height="12"
+       x="50"
+       y="170"
+       inkscape:export-filename="/home/stonebone/projects/tetattds/images/garbage.png"
+       inkscape:export-xdpi="7.4699998"
+       inkscape:export-ydpi="7.4699998" />
+  </g>
+</svg>
