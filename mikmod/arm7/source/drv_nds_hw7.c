@@ -34,7 +34,8 @@ void NDS_HW7_VoiceUpdate(u8 voice, u8 changes)
 	NDS_HW_VOICE* v = ipc->voices + voice;
 
 	if(changes & NDS_HW_CHANGE_VOLUME) {
-		SCHANNEL_VOL(voice) = v->volume >> 1;
+		// volume ranges from 0-256
+		SCHANNEL_VOL(voice) = ((v->volume<255) ? v->volume : 255) >> 1;
 	}
 
 	if(changes & NDS_HW_CHANGE_PANNING) {
@@ -50,6 +51,7 @@ void NDS_HW7_VoiceUpdate(u8 voice, u8 changes)
 	}
 
 	if(changes & NDS_HW_CHANGE_START) {
+		SCHANNEL_CR(voice) = 0; // stop old sound
 		SCHANNEL_SOURCE(voice) = (u32)ipc->samples[v->handle];
 		SCHANNEL_REPEAT_POINT(voice) = v->loopstart >> ((v->flags & SF_16BITS) ? 1 : 2);
 		if(v->flags & SF_LOOP)

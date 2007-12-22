@@ -136,8 +136,7 @@ static void NDS_HW_Exit()
 
 static void NDS_HW_Update()
 {
-	/* TODO should be called md_bpm/2.5 times per second? */
-	md_player();
+	/* should be called md_bpm*0.4 times per second */
 	int i;
 	DC_FlushRange(ipc, sizeof(*ipc));
 	for(i = 0; i < NDS_HW_MAXVOICES; i++) {
@@ -150,6 +149,7 @@ static void NDS_HW_Update()
 			v->changes = 0;
 		}
 	}
+	md_player();
 }
 
 static BOOL NDS_HW_Reset()
