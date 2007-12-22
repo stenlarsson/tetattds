@@ -54,7 +54,7 @@ static SWORD NDS_HW_SampleLoad(struct SAMPLOAD* sload, int type)
 
 	SAMPLE *s = sload->sample;
 	int handle;
-
+	
 	/* Find empty slot to put sample address in */
 	for(handle = 0; handle < NDS_HW_MAXSAMPLES; handle++) {
 		if(ipc->samples[handle] == 0) {
@@ -73,10 +73,9 @@ static SWORD NDS_HW_SampleLoad(struct SAMPLOAD* sload, int type)
 	if (s->loopstart >= s->loopend)
 		s->flags &= ~SF_LOOP;
 
-	/* TODO difference between 8 and 16 bits? */
 	SL_SampleSigned(sload);
-
-	ipc->samples[handle] = _mm_malloc(s->length * ((s->flags & SF_16BITS) ? 2 : 1));
+	
+	ipc->samples[handle] = _mm_malloc(s->length << ((s->flags & SF_16BITS) ? 1 : 0));
 	if(ipc->samples[handle] == NULL) {
 		_mm_errno = MMERR_SAMPLE_TOO_BIG;
 		return -1;
@@ -86,7 +85,7 @@ static SWORD NDS_HW_SampleLoad(struct SAMPLOAD* sload, int type)
 	if (SL_Load(ipc->samples[handle], sload, s->length))
 		return -1;
 
-	DC_FlushRange(ipc->samples[handle], s->length * ((s->flags & SF_16BITS) ? 2 : 1));
+	DC_FlushRange(ipc->samples[handle], s->length << ((s->flags & SF_16BITS) ? 1 : 0));
 
 	return handle;
 }
