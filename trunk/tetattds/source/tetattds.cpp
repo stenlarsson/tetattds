@@ -23,9 +23,16 @@
 #include "playfield.h"
 
 #include "serverconnection.h"
-#include "connectionmanager.h"
+#include "udpconnectionmanager.h"
 #include "state.h"
 #include "platformgraphics.h"
+
+#include "localwifi.h"
+#include "wifitypemenudialog.h"
+#include "localconnectionmanager.h"
+#include "servergame.h"
+#include "loopbackconnection.h"
+#include <lobby.h>
 
 // TODO: Put these prototypes someplace else
 void ShowSplashScreen();
@@ -35,8 +42,10 @@ void SeedRandom();
 void* GetMenuBackground();
 
 static bool hasSetupWifi = false;
-static ConnectionManager* connectionManager = NULL;
+static bool hasSetupLocalWifi = false;
 static ServerConnection* connection = NULL;
+
+static bool hostGame = false;
 
 static int level = 4;
 extern char name[10];
@@ -53,6 +62,8 @@ static State* endlessLevelState;
 static State* vsSelfLevelState;
 static State* endlessGameState;
 static State* vsSelfGameState;
+static State* wifiTypeMenuState;
+static State* localWifiState;
 static State* wifiState;
 static State* wifiHostEntryState;
 static State* setupWifiState;
@@ -118,7 +129,7 @@ public:
 			break;
 
 		case MMSEL_WIFI:
-			nextState = wifiHostEntryState;
+			nextState = wifiTypeMenuState;
 			break;
 
 		case MMSEL_HIGHSCORES:
@@ -136,6 +147,56 @@ public:
 	}
 private:
 	MainMenuDialog* dialog;
+};
+
+class WifiTypeMenuState : public State {
+public:
+	virtual void Enter() {
+		dialog = new WifiTypeMenuDialog(!hasSetupLocalWifi, !hasSetupWifi);
+
+		gui->SetActiveDialog(dialog);
+	}
+	virtual void Tick() {
+
+		switch (dialog->selection) {
+		case WTSEL_NONE:
+			break;
+
+		case WTSEL_HOST_INTERNET:
+			hostGame = true;
+			nextState = setupWifiState;
+			break;
+			
+		case WTSEL_JOIN_INTERNET:
+			hostGame = false;
+			nextState = wifiHostEntryState;
+			break;
+			
+		case WTSEL_HOST_LOCAL:
+			hostGame = true;
+			nextState = localWifiState;
+			break;
+
+		case WTSEL_JOIN_LOCAL:
+			hostGame = false;
+			nextState = localWifiState;
+			break;
+
+		case WTSEL_QUIT:
+			nextState = mainMenuState;
+			break;
+		}
+	}
+	virtual void Exit() {
+		// to get a random field every time
+		SeedRandom();
+
+		gui->SetActiveDialog(NULL);
+		delete dialog;
+		dialog = NULL;
+	}
+private:
+	WifiTypeMenuDialog* dialog;
 };
 
 class LevelState : public State {
@@ -496,6 +557,17 @@ public:
 	}
 
 	virtual void Exit() {
+#ifdef ARM9
+		unsigned long ip = Wifi_GetIP();
+		char str[256];
+		snprintf(str, 256, "My IP: %lu.%lu.%lu.%lu",
+			(ip >>  0) & 0xFF,
+			(ip >>  8) & 0xFF,
+			(ip >> 16) & 0xFF,
+			(ip >> 24) & 0xFF);
+		g_fieldGraphics->AddChat(str);
+#endif
+
 		gui->SetActiveDialog(NULL);
 		delete dialog;
 		dialog = NULL;
@@ -509,13 +581,28 @@ class WifiState : public State {
 	virtual void Enter() {
 		currentSubState = NULL;
 
-		connection = new ServerConnection(name);
-		connectionManager = new ConnectionManager(1, new UdpSocket(), connection);
-		Connection* result =
-			connectionManager->CreateConnection(settings->GetServerAddress(), 13687);
-		if (result == NULL) {
-			nextState = mainMenuState;
-			return;
+		if(hostGame) {
+			UdpSocket* socket = new UdpSocket();
+			if(!socket->Bind(13687)) {
+				nextState = mainMenuState;
+				return;
+			}
+
+			serverGame = new ServerGame();
+			connectionManager = new UdpConnectionManager(MAX_PLAYERS, socket, serverGame);
+			connection = new ServerConnection(name);
+			LoopbackConnection* a = new LoopbackConnection(serverGame);
+			LoopbackConnection* b = new LoopbackConnection(connection);
+			a->Connect(b);
+		} else {
+			connection = new ServerConnection(name);
+			connectionManager = new UdpConnectionManager(1, new UdpSocket(), connection);
+			Connection* result =
+				connectionManager->CreateConnection(settings->GetServerAddress(), 13687);
+			if (result == NULL) {
+				nextState = mainMenuState;
+				return;
+			}
 		}
 		
 		currentSubState = waitForServerAcceptState;
@@ -544,6 +631,9 @@ class WifiState : public State {
 		}
 
 		connectionManager->Tick();
+		if(serverGame != NULL) {
+			serverGame->Tick();
+		}
 	}
 	
 	virtual void Exit() {
@@ -558,6 +648,88 @@ class WifiState : public State {
 	}
 private:
 	State * currentSubState;
+	UdpConnectionManager* connectionManager;
+	ServerGame* serverGame;
+};
+
+class LocalWifiState : public State {
+	virtual void Enter() {
+		PlatformGraphics::InitSubScreen(true);
+		currentSubState = NULL;
+		
+		if(!hasSetupLocalWifi) {
+			SetupLocalWifi();
+			hasSetupLocalWifi = true;
+		}
+		
+		if(hostGame) {
+			serverGame = new ServerGame();
+			connectionManager = new LocalConnectionManager(MAX_PLAYERS, serverGame);
+			if(!connectionManager->HostGame()) {
+				nextState = mainMenuState;
+				return;
+			}
+			connection = new ServerConnection(name);
+			LoopbackConnection* a = new LoopbackConnection(serverGame);
+			LoopbackConnection* b = new LoopbackConnection(connection);
+			a->Connect(b);
+		} else {
+			serverGame = NULL;
+			connection = new ServerConnection(name);
+			connectionManager = new LocalConnectionManager(1, connection);
+			if(connectionManager->JoinGame() == NULL) {
+				nextState = mainMenuState;
+				return;
+			}
+		}
+		
+		currentSubState = waitForServerAcceptState;
+		currentSubState->Enter();
+	}
+
+	virtual void Tick() {
+		if(currentSubState != NULL) {
+			currentSubState->Tick();
+		}
+		
+		if (nextState == mainMenuState) {
+			return;
+		}
+
+		if (nextState != NULL) {
+			currentSubState->Exit();
+			currentSubState = nextState;
+			nextState = NULL;
+			currentSubState->Enter();
+		}
+		
+		if (connection->IsState(SERVERSTATE_DISCONNECTED)) {
+			nextState = mainMenuState;
+			return;
+		}
+
+		connectionManager->Tick();
+		if(serverGame != NULL) {
+			serverGame->Tick();
+		}
+	}
+	
+	virtual void Exit() {
+		if(currentSubState != NULL) {
+			currentSubState->Exit();
+		}
+		currentSubState = NULL;
+		delete connectionManager;
+		connectionManager = NULL;
+		delete connection;
+		connection = NULL;
+		delete serverGame;
+		serverGame = NULL;
+	}
+private:
+	State * currentSubState;
+	LocalConnectionManager* connectionManager;
+	ServerGame* serverGame;
 };
 
 class SplashScreenState : public State {
@@ -585,18 +757,20 @@ void InitStates()
 {
 	/* Main game state transitions
 	
-	mainMenuState -> select (endlessLevelState, vsSelfLevelState, wifiHostEntryState, highScoreState)
+	mainMenuState -> select (endlessLevelState, vsSelfLevelState, wifiTypeMenuState, highScoreState)
 	endlessLevelState -> choice (endlessGameState, mainMenuState)
 	endlessGameState -> always (mainMenuState)
 	vsSelfLevelState -> choice (vsSelfGameState, mainMenuState)
 	vsSelfGameState -> always (mainMenuState)
 	highScoreState -> always (mainMenuState)
+	wifiTypeMenuState -> choice (setupWifiState, localWifiState, wifiHostEntryState, mainMenuState)
 	wifiHostEntryState -> choice (setupWifiState, mainMenuState)
 	setupWifiState -> choice (wifiState, mainMenuState)
 	wifiState -> always (mainMenuState)
+	localWifiState -> always (mainMenuState)
 	*/
 	
-	/* Wifi state transitions
+	/* Wifi state transitions (inside wifiState and localWifiState)
 	
 	waitForServerAcceptState -> always (wifiMenuState)
 	wifiMenuState -> select (wifiGameState, wifiLevelState, wifiChatEntryState)
@@ -608,9 +782,11 @@ void InitStates()
 
 	highscoreState = new HighscoreState;
 	mainMenuState = new MainMenuState;
+	wifiTypeMenuState = new WifiTypeMenuState;
 	endlessGameState = new EndlessGameState;
 	vsSelfGameState = new VsSelfGameState;
 	wifiState = new WifiState;
+	localWifiState = new LocalWifiState;
 	setupWifiState = new SetupWifiState;	
 	wifiHostEntryState = new WifiHostEntryState;
 	wifiMenuState = new WifiMenuState;
@@ -645,6 +821,10 @@ bool StateTick()
 	if(!gui->Tick())
 		return false;
 	Sound::UpdateMusic();
+	
+	if(hasSetupLocalWifi) {
+		LOBBY_Update();
+	}
 
 	return true;
 }

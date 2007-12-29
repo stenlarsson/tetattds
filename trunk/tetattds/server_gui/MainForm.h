@@ -1,8 +1,8 @@
 #pragma once
 
 #include <vcclr.h>
-#include "connectionmanager.h"
-#include "game.h"
+#include "udpconnectionmanager.h"
+#include "servergame.h"
 
 namespace server_gui {
 
@@ -57,8 +57,8 @@ namespace server_gui {
 			}
 		}
 
-		Game* game;
-		ConnectionManager* connectionManager;
+		ServerGame* game;
+		UdpConnectionManager* connectionManager;
 
 	private: System::Windows::Forms::Timer^  pollTimer;
 
@@ -258,8 +258,8 @@ private: System::Void MainForm_Load(System::Object^  sender, System::EventArgs^ 
 			 if(!socket->Bind(13687)) {
 				throw "Failed to bind socket";
 			 }
-			 game = new Game();
-			 connectionManager = new ConnectionManager(MAX_PLAYERS, socket, game);
+			 game = new ServerGame();
+			 connectionManager = new UdpConnectionManager(MAX_PLAYERS, socket, game);
 		 }
 private: System::Void notifyIcon_Click(System::Object^  sender, System::EventArgs^  e) {
 			 Show();

@@ -104,7 +104,8 @@ void FieldGraphics::ReallyPrintPlayerInfo(PlayerInfo* player)
 	const char* suffix[] = {"  ", "ST", "ND", "RD", "TH", "TH"};
 	PrintLarge(
 		PLACE_TEXT_OFFSET + player->fieldNum * 8,
-		digit[player->place]);
+		digit[player->place],
+		true);
 	PrintSmall(
 		PLACE_TEXT_OFFSET + player->fieldNum * 8 + TEXTMAP_STRIDE + 1,
 		suffix[player->place]);

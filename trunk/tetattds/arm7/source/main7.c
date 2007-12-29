@@ -8,31 +8,14 @@
 
 #include <mikmod7.h>
 
+#include <smi_startup_viaipc.h>
+#include <MessageQueue.h>
+#include <wifi_hal.h>
+
 #include "../../arm9/source/ds.h"
 
-void SetupWifi();
-
-void FIFOHandler()
-{
-	while(!(REG_IPC_FIFO_CR & IPC_FIFO_RECV_EMPTY))
-	{
-		u32 command = REG_IPC_FIFO_RX;
-		switch(command)
-		{
-		case FIFO_START_WIFI:
-			SetupWifi();
-			break;
-			
-		case FIFO_SYNC_WIFI:
-			Wifi_Sync();
-			break;
-			
-		default:
-			MikMod7_ProcessCommand(command);
-			break;
-		}
-	}
-}
+BOOL wifi = FALSE;
+BOOL localWifi = FALSE;
 
 void startSound(int sampleRate, const void* data, uint32 bytes, u8 channel, u8 vol,  u8 pan, u8 format)
 {
@@ -66,7 +49,6 @@ s32 getFreeSoundChannel()
 	return -1;
 }
  
-int vcount;
 touchPosition first,tempPos;
 
 //---------------------------------------------------------------------------------
@@ -99,29 +81,13 @@ void VcountHandler() {
 		but |= (1 <<6);
 	}
 
-	if ( vcount == 80 ) {
-		first = tempPos;
-	} else {
-		if (	abs( xpx - first.px) > 10 || abs( ypx - first.py) > 10 ||
-				(but & ( 1<<6)) ) {
-
-			but |= (1 <<6);
-			lastbut = but;
-
-		} else { 	
-			IPC->mailBusy = 1;
-			IPC->touchX			= x;
-			IPC->touchY			= y;
-			IPC->touchXpx		= xpx;
-			IPC->touchYpx		= ypx;
-			IPC->touchZ1		= z1;
-			IPC->touchZ2		= z2;
-			IPC->mailBusy = 0;
-		}
-	}
+	IPC->touchX			= x;
+	IPC->touchY			= y;
+	IPC->touchXpx		= xpx;
+	IPC->touchYpx		= ypx;
+	IPC->touchZ1		= z1;
+	IPC->touchZ2		= z2;
 	IPC->buttons		= but;
-	vcount ^= (80 ^ 130);
-	SetYtrigger(vcount);
 
 }
 
@@ -130,7 +96,6 @@ void VblankHandler(void) {
 //---------------------------------------------------------------------------------
 
 	u32 i;
-
 
 	//sound code  :)
 	TransferSound *snd = IPC->soundData;
@@ -150,13 +115,17 @@ void VblankHandler(void) {
 
 void SendFifo(u32 data)
 {
-    while (REG_IPC_FIFO_CR & IPC_FIFO_SEND_FULL);
-    if (REG_IPC_FIFO_CR & IPC_FIFO_ERROR)
-    {
-        REG_IPC_FIFO_CR |= IPC_FIFO_SEND_CLEAR;
-    } 
-    
-    REG_IPC_FIFO_TX = data;
+	if(localWifi) {
+		IPC_SendMessage((char*)&data, 4);
+	} else {
+		while (REG_IPC_FIFO_CR & IPC_FIFO_SEND_FULL);
+		if (REG_IPC_FIFO_CR & IPC_FIFO_ERROR)
+		{
+			REG_IPC_FIFO_CR |= IPC_FIFO_SEND_CLEAR;
+		} 
+		
+		REG_IPC_FIFO_TX = data;
+	}
 }
 
 // callback to allow wifi library to notify arm9
@@ -183,40 +152,98 @@ void SetupWifi()
 
 	Wifi_SetSyncHandler(arm7_synctoarm9); // allow wifi lib to notify arm9
 	// arm7 wifi init complete
+	
+	wifi = TRUE;
+}
+
+static void OnFifoCommand(u32 command);
+
+static void FifoCallback(unsigned char *data, int length)
+{
+	OnFifoCommand(*(u32*)data);
+}
+
+static void SetupLocalWifi()
+{
+	IPC_Init();
+	IPC_SetCustomCallback(FifoCallback);
+	LWIFI_Init();
+	
+	localWifi = TRUE;
+}
+
+void FIFOHandler()
+{
+
+	while(!(REG_IPC_FIFO_CR & IPC_FIFO_RECV_EMPTY))
+	{
+		if(localWifi) {
+//SCHANNEL_TIMER(10) = SOUND_FREQ( 277.183*8);
+//SCHANNEL_CR(10) = SCHANNEL_ENABLE | SOUND_FORMAT_PSG | SOUND_PAN(4 * 15 + 2)  | (127 / 48) << 24 | 63;
+		}
+		OnFifoCommand(REG_IPC_FIFO_RX);
+		if(localWifi) {
+			return;
+		}
+	}
+}
+
+static void OnFifoCommand(u32 command)
+{
+	switch(command)
+	{
+	case FIFO_START_WIFI:
+		SetupWifi();
+		break;
+		
+	case FIFO_SYNC_WIFI:
+		Wifi_Sync();
+		break;
+	
+	case FIFO_START_LOCAL_WIFI:
+		SetupLocalWifi();
+		break;
+		
+	default:
+		MikMod7_ProcessCommand(command);
+		break;
+	}
 }
 
 int main(int argc, char ** argv)
 {
 	REG_IPC_FIFO_CR = IPC_FIFO_ENABLE | IPC_FIFO_RECV_IRQ | IPC_FIFO_SEND_CLEAR;
-	IPC->mailData=0;
-	IPC->mailSize=0;
 
-	// Reset the clock if needed
-	rtcReset();
+	// read User Settings from firmware
+	readUserSettings();
 
 	//enable sound
 	powerON(POWER_SOUND);
+	writePowerManagement(PM_CONTROL_REG, ( readPowerManagement(PM_CONTROL_REG) & ~PM_SOUND_MUTE ) | PM_SOUND_AMP );
 	SOUND_CR = SOUND_ENABLE | SOUND_VOL(0x7F);
-	IPC->soundData = 0;
 
 	irqInit();
-	irqSet(IRQ_VBLANK, VblankHandler);
-	SetYtrigger(80);
-	vcount = 80;
-	irqSet(IRQ_VCOUNT, VcountHandler);
-	irqEnable(IRQ_VBLANK | IRQ_VCOUNT);
 
-	// we would like to react to fifo irq but that is unreliable
-	// since interrupts are sometimes disabled in wifi lib
-	//irqSet(IRQ_FIFO_NOT_EMPTY, FIFOHandler);
-	//irqEnable(IRQ_FIFO_NOT_EMPTY);
-	
-	// keep the ARM7 out of main RAM
+	// Start the RTC tracking IRQ
+	initClockIRQ();
+
+	SetYtrigger(80);
+	irqSet(IRQ_VCOUNT, VcountHandler);
+	irqSet(IRQ_VBLANK, VblankHandler);
+
+	irqEnable( IRQ_VBLANK | IRQ_VCOUNT);
+
+
 	while(true)
-	{
-		swiWaitForVBlank();
-		
-		Wifi_Update();
-		FIFOHandler();
+	{		
+		//swiWaitForVBlank();
+		if(wifi) {
+			Wifi_Update();
+		}
+		if(localWifi) {
+			LWIFI_IPC_UpdateNOIRQ();
+		} else {
+			FIFOHandler();
+		}
 	}
 }

@@ -2,6 +2,7 @@
 
 #include "netval.h"
 
+#define MAX_PACKET_SIZE 512
 #define CONNECTION_KEEPALIVE_TIME 2
 #define CONNECTION_TIMEOUT 10
 #define RESEND_PACKET_TIMEOUT 1

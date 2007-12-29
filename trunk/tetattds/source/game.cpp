@@ -3,7 +3,6 @@
 #include "playfield.h"
 #include "platformgraphics.h"
 #include "serverconnection.h"
-#include "connectionmanager.h"
 #include "sound.h"
 
 Game* g_game = NULL;

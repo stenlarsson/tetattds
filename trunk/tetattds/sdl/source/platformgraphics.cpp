@@ -160,7 +160,7 @@ void PlatformGraphics::ClearPlayer(PlayerInfo* player)
 	smallFields[player->fieldNum].player = NULL;
 }
 
-void PlatformGraphics::PrintLarge(uint32_t cell, const char* text)
+void PlatformGraphics::PrintLarge(uint32_t cell, const char* text, bool subScreen)
 {
 	ASSERT(text != NULL);
 

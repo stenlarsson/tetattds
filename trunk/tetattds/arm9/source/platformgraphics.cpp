@@ -121,7 +121,7 @@ void PlatformGraphics::InitSubScreen(bool wifi)
 	vramSetBankC(VRAM_C_SUB_BG);
 
 	BG_PALETTE_SUB[0] = RGB15(0,0,0);
-	BG_PALETTE_SUB[255] = RGB15(0,0,0);
+	BG_PALETTE_SUB[255] = RGB15(31,0,0);
 
 	// 32K, can hold palettes for all four BG layers
 	// allocate for cpu access
@@ -295,22 +295,24 @@ void PlatformGraphics::ClearPlayer(PlayerInfo* player)
 	// ready
 	ClearText(subTextMap + READY_TEXT_OFFSET + player->fieldNum * 8, 8);
 	// place
-	PrintLarge((uint32_t)subTextMap + PLACE_TEXT_OFFSET + player->fieldNum * 8," ");
+	PrintLarge(PLACE_TEXT_OFFSET + player->fieldNum * 8," ", true);
 	ClearText(subTextMap + PLACE_TEXT_OFFSET + player->fieldNum * 8 + TEXTMAP_STRIDE + 1, 2);
 	// smallfield
 	ClearSmallField(player->fieldNum);
 	memset(player, 0, sizeof(PlayerInfo));
 }
 
-void PlatformGraphics::PrintLarge(uint32_t cell, const char* text)
+void PlatformGraphics::PrintLarge(uint32_t cell, const char* text, bool subScreen)
 {
 	ASSERT(text != NULL);
+	
+	u16* map = subScreen ? subTextMap : mainTextMap;
 	
 	while(*text != '\0')
 	{
 		int tile = LargeCharTile(*text);
-		mainTextMap[cell] =  + tile;
-		mainTextMap[cell+TEXTMAP_STRIDE] = tile + LARGE_DIGIT_TILE_STRIDE;
+		map[cell] = tile;
+		map[cell+TEXTMAP_STRIDE] = tile + LARGE_DIGIT_TILE_STRIDE;
 		text++;
 		cell++;
 	}
@@ -343,6 +345,12 @@ void PlatformGraphics::ClearText(u16* cell, int length)
 		*cell = 0;
 		cell++;
 	}
+}
+
+void PlatformGraphics::AddChat(char* text)
+{
+	FieldGraphics::AddChat(text);
+	PrintChat();
 }
 
 void PlatformGraphics::PrintChat()

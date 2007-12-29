@@ -5,6 +5,9 @@
 export CXX	:=	g++
 export LD	:=	g++
 
+export VERSION_STRING :=  Tetattds 3.0
+export ABOUT_STRING   :=  http://blog.dev-scene.com/flatware/
+
 #---------------------------------------------------------------------------------
 %.o: %.cpp
 	$(CXX) -MMD -MP -MF $(DEPSDIR)/$*.d $(CXXFLAGS) -c $< -o $@
@@ -25,7 +28,7 @@ DATA		:=  data
 # options for code generation
 #---------------------------------------------------------------------------------
 
-CXXFLAGS	:=	$(INCLUDE) -g -Wall -fno-exceptions
+CXXFLAGS	:=	$(INCLUDE) -g -Wall -fno-exceptions -DVERSION_STRING="\"$(VERSION_STRING)\"" -DABOUT_STRING="\"$(ABOUT_STRING)\""
 ifneq (,$(findstring CYGWIN,$(shell uname)))
 CXXFLAGS	+= -mno-cygwin
 endif

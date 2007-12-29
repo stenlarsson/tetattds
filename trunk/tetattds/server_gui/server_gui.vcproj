@@ -119,7 +119,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="../network/include;../server/source"
-				PreprocessorDefinitions="WIN32;NDEBUG"
+				PreprocessorDefinitions="WIN32;NDEBUG;VERSION_STRING=\&quot;Tetattds 3.0\&quot;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -202,19 +202,23 @@
 				>
 			</File>
 			<File
-				RelativePath="..\network\source\connection.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\network\source\connectionmanager.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\server\source\game.cpp"
+				RelativePath="..\network\source\loopbackconnection.cpp"
 				>
 			</File>
 			<File
 				RelativePath=".\server_gui.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\network\source\servergame.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\network\source\udpconnection.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\network\source\udpconnectionmanager.cpp"
 				>
 			</File>
 			<File
@@ -232,15 +236,11 @@
 				>
 			</File>
 			<File
-				RelativePath="..\network\include\connectionmanager.h"
-				>
-			</File>
-			<File
-				RelativePath="..\server\source\game.h"
-				>
-			</File>
-			<File
 				RelativePath="..\network\include\ipaddress.h"
+				>
+			</File>
+			<File
+				RelativePath="..\network\include\loopbackconnection.h"
 				>
 			</File>
 			<File
@@ -271,6 +271,18 @@
 			</File>
 			<File
 				RelativePath="..\server\source\server.h"
+				>
+			</File>
+			<File
+				RelativePath="..\network\include\servergame.h"
+				>
+			</File>
+			<File
+				RelativePath="..\network\include\udpconnection.h"
+				>
+			</File>
+			<File
+				RelativePath="..\network\include\udpconnectionmanager.h"
 				>
 			</File>
 			<File

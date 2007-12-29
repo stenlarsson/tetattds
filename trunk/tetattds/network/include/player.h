@@ -1,6 +1,7 @@
 #pragma once
 
-#include <time.h>
+#include <stdlib.h>
+#include <string.h>
 #include "connection.h"
 
 class Game;
