@@ -30,12 +30,12 @@ void ServerConnection::ConnectionCreated(Connection* connection)
 	SendMessage(connect);
 }
 
-void ServerConnection::MessageIn(Connection* from, unsigned char id, void* data, size_t size)
+void ServerConnection::MessageIn(Connection* from, unsigned char id, const void* data, size_t size)
 {
 	ASSERT(from != NULL);
 	ASSERT(data != NULL);
 	ASSERT(size > 0);
-	
+
 	BEGIN_MESSAGE_HANDLER
 	HANDLE_MESSAGE(Ping)
 	HANDLE_MESSAGE(Garbage)

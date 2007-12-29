@@ -4,8 +4,8 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include "udpsocket.h"
-#include "connectionmanager.h"
-#include "game.h"
+#include "udpconnectionmanager.h"
+#include "servergame.h"
 
 void PrintStatus(const char* format, ...)
 {
@@ -27,8 +27,8 @@ int main( int argc, char **argv )
 		return 1;
 	}
 
-	Game* game = new Game();
-	ConnectionManager* connectionManager = new ConnectionManager(MAX_PLAYERS, socket, game);
+	ServerGame* game = new ServerGame();
+	UdpConnectionManager* connectionManager = new UdpConnectionManager(MAX_PLAYERS, socket, game);
 
 	// todo: need a way to quit
 	while( true )

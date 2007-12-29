@@ -62,12 +62,12 @@ public:
 	void Draw(PlayField *pf);
 	void DrawField(PlayField *pf, int x, int y, int tile, bool shaded);
 	void DrawSubScreen();
-	void AddChat(char* text);
+	virtual void AddChat(char* text);
 	void ClearChat();
 
 private:
 	void PrintSmall(uint32_t offset, const char* text);
-	void PrintLarge(uint32_t offset, const char* text);
+	void PrintLarge(uint32_t offset, const char* text, bool subScreen);
 	void PrintChat();
 	
 	void ClearText(uint16_t* cell, int length);

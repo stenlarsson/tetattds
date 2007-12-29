@@ -10,3 +10,5 @@ enum WIFI_ASSOCSTATUS {
 WIFI_ASSOCSTATUS Wifi_AssocStatus() {
 	return ASSOCSTATUS_ASSOCIATED;
 }
+
+unsigned int Wifi_GetIP() { return 0; }

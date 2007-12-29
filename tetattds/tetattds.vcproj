@@ -120,7 +120,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="source;sdl\source;network\include;..\fwgui\include;..\win32deps\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;&quot;VERSION_STRING=\&quot;Tetattsdl 2.0\&quot;&quot;;&quot;ABOUT_STRING=\&quot;http://blog.dev-scene.com/flatware\&quot;&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;&quot;VERSION_STRING=\&quot;Tetattsdl 3.0\&quot;&quot;;&quot;ABOUT_STRING=\&quot;http://blog.dev-scene.com/flatware\&quot;&quot;"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -384,6 +384,14 @@
 				RelativePath=".\source\wifimenudialog.h"
 				>
 			</File>
+			<File
+				RelativePath=".\source\wifitypemenudialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\source\wifitypemenudialog.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="sdl"
@@ -391,6 +399,14 @@
 			<Filter
 				Name="source"
 				>
+				<File
+					RelativePath=".\sdl\source\lobby.h"
+					>
+				</File>
+				<File
+					RelativePath=".\sdl\source\localwifi.h"
+					>
+				</File>
 				<File
 					RelativePath=".\sdl\source\main.cpp"
 					>
@@ -432,15 +448,23 @@
 				Name="source"
 				>
 				<File
-					RelativePath=".\network\source\connection.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\network\source\connectionmanager.cpp"
+					RelativePath=".\network\source\loopbackconnection.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\network\source\network.h"
+					>
+				</File>
+				<File
+					RelativePath=".\network\source\servergame.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\network\source\udpconnection.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\network\source\udpconnectionmanager.cpp"
 					>
 				</File>
 				<File
@@ -460,11 +484,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\network\include\connectionmanager.h"
+					RelativePath=".\network\include\ipaddress.h"
 					>
 				</File>
 				<File
-					RelativePath=".\network\include\ipaddress.h"
+					RelativePath=".\network\include\loopbackconnection.h"
 					>
 				</File>
 				<File
@@ -473,6 +497,18 @@
 				</File>
 				<File
 					RelativePath=".\network\include\protocol.h"
+					>
+				</File>
+				<File
+					RelativePath=".\network\include\servergame.h"
+					>
+				</File>
+				<File
+					RelativePath=".\network\include\udpconnection.h"
+					>
+				</File>
+				<File
+					RelativePath=".\network\include\udpconnectionmanager.h"
 					>
 				</File>
 				<File

@@ -54,7 +54,7 @@ namespace FwGui
 			scanKeys();
 			
 			uint32_t down = keysDown();
-			uint32_t up = keysDown();
+			uint32_t up = keysUp();
 
 			for(int i = 0; i < FWGUI_NUM_KEYS; i++) {
 				if(down & BIT(i))

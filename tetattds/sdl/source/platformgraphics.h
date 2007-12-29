@@ -58,7 +58,7 @@ private:
 	void ReallyDrawSmallField(int fieldNum);
 
 	void PrintSmall(uint32_t offset, const char* text);
-	void PrintLarge(uint32_t offset, const char* text);
+	void PrintLarge(uint32_t offset, const char* text, bool subScreen);
 	void PrintChat();
 	
 	struct {

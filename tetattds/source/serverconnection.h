@@ -41,7 +41,7 @@ public:
 	}
 
 	virtual void ConnectionCreated(Connection* connection);
-	virtual void MessageIn(Connection* from, unsigned char id, void* data, size_t size);
+	virtual void MessageIn(Connection* from, unsigned char id, const void* data, size_t size);
 	virtual void ConnectionRejected(Connection* connection);
 	virtual void ConnectionTimeout(Connection* connection);
 

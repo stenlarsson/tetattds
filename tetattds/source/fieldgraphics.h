@@ -63,7 +63,7 @@ public:
 	inline void DrawEffects() { effects.Draw(); };
 		
 	void PrintCountdown(int count);
-	void AddChat(char* text);
+	virtual void AddChat(char* text);
 	virtual void ClearChat() = 0;
 
 	EffectHandler *GetEffectHandler() { return &effects; }
@@ -74,7 +74,7 @@ protected:
 	void PrintStopTime(int ticks);
 
 	virtual void PrintSmall(uint32_t offset, const char* text) = 0;
-	virtual void PrintLarge(uint32_t offset, const char* text) = 0;
+	virtual void PrintLarge(uint32_t offset, const char* text, bool subScreen = false) = 0;
 	
 	int LargeCharTile(char c);
 	int SmallCharTile(char c);
