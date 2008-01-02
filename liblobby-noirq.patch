@@ -1,0 +1,92 @@
+Index: arm9/source/802.11.c
+===================================================================
+--- arm9/source/802.11.c	(revision 75)
++++ arm9/source/802.11.c	(working copy)
+@@ -299,28 +299,28 @@
+ 
+ void IPC_RcvCompleteCheck(void)
+ {
+-	//char *WIFI_IPC_buffer = (char *)safe_malloc(2000) ;
+-	//unsigned long length = 2000 ;
+-	//while (IPC_GetMessage(WIFI_IPC_buffer,&length))
+-	//{
+-	//	if (*(unsigned long *)WIFI_IPC_buffer == IPCTAG_DATA)
+-	//	{
+-	//		Handle802_11((unsigned char *)WIFI_IPC_buffer+10+12,length-10-12) ;
+-	//	} else 
+-	//	if (*(unsigned long *)WIFI_IPC_buffer == IPCTAG_MAC)
+-	//	{
+-	//		UpdateMAC((unsigned char *)WIFI_IPC_buffer + 4) ;
+-	//	} else 
+-	//	if (*(unsigned long *)WIFI_IPC_buffer == IPCTAG_HINT)
+-	//	{
+-	//		// hints (debug)
+-	//	} else
+-	//	{
+-	//		IPC_PassCustomMessage((unsigned char *)WIFI_IPC_buffer,length) ;
+-	//	}
+-	//	length = 2000 ;
+-	//}
+-	//safe_free(WIFI_IPC_buffer) ;
++	char *WIFI_IPC_buffer = (char *)safe_malloc(2000) ;
++	unsigned long length = 2000 ;
++	while (IPC_GetMessage(WIFI_IPC_buffer,&length))
++	{
++		if (*(unsigned long *)WIFI_IPC_buffer == IPCTAG_DATA)
++		{
++			Handle802_11((unsigned char *)WIFI_IPC_buffer+10+12,length-10-12) ;
++		} else 
++		if (*(unsigned long *)WIFI_IPC_buffer == IPCTAG_MAC)
++		{
++			UpdateMAC((unsigned char *)WIFI_IPC_buffer + 4) ;
++		} else 
++		if (*(unsigned long *)WIFI_IPC_buffer == IPCTAG_HINT)
++		{
++			// hints (debug)
++		} else
++		{
++			IPC_PassCustomMessage((unsigned char *)WIFI_IPC_buffer,length) ;
++		}
++		length = 2000 ;
++	}
++	safe_free(WIFI_IPC_buffer) ;
+ }
+ 
+ #endif
+Index: arm9/source/lobby.c
+===================================================================
+--- arm9/source/lobby.c	(revision 75)
++++ arm9/source/lobby.c	(working copy)
+@@ -9,6 +9,7 @@
+ #include "lobby.h"
+ #include <string.h>
+ #include "profiler.h"
++#include "MessageQueue.h"
+ 
+ #ifdef WIN32
+ 	#define safe_malloc	malloc
+@@ -1430,6 +1431,7 @@
+ */
+ void LOBBY_Update(void)
+ {
++	IPC_RcvCompleteCheck();
+ 	LPLOBBY_USER tmp ;
+ 	PROFILER_EnterState(PSTATE_UPDATE) ;
+ 	if (!currentLobby) {
+Index: common/source/MessageQueue.c
+===================================================================
+--- common/source/MessageQueue.c	(revision 75)
++++ common/source/MessageQueue.c	(working copy)
+@@ -370,9 +370,9 @@
+ 		{
+ 			return 0 ;
+ 		}
+-		irqEnable(IRQ_IPC_SYNC) ;
+-		irqEnable(IRQ_FIFO_EMPTY) ;
+-		irqEnable(IRQ_FIFO_NOT_EMPTY) ;
++		//irqEnable(IRQ_IPC_SYNC) ;
++		//irqEnable(IRQ_FIFO_EMPTY) ;
++		//irqEnable(IRQ_FIFO_NOT_EMPTY) ;
+ 	#else
+ 		irqSet(IRQ_FIFO_EMPTY,&IPC_IrqAll) ;
+ 		irqSet(IRQ_FIFO_NOT_EMPTY,&IPC_IrqAll) ;
