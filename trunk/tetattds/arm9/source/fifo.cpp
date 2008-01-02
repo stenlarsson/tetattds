@@ -12,21 +12,17 @@ static bool localWifi = false;
 
 void FIFOHandler()
 {
-	if(localWifi) {
-		IPC_RcvCompleteCheck();
-	} else {
-		while(!(REG_IPC_FIFO_CR & IPC_FIFO_RECV_EMPTY))
+	while(!(REG_IPC_FIFO_CR & IPC_FIFO_RECV_EMPTY))
+	{
+		u32 command = REG_IPC_FIFO_RX;
+		switch(command)
 		{
-			u32 command = REG_IPC_FIFO_RX;
-			switch(command)
-			{
-			case FIFO_SYNC_WIFI:
-				Wifi_Sync();
-				break;
-				
-			default:
-				break;
-			}
+		case FIFO_SYNC_WIFI:
+			Wifi_Sync();
+			break;
+			
+		default:
+			break;
 		}
 	}
 }

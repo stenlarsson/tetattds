@@ -27,7 +27,7 @@ void SetupLocalWifi()
 	SendFifo(FIFO_START_LOCAL_WIFI);
 	swiWaitForVBlank();
 	IPC_Init();
-	IPC_SetChannelCallback(0, &LWIFI_IPC_Callback);
+	//IPC_SetChannelCallback(0, &LWIFI_IPC_Callback);
 	
 	LOBBY_Init();
 	LOBBY_SetStreamHandler(0x0001, &PacketCallback);

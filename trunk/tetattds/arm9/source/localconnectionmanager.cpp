@@ -7,7 +7,8 @@
 #include <802.11.h>
 #include <lobby.h>
 
-#define GAMECODE 13687
+#define ROOM_NAME "TETATTDS"
+#define GAME_CODE 13687
 
 LocalConnectionManager* g_localConnectionManager = NULL;
 
@@ -36,13 +37,13 @@ LocalConnectionManager::~LocalConnectionManager()
 
 bool LocalConnectionManager::HostGame()
 {
-	room = LOBBY_GetRoomByGame(0, 69);
+	room = LOBBY_GetRoomByGame(0, GAME_CODE);
 	if(room != NULL) {
-		printf("a game is already hosted\n");
+		printf("A game is already hosted\n");
 		return false;
 	}
 	
-	LOBBY_CreateRoom("PONG", 2, 69, 2);
+	LOBBY_CreateRoom(ROOM_NAME, MAX_PLAYERS, GAME_CODE, VERSION);
 	room = LOBBY_GetRoomByID(ROOMID_MYROOM);
 	return true;
 }
@@ -52,7 +53,7 @@ LocalConnection* LocalConnectionManager::JoinGame()
 	int i = 0;
 	do {
 		LOBBY_Update();
-		room = LOBBY_GetRoomByGame(0, 69);
+		room = LOBBY_GetRoomByGame(0, GAME_CODE);
 		swiWaitForVBlank();
 	} while(room == NULL && i++ < 10*60);
 	
