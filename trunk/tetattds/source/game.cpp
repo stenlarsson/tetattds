@@ -185,7 +185,7 @@ void Game::Tick()
 	{
 		if(touchedArea == 1)
 			field->KeyInput(INPUT_RAISE);
-		else
+		else if(touchedArea == 2)
 			field->TouchHeld(col, row);
 	}
 
