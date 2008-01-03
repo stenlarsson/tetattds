@@ -87,6 +87,28 @@ void LocalConnectionManager::Tick()
 			}
 		}
 	}
+	
+	char data[MAX_PACKET_SIZE];
+	size_t length;
+	void* from;
+	while(buffer.Get(data, &length, &from)) {
+		Connection* connection = FindConnection((LPLOBBY_USER)from);
+		if(connection == NULL) {
+			connection = CreateConnection((LPLOBBY_USER)from);
+		}
+		
+		/* Copy the message to avoid unaligned memory */
+		char packet[MAX_PACKET_SIZE];
+		memcpy(packet, data, length);
+		
+		MessageHeader* header = (MessageHeader*)packet;
+		
+		reciever->MessageIn(
+			connection,
+			header->messageId,
+			packet + sizeof(MessageHeader),
+			length - sizeof(MessageHeader));
+	}
 }
 
 LocalConnection* LocalConnectionManager::CreateConnection(LPLOBBY_USER user)
@@ -157,20 +179,7 @@ void LocalConnectionManager::OnUserInfo(LPLOBBY_USER user, unsigned long reason)
 
 void LocalConnectionManager::OnPacket(unsigned char *data, int length, LPLOBBY_USER from)
 {
-	Connection* connection = FindConnection(from);
-	if(connection == NULL) {
-		connection = CreateConnection(from);
+	if(!buffer.Put(data, length, from)) {
+		printf("Buffer full! Message lost.\n");
 	}
-	
-	/* Copy the message to avoid unaligned memory */
-	char packet[MAX_PACKET_SIZE];
-	memcpy(packet, data, length);
-	
-	MessageHeader* header = (MessageHeader*)packet;
-	
-	reciever->MessageIn(
-		connection,
-		header->messageId,
-		packet + sizeof(MessageHeader),
-		length - sizeof(MessageHeader));
 }

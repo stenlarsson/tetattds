@@ -2,6 +2,7 @@
 
 #include <lobby.h>
 #include "localconnection.h"
+#include "messagebuffer.h"
 
 struct ConnectionInfo;
 
@@ -30,6 +31,7 @@ private:
 	ConnectionInfo* connections;
 	MessageReciever* reciever;
 	LPLOBBY_ROOM room;
+	MessageBuffer buffer;
 };
 
 extern LocalConnectionManager* g_localConnectionManager;
