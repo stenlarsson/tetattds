@@ -50,7 +50,6 @@ public:
 	void Draw(PlayField *pf);
 	void DrawField(PlayField *pf, int x, int y, int tile, bool shaded);
 	void DrawSubScreen();
-	void AddChat(char* text);
 	void ClearChat();
 	
 	SDL_Surface *framebuffer;
