@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		283606230D3A82B70043A0F8 /* loopbackconnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2836061E0D3A82B70043A0F8 /* loopbackconnection.cpp */; };
+		283606240D3A82B70043A0F8 /* messagebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2836061F0D3A82B70043A0F8 /* messagebuffer.cpp */; };
+		283606250D3A82B70043A0F8 /* servergame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 283606200D3A82B70043A0F8 /* servergame.cpp */; };
+		283606260D3A82B70043A0F8 /* udpconnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 283606210D3A82B70043A0F8 /* udpconnection.cpp */; };
+		283606270D3A82B70043A0F8 /* udpconnectionmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 283606220D3A82B70043A0F8 /* udpconnectionmanager.cpp */; };
+		2836062A0D3A82D50043A0F8 /* wifitypemenudialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 283606280D3A82D50043A0F8 /* wifitypemenudialog.cpp */; };
+		283606860D3A977A0043A0F8 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A300BAAA8790048D645 /* images */; };
 		2862A72C0BA97F5400C4C204 /* backspace.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A7270BA97F4A00C4C204 /* backspace.bin */; };
 		2862A72D0BA97F5400C4C204 /* close.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A7280BA97F4A00C4C204 /* close.bin */; };
 		2862A72E0BA97F5400C4C204 /* down.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A7290BA97F4A00C4C204 /* down.bin */; };
@@ -26,7 +33,6 @@
 		2862A73C0BA97F6200C4C204 /* theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DB40BA95D1300673C7C /* theme.cpp */; };
 		2862A73D0BA97F6D00C4C204 /* driver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DA80BA95CE000673C7C /* driver.cpp */; };
 		2862A83F0BA998F600C4C204 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2862A83D0BA998F600C4C204 /* Cocoa.framework */; };
-		28BBD0640BE49486009E47F1 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A300BAAA8790048D645 /* images */; };
 		28BBD0650BE49486009E47F1 /* music in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A530BAAA8790048D645 /* music */; };
 		28BBD0660BE49486009E47F1 /* sound in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A560BAAA8790048D645 /* sound */; };
 		28BBD0680BE49495009E47F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D0F0BA9594B00673C7C /* main.cpp */; };
@@ -54,8 +60,6 @@
 		28BBD07E0BE49495009E47F1 /* tetattds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D4E0BA959B900673C7C /* tetattds.cpp */; };
 		28BBD07F0BE49495009E47F1 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D500BA959B900673C7C /* util.cpp */; };
 		28BBD0800BE49495009E47F1 /* wifimenudialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D520BA959B900673C7C /* wifimenudialog.cpp */; };
-		28BBD0810BE49495009E47F1 /* connection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D890BA959E000673C7C /* connection.cpp */; };
-		28BBD0820BE49495009E47F1 /* connectionmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D8A0BA959E000673C7C /* connectionmanager.cpp */; };
 		28BBD0830BE49495009E47F1 /* udpsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D8D0BA959E000673C7C /* udpsocket.cpp */; };
 		28BBD0840BE49495009E47F1 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 2862A8060BA98F2200C4C204 /* SDLMain.m */; };
 		28BBD0A70BE494AB009E47F1 /* libfwgui.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2862A71E0BA97EA400C4C204 /* libfwgui.a */; };
@@ -101,6 +105,16 @@
 /* End PBXBuildStyle section */
 
 /* Begin PBXFileReference section */
+		2836061E0D3A82B70043A0F8 /* loopbackconnection.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = loopbackconnection.cpp; sourceTree = "<group>"; };
+		2836061F0D3A82B70043A0F8 /* messagebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = messagebuffer.cpp; sourceTree = "<group>"; };
+		283606200D3A82B70043A0F8 /* servergame.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = servergame.cpp; sourceTree = "<group>"; };
+		283606210D3A82B70043A0F8 /* udpconnection.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = udpconnection.cpp; sourceTree = "<group>"; };
+		283606220D3A82B70043A0F8 /* udpconnectionmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = udpconnectionmanager.cpp; sourceTree = "<group>"; };
+		283606280D3A82D50043A0F8 /* wifitypemenudialog.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = wifitypemenudialog.cpp; sourceTree = "<group>"; };
+		283606290D3A82D50043A0F8 /* wifitypemenudialog.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wifitypemenudialog.h; sourceTree = "<group>"; };
+		2836062B0D3A82E90043A0F8 /* lobby.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = lobby.h; sourceTree = "<group>"; };
+		2836062C0D3A82E90043A0F8 /* localconnectionmanager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = localconnectionmanager.h; sourceTree = "<group>"; };
+		2836062D0D3A82E90043A0F8 /* localwifi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = localwifi.h; sourceTree = "<group>"; };
 		2862A6A30BA969BF00C4C204 /* gunship_12.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = gunship_12.bin; path = fwgui/data/gunship_12.bin; sourceTree = "<group>"; };
 		2862A6A40BA969BF00C4C204 /* vera_11.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = vera_11.bin; path = fwgui/data/vera_11.bin; sourceTree = "<group>"; };
 		2862A71E0BA97EA400C4C204 /* libfwgui.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfwgui.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -167,8 +181,6 @@
 		28AC9D510BA959B900673C7C /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = tetattds/source/util.h; sourceTree = SOURCE_ROOT; };
 		28AC9D520BA959B900673C7C /* wifimenudialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wifimenudialog.cpp; path = tetattds/source/wifimenudialog.cpp; sourceTree = SOURCE_ROOT; };
 		28AC9D530BA959B900673C7C /* wifimenudialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wifimenudialog.h; path = tetattds/source/wifimenudialog.h; sourceTree = SOURCE_ROOT; };
-		28AC9D890BA959E000673C7C /* connection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = connection.cpp; path = tetattds/network/source/connection.cpp; sourceTree = SOURCE_ROOT; };
-		28AC9D8A0BA959E000673C7C /* connectionmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = connectionmanager.cpp; path = tetattds/network/source/connectionmanager.cpp; sourceTree = SOURCE_ROOT; };
 		28AC9D8B0BA959E000673C7C /* network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = network.h; path = tetattds/network/source/network.h; sourceTree = SOURCE_ROOT; };
 		28AC9D8C0BA959E000673C7C /* udpsocket-internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "udpsocket-internal.h"; path = "tetattds/network/source/udpsocket-internal.h"; sourceTree = SOURCE_ROOT; };
 		28AC9D8D0BA959E000673C7C /* udpsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = udpsocket.cpp; path = tetattds/network/source/udpsocket.cpp; sourceTree = SOURCE_ROOT; };
@@ -272,6 +284,9 @@
 		28AC9D0C0BA9594B00673C7C /* sdl */ = {
 			isa = PBXGroup;
 			children = (
+				2836062B0D3A82E90043A0F8 /* lobby.h */,
+				2836062C0D3A82E90043A0F8 /* localconnectionmanager.h */,
+				2836062D0D3A82E90043A0F8 /* localwifi.h */,
 				28EDCC8D0BE69171000A6937 /* platformgraphics.cpp */,
 				28EDCC8E0BE69171000A6937 /* platformgraphics.h */,
 				28AC9D0F0BA9594B00673C7C /* main.cpp */,
@@ -288,6 +303,8 @@
 		28AC9D1F0BA959B900673C7C /* common */ = {
 			isa = PBXGroup;
 			children = (
+				283606280D3A82D50043A0F8 /* wifitypemenudialog.cpp */,
+				283606290D3A82D50043A0F8 /* wifitypemenudialog.h */,
 				28EDCC900BE69189000A6937 /* fieldgraphics.cpp */,
 				28EDCC910BE69189000A6937 /* fieldgraphics.h */,
 				28AC9D200BA959B900673C7C /* anim.cpp */,
@@ -347,8 +364,11 @@
 		28AC9D880BA959E000673C7C /* network */ = {
 			isa = PBXGroup;
 			children = (
-				28AC9D890BA959E000673C7C /* connection.cpp */,
-				28AC9D8A0BA959E000673C7C /* connectionmanager.cpp */,
+				2836061E0D3A82B70043A0F8 /* loopbackconnection.cpp */,
+				2836061F0D3A82B70043A0F8 /* messagebuffer.cpp */,
+				283606200D3A82B70043A0F8 /* servergame.cpp */,
+				283606210D3A82B70043A0F8 /* udpconnection.cpp */,
+				283606220D3A82B70043A0F8 /* udpconnectionmanager.cpp */,
 				28AC9D8B0BA959E000673C7C /* network.h */,
 				28AC9D8C0BA959E000673C7C /* udpsocket-internal.h */,
 				28AC9D8D0BA959E000673C7C /* udpsocket.cpp */,
@@ -551,7 +571,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				28BBD1940BE4AFEE009E47F1 /* icon.icns in Resources */,
-				28BBD0640BE49486009E47F1 /* images in Resources */,
+				283606860D3A977A0043A0F8 /* images in Resources */,
 				28BBD0650BE49486009E47F1 /* music in Resources */,
 				28BBD0660BE49486009E47F1 /* sound in Resources */,
 				28EDCC840BE646BF000A6937 /* Info.plist in Resources */,
@@ -615,12 +635,16 @@
 				28BBD07E0BE49495009E47F1 /* tetattds.cpp in Sources */,
 				28BBD07F0BE49495009E47F1 /* util.cpp in Sources */,
 				28BBD0800BE49495009E47F1 /* wifimenudialog.cpp in Sources */,
-				28BBD0810BE49495009E47F1 /* connection.cpp in Sources */,
-				28BBD0820BE49495009E47F1 /* connectionmanager.cpp in Sources */,
 				28BBD0830BE49495009E47F1 /* udpsocket.cpp in Sources */,
 				28BBD0840BE49495009E47F1 /* SDLMain.m in Sources */,
 				28EDCC8F0BE69171000A6937 /* platformgraphics.cpp in Sources */,
 				28EDCC920BE69189000A6937 /* fieldgraphics.cpp in Sources */,
+				283606230D3A82B70043A0F8 /* loopbackconnection.cpp in Sources */,
+				283606240D3A82B70043A0F8 /* messagebuffer.cpp in Sources */,
+				283606250D3A82B70043A0F8 /* servergame.cpp in Sources */,
+				283606260D3A82B70043A0F8 /* udpconnection.cpp in Sources */,
+				283606270D3A82B70043A0F8 /* udpconnectionmanager.cpp in Sources */,
+				2836062A0D3A82D50043A0F8 /* wifitypemenudialog.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
