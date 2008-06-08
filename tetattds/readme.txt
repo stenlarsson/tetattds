@@ -4,7 +4,7 @@
            \ \__\ \_____\\__\ \__\__\\__\\ \__\ \____\_____\
             \/__/\/_____//__/\/__/__//__/ \/__/\/____/_____/
 
-                       TetattDS v2.0 by Flatware
+                       TetattDS v3.0 by Flatware
                   http://blog.dev-scene.com/flatware
 
 About
@@ -31,12 +31,12 @@ mode is intended as a practice for Wifi play.
 
 Wifi play
 ---------
-Play up to 4 opponents over Internet. Chains and combos generate
-garbage which is dropped on one of your opponents and the last
-survivor is the winner.
+Play up to 4 opponents locally or over Internet. Chains and combos
+generate garbage which is dropped on one of your opponents and the
+last survivor is the winner.
 
-To play this mode you need to have a wireless accesspoint supported by
-dswifi. You also need to have entered wifi settings in a game like
+To play over Internet you need to have a wireless accesspoint supported
+by dswifi. You also need to have entered wifi settings in a game like
 Mario Kart DS.
 
 You can connect to our official server att wallbraker.ath.cx, but
@@ -49,6 +49,9 @@ only works in Windows. The other, text-based version, can be
 compiled in Linux, Cygwin or msys. You need to download the
 source package for this, and then type "make" in the server
 directory.
+
+To play locally you don't need an accesspoint. One player hosts
+and the other players join.
 
 
 Known problems
@@ -86,6 +89,11 @@ Changelog
   * Improved building from source
   * Built with latest devkitpro
 
+3.0 (20080608)
+  * Local Wifi using liblobby
+  * Host game on DS
+  * SDL port for PC
+  * Lots of changes in the code
 
 Credits
 -------
@@ -110,6 +118,7 @@ This game uses the following libraries:
 libnds    (http://www.devkitpro.org/)
 dswifi    (http://www.akkit.org/dswifi/)
 libmikmod (http://mikmod.raphnet.net/)
+liblobby  (http://forum.gbadev.org/viewtopic.php?p=147290#147290)
 
 Contact
 -------

@@ -1,6 +1,5 @@
 #pragma once
 
-#include <stdint.h>
 #include <string.h>
 #include <vector>
 #include "udpsocket.h"
