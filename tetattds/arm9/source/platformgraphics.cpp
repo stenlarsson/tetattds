@@ -1,6 +1,6 @@
 #include <nds.h>
 #include "tetattds.h"
-#include "PlatformGraphics.h"
+#include "platformgraphics.h"
 #include "baseblock.h"
 #include "playfield.h"
 #include "util.h"
