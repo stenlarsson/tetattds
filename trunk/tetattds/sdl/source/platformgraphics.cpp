@@ -158,6 +158,9 @@ void PlatformGraphics::ClearPlayer(PlayerInfo* player)
 	ASSERT(player != NULL);
 
 	smallFields[player->fieldNum].player = NULL;
+	// smallfield
+	ClearSmallField(player->fieldNum);
+	memset(player, 0, sizeof(PlayerInfo));
 }
 
 void PlatformGraphics::PrintLarge(uint32_t cell, const char* text, bool subScreen)
