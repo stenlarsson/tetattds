@@ -43,7 +43,7 @@ bool LocalConnectionManager::HostGame()
 		return false;
 	}
 	
-	LOBBY_CreateRoom(ROOM_NAME, MAX_PLAYERS, GAME_CODE, VERSION);
+	LOBBY_CreateRoom((char*)ROOM_NAME, MAX_PLAYERS, GAME_CODE, VERSION);
 	room = LOBBY_GetRoomByID(ROOMID_MYROOM);
 	return true;
 }

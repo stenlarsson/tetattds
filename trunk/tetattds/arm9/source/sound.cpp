@@ -43,7 +43,7 @@ void Sound::InitMusic()
     /* initialize the library */
     md_mode |= DMODE_SOFT_MUSIC;
 	md_mixfreq = 22050;
-    if (MikMod_Init(""))
+    if (MikMod_Init((char*)""))
 	{
         fprintf(stderr, "Could not initialize sound, reason: %s\n",
                 MikMod_strerror(MikMod_errno));

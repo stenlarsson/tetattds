@@ -1,5 +1,6 @@
 #include "network.h"
 #include "udpconnection.h"
+#include <string.h>
 #ifdef _WIN32
 typedef unsigned int uint32_t;
 #endif
