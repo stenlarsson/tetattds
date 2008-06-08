@@ -39,7 +39,7 @@ To play over Internet you need to have a wireless accesspoint supported
 by dswifi. You also need to have entered wifi settings in a game like
 Mario Kart DS.
 
-You can connect to our official server att wallbraker.ath.cx, but
+You can connect to our official server at "walkyrie.se", but
 you could also run your own server on a PC. You might need
 to open up port 13687 (UDP) in your firewall.
 

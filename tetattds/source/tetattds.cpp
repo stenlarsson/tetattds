@@ -595,6 +595,7 @@ class WifiState : public State {
 			LoopbackConnection* b = new LoopbackConnection(connection);
 			a->Connect(b);
 		} else {
+			serverGame = NULL;
 			connection = new ServerConnection(name);
 			connectionManager = new UdpConnectionManager(1, new UdpSocket(), connection);
 			Connection* result =
