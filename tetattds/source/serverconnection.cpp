@@ -15,6 +15,14 @@ ServerConnection::ServerConnection(const char* name)
 
 ServerConnection::~ServerConnection()
 {
+	// Clean up graphics when disconnected
+	for(int i = 0; i < MAX_PLAYERS; i++) {
+		if(players[i].connected) {
+			players[i].connected = false;
+			g_fieldGraphics->ClearPlayer(&players[i]);
+		}
+	}
+
 	free(name);
 }
 
