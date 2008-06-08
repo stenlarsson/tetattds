@@ -1,0 +1,829 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 42;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		283606230D3A82B70043A0F8 /* loopbackconnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2836061E0D3A82B70043A0F8 /* loopbackconnection.cpp */; };
+		283606240D3A82B70043A0F8 /* messagebuffer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2836061F0D3A82B70043A0F8 /* messagebuffer.cpp */; };
+		283606250D3A82B70043A0F8 /* servergame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 283606200D3A82B70043A0F8 /* servergame.cpp */; };
+		283606260D3A82B70043A0F8 /* udpconnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 283606210D3A82B70043A0F8 /* udpconnection.cpp */; };
+		283606270D3A82B70043A0F8 /* udpconnectionmanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 283606220D3A82B70043A0F8 /* udpconnectionmanager.cpp */; };
+		2836062A0D3A82D50043A0F8 /* wifitypemenudialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 283606280D3A82D50043A0F8 /* wifitypemenudialog.cpp */; };
+		283606860D3A977A0043A0F8 /* images in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A300BAAA8790048D645 /* images */; };
+		2862A72C0BA97F5400C4C204 /* backspace.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A7270BA97F4A00C4C204 /* backspace.bin */; };
+		2862A72D0BA97F5400C4C204 /* close.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A7280BA97F4A00C4C204 /* close.bin */; };
+		2862A72E0BA97F5400C4C204 /* down.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A7290BA97F4A00C4C204 /* down.bin */; };
+		2862A72F0BA97F5400C4C204 /* shift.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A72A0BA97F4A00C4C204 /* shift.bin */; };
+		2862A7300BA97F5400C4C204 /* up.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A72B0BA97F4A00C4C204 /* up.bin */; };
+		2862A7310BA97F5400C4C204 /* gunship_12.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A6A30BA969BF00C4C204 /* gunship_12.bin */; };
+		2862A7320BA97F5400C4C204 /* vera_11.bin in Sources */ = {isa = PBXBuildFile; fileRef = 2862A6A40BA969BF00C4C204 /* vera_11.bin */; };
+		2862A7330BA97F6200C4C204 /* button.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DAB0BA95D1300673C7C /* button.cpp */; };
+		2862A7340BA97F6200C4C204 /* control.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DAC0BA95D1300673C7C /* control.cpp */; };
+		2862A7350BA97F6200C4C204 /* dialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DAD0BA95D1300673C7C /* dialog.cpp */; };
+		2862A7360BA97F6200C4C204 /* editbox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DAE0BA95D1300673C7C /* editbox.cpp */; };
+		2862A7370BA97F6200C4C204 /* font.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DAF0BA95D1300673C7C /* font.cpp */; };
+		2862A7380BA97F6200C4C204 /* graphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DB00BA95D1300673C7C /* graphics.cpp */; };
+		2862A7390BA97F6200C4C204 /* imagebutton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DB10BA95D1300673C7C /* imagebutton.cpp */; };
+		2862A73A0BA97F6200C4C204 /* label.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DB20BA95D1300673C7C /* label.cpp */; };
+		2862A73B0BA97F6200C4C204 /* textentrydialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DB30BA95D1300673C7C /* textentrydialog.cpp */; };
+		2862A73C0BA97F6200C4C204 /* theme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DB40BA95D1300673C7C /* theme.cpp */; };
+		2862A73D0BA97F6D00C4C204 /* driver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9DA80BA95CE000673C7C /* driver.cpp */; };
+		2862A83F0BA998F600C4C204 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2862A83D0BA998F600C4C204 /* Cocoa.framework */; };
+		28BBD0650BE49486009E47F1 /* music in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A530BAAA8790048D645 /* music */; };
+		28BBD0660BE49486009E47F1 /* sound in Resources */ = {isa = PBXBuildFile; fileRef = 28FE2A560BAAA8790048D645 /* sound */; };
+		28BBD0680BE49495009E47F1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D0F0BA9594B00673C7C /* main.cpp */; };
+		28BBD0690BE49495009E47F1 /* sound.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D110BA9594B00673C7C /* sound.cpp */; };
+		28BBD06A0BE49495009E47F1 /* sprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D130BA9594B00673C7C /* sprite.cpp */; };
+		28BBD06B0BE49495009E47F1 /* anim.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D200BA959B900673C7C /* anim.cpp */; };
+		28BBD06C0BE49495009E47F1 /* baseblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D220BA959B900673C7C /* baseblock.cpp */; };
+		28BBD06D0BE49495009E47F1 /* block.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D240BA959B900673C7C /* block.cpp */; };
+		28BBD06E0BE49495009E47F1 /* effcombo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D280BA959B900673C7C /* effcombo.cpp */; };
+		28BBD06F0BE49495009E47F1 /* effecthandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D2C0BA959B900673C7C /* effecthandler.cpp */; };
+		28BBD0700BE49495009E47F1 /* effmoveblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D2E0BA959B900673C7C /* effmoveblock.cpp */; };
+		28BBD0710BE49495009E47F1 /* effpop.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D300BA959B900673C7C /* effpop.cpp */; };
+		28BBD0720BE49495009E47F1 /* effready.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D320BA959B900673C7C /* effready.cpp */; };
+		28BBD0730BE49495009E47F1 /* game.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D340BA959B900673C7C /* game.cpp */; };
+		28BBD0740BE49495009E47F1 /* garbage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D360BA959B900673C7C /* garbage.cpp */; };
+		28BBD0750BE49495009E47F1 /* garbageblock.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D380BA959B900673C7C /* garbageblock.cpp */; };
+		28BBD0760BE49495009E47F1 /* garbagehandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D3C0BA959B900673C7C /* garbagehandler.cpp */; };
+		28BBD0770BE49495009E47F1 /* leveldialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D3E0BA959B900673C7C /* leveldialog.cpp */; };
+		28BBD0780BE49495009E47F1 /* mainmenudialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D400BA959B900673C7C /* mainmenudialog.cpp */; };
+		28BBD0790BE49495009E47F1 /* playfield.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D430BA959B900673C7C /* playfield.cpp */; };
+		28BBD07A0BE49495009E47F1 /* popper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D450BA959B900673C7C /* popper.cpp */; };
+		28BBD07B0BE49495009E47F1 /* serverconnection.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D470BA959B900673C7C /* serverconnection.cpp */; };
+		28BBD07C0BE49495009E47F1 /* settings.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D490BA959B900673C7C /* settings.cpp */; };
+		28BBD07D0BE49495009E47F1 /* statusdialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D4C0BA959B900673C7C /* statusdialog.cpp */; };
+		28BBD07E0BE49495009E47F1 /* tetattds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D4E0BA959B900673C7C /* tetattds.cpp */; };
+		28BBD07F0BE49495009E47F1 /* util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D500BA959B900673C7C /* util.cpp */; };
+		28BBD0800BE49495009E47F1 /* wifimenudialog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D520BA959B900673C7C /* wifimenudialog.cpp */; };
+		28BBD0830BE49495009E47F1 /* udpsocket.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28AC9D8D0BA959E000673C7C /* udpsocket.cpp */; };
+		28BBD0840BE49495009E47F1 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 2862A8060BA98F2200C4C204 /* SDLMain.m */; };
+		28BBD0A70BE494AB009E47F1 /* libfwgui.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2862A71E0BA97EA400C4C204 /* libfwgui.a */; };
+		28BBD0A80BE494AB009E47F1 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2862A83D0BA998F600C4C204 /* Cocoa.framework */; };
+		28BBD0A90BE494AB009E47F1 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FE29C30BA99E2A0048D645 /* SDL.framework */; };
+		28BBD0AA0BE494AB009E47F1 /* libmikmod-coreaudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FE2A100BA9A6C50048D645 /* libmikmod-coreaudio.framework */; };
+		28BBD1940BE4AFEE009E47F1 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 28BBD1930BE4AFEE009E47F1 /* icon.icns */; };
+		28EDCC840BE646BF000A6937 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 28EDCC830BE646BF000A6937 /* Info.plist */; };
+		28EDCC8F0BE69171000A6937 /* platformgraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28EDCC8D0BE69171000A6937 /* platformgraphics.cpp */; };
+		28EDCC920BE69189000A6937 /* fieldgraphics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 28EDCC900BE69189000A6937 /* fieldgraphics.cpp */; };
+		28FE29C50BA99E2A0048D645 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FE29C30BA99E2A0048D645 /* SDL.framework */; };
+		28FE2A120BA9A6C50048D645 /* libmikmod-coreaudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 28FE2A100BA9A6C50048D645 /* libmikmod-coreaudio.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXBuildRule section */
+		2862A7260BA97ED500C4C204 /* PBXBuildRule */ = {
+			isa = PBXBuildRule;
+			compilerSpec = com.apple.compilers.proxy.script;
+			filePatterns = "*.bin";
+			fileType = pattern.proxy;
+			isEditable = 1;
+			outputFiles = (
+				"$(DERIVED_SOURCES_DIR)/$(INPUT_FILE_BASE)_bin.h",
+				"$(DERIVED_SOURCES_DIR)/$(INPUT_FILE_NAME).c",
+			);
+			script = "#!/bin/sh\n\nbin2c=\"${SRCROOT}/fwgui/tools/bin2c\"\ndst=\"${DERIVED_SOURCES_DIR}\"\nbase=${INPUT_FILE_BASE}\n\n\"${bin2c}\" -h ${base}_bin > \"${dst}/${base}_bin.h\"\n\"${bin2c}\" ${base}_bin < \"${INPUT_FILE_PATH}\" > \"${dst}/${base}.bin.c\"\necho \"${bin2c} -h ${base}_bin > ${dst}/${base}_bin.h\" > /tmp/gurka.log\necho \"${bin2c} ${base}_bin < ${INPUT_FILE_PATH} > ${dst}/${base}.bin.c\" >> /tmp/gurka.log\n\n";
+		};
+/* End PBXBuildRule section */
+
+/* Begin PBXBuildStyle section */
+		014CEA460018CE2711CA2923 /* Debug */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		014CEA470018CE2711CA2923 /* Release */ = {
+			isa = PBXBuildStyle;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End PBXBuildStyle section */
+
+/* Begin PBXFileReference section */
+		2836061E0D3A82B70043A0F8 /* loopbackconnection.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = loopbackconnection.cpp; sourceTree = "<group>"; };
+		2836061F0D3A82B70043A0F8 /* messagebuffer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = messagebuffer.cpp; sourceTree = "<group>"; };
+		283606200D3A82B70043A0F8 /* servergame.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = servergame.cpp; sourceTree = "<group>"; };
+		283606210D3A82B70043A0F8 /* udpconnection.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = udpconnection.cpp; sourceTree = "<group>"; };
+		283606220D3A82B70043A0F8 /* udpconnectionmanager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = udpconnectionmanager.cpp; sourceTree = "<group>"; };
+		283606280D3A82D50043A0F8 /* wifitypemenudialog.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = wifitypemenudialog.cpp; sourceTree = "<group>"; };
+		283606290D3A82D50043A0F8 /* wifitypemenudialog.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = wifitypemenudialog.h; sourceTree = "<group>"; };
+		2836062B0D3A82E90043A0F8 /* lobby.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = lobby.h; sourceTree = "<group>"; };
+		2836062C0D3A82E90043A0F8 /* localconnectionmanager.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = localconnectionmanager.h; sourceTree = "<group>"; };
+		2836062D0D3A82E90043A0F8 /* localwifi.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = localwifi.h; sourceTree = "<group>"; };
+		2862A6A30BA969BF00C4C204 /* gunship_12.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = gunship_12.bin; path = fwgui/data/gunship_12.bin; sourceTree = "<group>"; };
+		2862A6A40BA969BF00C4C204 /* vera_11.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = vera_11.bin; path = fwgui/data/vera_11.bin; sourceTree = "<group>"; };
+		2862A71E0BA97EA400C4C204 /* libfwgui.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libfwgui.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2862A7270BA97F4A00C4C204 /* backspace.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = backspace.bin; path = fwgui/data/backspace.bin; sourceTree = "<group>"; };
+		2862A7280BA97F4A00C4C204 /* close.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = close.bin; path = fwgui/data/close.bin; sourceTree = "<group>"; };
+		2862A7290BA97F4A00C4C204 /* down.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = down.bin; path = fwgui/data/down.bin; sourceTree = "<group>"; };
+		2862A72A0BA97F4A00C4C204 /* shift.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = shift.bin; path = fwgui/data/shift.bin; sourceTree = "<group>"; };
+		2862A72B0BA97F4A00C4C204 /* up.bin */ = {isa = PBXFileReference; lastKnownFileType = archive.macbinary; name = up.bin; path = fwgui/data/up.bin; sourceTree = "<group>"; };
+		2862A8050BA98F2200C4C204 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = xcode/SDLMain.h; sourceTree = "<group>"; };
+		2862A8060BA98F2200C4C204 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = xcode/SDLMain.m; sourceTree = "<group>"; };
+		2862A83D0BA998F600C4C204 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
+		28AC9D0F0BA9594B00673C7C /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = tetattds/sdl/source/main.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D110BA9594B00673C7C /* sound.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sound.cpp; path = tetattds/sdl/source/sound.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D120BA9594B00673C7C /* sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sound.h; path = tetattds/sdl/source/sound.h; sourceTree = SOURCE_ROOT; };
+		28AC9D130BA9594B00673C7C /* sprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sprite.cpp; path = tetattds/sdl/source/sprite.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D140BA9594B00673C7C /* sprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sprite.h; path = tetattds/sdl/source/sprite.h; sourceTree = SOURCE_ROOT; };
+		28AC9D150BA9594B00673C7C /* wifi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wifi.h; path = tetattds/sdl/source/wifi.h; sourceTree = SOURCE_ROOT; };
+		28AC9D200BA959B900673C7C /* anim.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = anim.cpp; path = tetattds/source/anim.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D210BA959B900673C7C /* anim.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = anim.h; path = tetattds/source/anim.h; sourceTree = SOURCE_ROOT; };
+		28AC9D220BA959B900673C7C /* baseblock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = baseblock.cpp; path = tetattds/source/baseblock.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D230BA959B900673C7C /* baseblock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = baseblock.h; path = tetattds/source/baseblock.h; sourceTree = SOURCE_ROOT; };
+		28AC9D240BA959B900673C7C /* block.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = block.cpp; path = tetattds/source/block.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D250BA959B900673C7C /* block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = block.h; path = tetattds/source/block.h; sourceTree = SOURCE_ROOT; };
+		28AC9D260BA959B900673C7C /* chain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = chain.h; path = tetattds/source/chain.h; sourceTree = SOURCE_ROOT; };
+		28AC9D270BA959B900673C7C /* constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = constants.h; path = tetattds/source/constants.h; sourceTree = SOURCE_ROOT; };
+		28AC9D280BA959B900673C7C /* effcombo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effcombo.cpp; path = tetattds/source/effcombo.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D290BA959B900673C7C /* effcombo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = effcombo.h; path = tetattds/source/effcombo.h; sourceTree = SOURCE_ROOT; };
+		28AC9D2B0BA959B900673C7C /* effect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = effect.h; path = tetattds/source/effect.h; sourceTree = SOURCE_ROOT; };
+		28AC9D2C0BA959B900673C7C /* effecthandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effecthandler.cpp; path = tetattds/source/effecthandler.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D2D0BA959B900673C7C /* effecthandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = effecthandler.h; path = tetattds/source/effecthandler.h; sourceTree = SOURCE_ROOT; };
+		28AC9D2E0BA959B900673C7C /* effmoveblock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effmoveblock.cpp; path = tetattds/source/effmoveblock.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D2F0BA959B900673C7C /* effmoveblock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = effmoveblock.h; path = tetattds/source/effmoveblock.h; sourceTree = SOURCE_ROOT; };
+		28AC9D300BA959B900673C7C /* effpop.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effpop.cpp; path = tetattds/source/effpop.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D310BA959B900673C7C /* effpop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = effpop.h; path = tetattds/source/effpop.h; sourceTree = SOURCE_ROOT; };
+		28AC9D320BA959B900673C7C /* effready.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = effready.cpp; path = tetattds/source/effready.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D330BA959B900673C7C /* effready.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = effready.h; path = tetattds/source/effready.h; sourceTree = SOURCE_ROOT; };
+		28AC9D340BA959B900673C7C /* game.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = game.cpp; path = tetattds/source/game.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D350BA959B900673C7C /* game.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = game.h; path = tetattds/source/game.h; sourceTree = SOURCE_ROOT; };
+		28AC9D360BA959B900673C7C /* garbage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = garbage.cpp; path = tetattds/source/garbage.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D370BA959B900673C7C /* garbage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = garbage.h; path = tetattds/source/garbage.h; sourceTree = SOURCE_ROOT; };
+		28AC9D380BA959B900673C7C /* garbageblock.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = garbageblock.cpp; path = tetattds/source/garbageblock.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D390BA959B900673C7C /* garbageblock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = garbageblock.h; path = tetattds/source/garbageblock.h; sourceTree = SOURCE_ROOT; };
+		28AC9D3C0BA959B900673C7C /* garbagehandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = garbagehandler.cpp; path = tetattds/source/garbagehandler.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D3D0BA959B900673C7C /* garbagehandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = garbagehandler.h; path = tetattds/source/garbagehandler.h; sourceTree = SOURCE_ROOT; };
+		28AC9D3E0BA959B900673C7C /* leveldialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = leveldialog.cpp; path = tetattds/source/leveldialog.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D3F0BA959B900673C7C /* leveldialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = leveldialog.h; path = tetattds/source/leveldialog.h; sourceTree = SOURCE_ROOT; };
+		28AC9D400BA959B900673C7C /* mainmenudialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = mainmenudialog.cpp; path = tetattds/source/mainmenudialog.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D410BA959B900673C7C /* mainmenudialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = mainmenudialog.h; path = tetattds/source/mainmenudialog.h; sourceTree = SOURCE_ROOT; };
+		28AC9D420BA959B900673C7C /* marker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = marker.h; path = tetattds/source/marker.h; sourceTree = SOURCE_ROOT; };
+		28AC9D430BA959B900673C7C /* playfield.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = playfield.cpp; path = tetattds/source/playfield.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D440BA959B900673C7C /* playfield.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = playfield.h; path = tetattds/source/playfield.h; sourceTree = SOURCE_ROOT; };
+		28AC9D450BA959B900673C7C /* popper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = popper.cpp; path = tetattds/source/popper.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D460BA959B900673C7C /* popper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = popper.h; path = tetattds/source/popper.h; sourceTree = SOURCE_ROOT; };
+		28AC9D470BA959B900673C7C /* serverconnection.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = serverconnection.cpp; path = tetattds/source/serverconnection.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D480BA959B900673C7C /* serverconnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = serverconnection.h; path = tetattds/source/serverconnection.h; sourceTree = SOURCE_ROOT; };
+		28AC9D490BA959B900673C7C /* settings.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = settings.cpp; path = tetattds/source/settings.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D4A0BA959B900673C7C /* settings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = settings.h; path = tetattds/source/settings.h; sourceTree = SOURCE_ROOT; };
+		28AC9D4B0BA959B900673C7C /* state.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = state.h; path = tetattds/source/state.h; sourceTree = SOURCE_ROOT; };
+		28AC9D4C0BA959B900673C7C /* statusdialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = statusdialog.cpp; path = tetattds/source/statusdialog.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D4D0BA959B900673C7C /* statusdialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = statusdialog.h; path = tetattds/source/statusdialog.h; sourceTree = SOURCE_ROOT; };
+		28AC9D4E0BA959B900673C7C /* tetattds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = tetattds.cpp; path = tetattds/source/tetattds.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D4F0BA959B900673C7C /* tetattds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = tetattds.h; path = tetattds/source/tetattds.h; sourceTree = SOURCE_ROOT; };
+		28AC9D500BA959B900673C7C /* util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = util.cpp; path = tetattds/source/util.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D510BA959B900673C7C /* util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = util.h; path = tetattds/source/util.h; sourceTree = SOURCE_ROOT; };
+		28AC9D520BA959B900673C7C /* wifimenudialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = wifimenudialog.cpp; path = tetattds/source/wifimenudialog.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9D530BA959B900673C7C /* wifimenudialog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = wifimenudialog.h; path = tetattds/source/wifimenudialog.h; sourceTree = SOURCE_ROOT; };
+		28AC9D8B0BA959E000673C7C /* network.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = network.h; path = tetattds/network/source/network.h; sourceTree = SOURCE_ROOT; };
+		28AC9D8C0BA959E000673C7C /* udpsocket-internal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "udpsocket-internal.h"; path = "tetattds/network/source/udpsocket-internal.h"; sourceTree = SOURCE_ROOT; };
+		28AC9D8D0BA959E000673C7C /* udpsocket.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = udpsocket.cpp; path = tetattds/network/source/udpsocket.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DA80BA95CE000673C7C /* driver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = driver.cpp; path = fwgui/sdl/source/driver.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DAB0BA95D1300673C7C /* button.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = button.cpp; path = fwgui/source/button.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DAC0BA95D1300673C7C /* control.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = control.cpp; path = fwgui/source/control.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DAD0BA95D1300673C7C /* dialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = dialog.cpp; path = fwgui/source/dialog.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DAE0BA95D1300673C7C /* editbox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = editbox.cpp; path = fwgui/source/editbox.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DAF0BA95D1300673C7C /* font.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = font.cpp; path = fwgui/source/font.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DB00BA95D1300673C7C /* graphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = graphics.cpp; path = fwgui/source/graphics.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DB10BA95D1300673C7C /* imagebutton.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = imagebutton.cpp; path = fwgui/source/imagebutton.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DB20BA95D1300673C7C /* label.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = label.cpp; path = fwgui/source/label.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DB30BA95D1300673C7C /* textentrydialog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = textentrydialog.cpp; path = fwgui/source/textentrydialog.cpp; sourceTree = SOURCE_ROOT; };
+		28AC9DB40BA95D1300673C7C /* theme.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = theme.cpp; path = fwgui/source/theme.cpp; sourceTree = SOURCE_ROOT; };
+		28BBD0570BE49233009E47F1 /* tetattds.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = tetattds.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		28BBD1930BE4AFEE009E47F1 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = icon.icns; path = tetattds/images/icon.icns; sourceTree = "<group>"; };
+		28EDCC830BE646BF000A6937 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = Info.plist; path = xcode/Info.plist; sourceTree = "<group>"; };
+		28EDCC8D0BE69171000A6937 /* platformgraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = platformgraphics.cpp; sourceTree = "<group>"; };
+		28EDCC8E0BE69171000A6937 /* platformgraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = platformgraphics.h; sourceTree = "<group>"; };
+		28EDCC900BE69189000A6937 /* fieldgraphics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fieldgraphics.cpp; sourceTree = "<group>"; };
+		28EDCC910BE69189000A6937 /* fieldgraphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fieldgraphics.h; sourceTree = "<group>"; };
+		28FE29C30BA99E2A0048D645 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = /Library/Frameworks/SDL.framework; sourceTree = "<absolute>"; };
+		28FE2A100BA9A6C50048D645 /* libmikmod-coreaudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = "libmikmod-coreaudio.framework"; path = "/Library/Frameworks/libmikmod-coreaudio.framework"; sourceTree = "<absolute>"; };
+		28FE2A300BAAA8790048D645 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = tetattds/images; sourceTree = SOURCE_ROOT; };
+		28FE2A530BAAA8790048D645 /* music */ = {isa = PBXFileReference; lastKnownFileType = folder; name = music; path = tetattds/music; sourceTree = SOURCE_ROOT; };
+		28FE2A560BAAA8790048D645 /* sound */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sound; path = tetattds/sound; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		2862A71C0BA97EA400C4C204 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2862A83F0BA998F600C4C204 /* Cocoa.framework in Frameworks */,
+				28FE29C50BA99E2A0048D645 /* SDL.framework in Frameworks */,
+				28FE2A120BA9A6C50048D645 /* libmikmod-coreaudio.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28BBD0550BE49233009E47F1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28BBD0A70BE494AB009E47F1 /* libfwgui.a in Frameworks */,
+				28BBD0A80BE494AB009E47F1 /* Cocoa.framework in Frameworks */,
+				28BBD0A90BE494AB009E47F1 /* SDL.framework in Frameworks */,
+				28BBD0AA0BE494AB009E47F1 /* libmikmod-coreaudio.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08FB7794FE84155DC02AAC07 /* tetattsdl */ = {
+			isa = PBXGroup;
+			children = (
+				28FE2A100BA9A6C50048D645 /* libmikmod-coreaudio.framework */,
+				28FE29C30BA99E2A0048D645 /* SDL.framework */,
+				2862A83D0BA998F600C4C204 /* Cocoa.framework */,
+				08FB7795FE84155DC02AAC07 /* Source */,
+				C6859E8C029090F304C91782 /* Documentation */,
+				1AB674ADFE9D54B511CA2CBB /* Products */,
+			);
+			name = tetattsdl;
+			sourceTree = "<group>";
+		};
+		08FB7795FE84155DC02AAC07 /* Source */ = {
+			isa = PBXGroup;
+			children = (
+				2862A8050BA98F2200C4C204 /* SDLMain.h */,
+				2862A8060BA98F2200C4C204 /* SDLMain.m */,
+				28AC9D9D0BA95C8600673C7C /* fwgui */,
+				28AC9D9C0BA95C7500673C7C /* tetattds */,
+			);
+			name = Source;
+			sourceTree = "<group>";
+		};
+		1AB674ADFE9D54B511CA2CBB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2862A71E0BA97EA400C4C204 /* libfwgui.a */,
+				28BBD0570BE49233009E47F1 /* tetattds.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		2862A6A20BA9699400C4C204 /* data */ = {
+			isa = PBXGroup;
+			children = (
+				2862A7270BA97F4A00C4C204 /* backspace.bin */,
+				2862A7280BA97F4A00C4C204 /* close.bin */,
+				2862A7290BA97F4A00C4C204 /* down.bin */,
+				2862A72A0BA97F4A00C4C204 /* shift.bin */,
+				2862A72B0BA97F4A00C4C204 /* up.bin */,
+				2862A6A30BA969BF00C4C204 /* gunship_12.bin */,
+				2862A6A40BA969BF00C4C204 /* vera_11.bin */,
+			);
+			name = data;
+			sourceTree = "<group>";
+		};
+		28AC9D0C0BA9594B00673C7C /* sdl */ = {
+			isa = PBXGroup;
+			children = (
+				2836062B0D3A82E90043A0F8 /* lobby.h */,
+				2836062C0D3A82E90043A0F8 /* localconnectionmanager.h */,
+				2836062D0D3A82E90043A0F8 /* localwifi.h */,
+				28EDCC8D0BE69171000A6937 /* platformgraphics.cpp */,
+				28EDCC8E0BE69171000A6937 /* platformgraphics.h */,
+				28AC9D0F0BA9594B00673C7C /* main.cpp */,
+				28AC9D110BA9594B00673C7C /* sound.cpp */,
+				28AC9D120BA9594B00673C7C /* sound.h */,
+				28AC9D130BA9594B00673C7C /* sprite.cpp */,
+				28AC9D140BA9594B00673C7C /* sprite.h */,
+				28AC9D150BA9594B00673C7C /* wifi.h */,
+			);
+			name = sdl;
+			path = tetattds/sdl/source;
+			sourceTree = "<group>";
+		};
+		28AC9D1F0BA959B900673C7C /* common */ = {
+			isa = PBXGroup;
+			children = (
+				283606280D3A82D50043A0F8 /* wifitypemenudialog.cpp */,
+				283606290D3A82D50043A0F8 /* wifitypemenudialog.h */,
+				28EDCC900BE69189000A6937 /* fieldgraphics.cpp */,
+				28EDCC910BE69189000A6937 /* fieldgraphics.h */,
+				28AC9D200BA959B900673C7C /* anim.cpp */,
+				28AC9D210BA959B900673C7C /* anim.h */,
+				28AC9D220BA959B900673C7C /* baseblock.cpp */,
+				28AC9D230BA959B900673C7C /* baseblock.h */,
+				28AC9D240BA959B900673C7C /* block.cpp */,
+				28AC9D250BA959B900673C7C /* block.h */,
+				28AC9D260BA959B900673C7C /* chain.h */,
+				28AC9D270BA959B900673C7C /* constants.h */,
+				28AC9D280BA959B900673C7C /* effcombo.cpp */,
+				28AC9D290BA959B900673C7C /* effcombo.h */,
+				28AC9D2B0BA959B900673C7C /* effect.h */,
+				28AC9D2C0BA959B900673C7C /* effecthandler.cpp */,
+				28AC9D2D0BA959B900673C7C /* effecthandler.h */,
+				28AC9D2E0BA959B900673C7C /* effmoveblock.cpp */,
+				28AC9D2F0BA959B900673C7C /* effmoveblock.h */,
+				28AC9D300BA959B900673C7C /* effpop.cpp */,
+				28AC9D310BA959B900673C7C /* effpop.h */,
+				28AC9D320BA959B900673C7C /* effready.cpp */,
+				28AC9D330BA959B900673C7C /* effready.h */,
+				28AC9D340BA959B900673C7C /* game.cpp */,
+				28AC9D350BA959B900673C7C /* game.h */,
+				28AC9D360BA959B900673C7C /* garbage.cpp */,
+				28AC9D370BA959B900673C7C /* garbage.h */,
+				28AC9D380BA959B900673C7C /* garbageblock.cpp */,
+				28AC9D390BA959B900673C7C /* garbageblock.h */,
+				28AC9D3C0BA959B900673C7C /* garbagehandler.cpp */,
+				28AC9D3D0BA959B900673C7C /* garbagehandler.h */,
+				28AC9D3E0BA959B900673C7C /* leveldialog.cpp */,
+				28AC9D3F0BA959B900673C7C /* leveldialog.h */,
+				28AC9D400BA959B900673C7C /* mainmenudialog.cpp */,
+				28AC9D410BA959B900673C7C /* mainmenudialog.h */,
+				28AC9D420BA959B900673C7C /* marker.h */,
+				28AC9D430BA959B900673C7C /* playfield.cpp */,
+				28AC9D440BA959B900673C7C /* playfield.h */,
+				28AC9D450BA959B900673C7C /* popper.cpp */,
+				28AC9D460BA959B900673C7C /* popper.h */,
+				28AC9D470BA959B900673C7C /* serverconnection.cpp */,
+				28AC9D480BA959B900673C7C /* serverconnection.h */,
+				28AC9D490BA959B900673C7C /* settings.cpp */,
+				28AC9D4A0BA959B900673C7C /* settings.h */,
+				28AC9D4B0BA959B900673C7C /* state.h */,
+				28AC9D4C0BA959B900673C7C /* statusdialog.cpp */,
+				28AC9D4D0BA959B900673C7C /* statusdialog.h */,
+				28AC9D4E0BA959B900673C7C /* tetattds.cpp */,
+				28AC9D4F0BA959B900673C7C /* tetattds.h */,
+				28AC9D500BA959B900673C7C /* util.cpp */,
+				28AC9D510BA959B900673C7C /* util.h */,
+				28AC9D520BA959B900673C7C /* wifimenudialog.cpp */,
+				28AC9D530BA959B900673C7C /* wifimenudialog.h */,
+			);
+			name = common;
+			path = tetattds/source;
+			sourceTree = "<group>";
+		};
+		28AC9D880BA959E000673C7C /* network */ = {
+			isa = PBXGroup;
+			children = (
+				2836061E0D3A82B70043A0F8 /* loopbackconnection.cpp */,
+				2836061F0D3A82B70043A0F8 /* messagebuffer.cpp */,
+				283606200D3A82B70043A0F8 /* servergame.cpp */,
+				283606210D3A82B70043A0F8 /* udpconnection.cpp */,
+				283606220D3A82B70043A0F8 /* udpconnectionmanager.cpp */,
+				28AC9D8B0BA959E000673C7C /* network.h */,
+				28AC9D8C0BA959E000673C7C /* udpsocket-internal.h */,
+				28AC9D8D0BA959E000673C7C /* udpsocket.cpp */,
+			);
+			name = network;
+			path = tetattds/network/source;
+			sourceTree = "<group>";
+		};
+		28AC9D9C0BA95C7500673C7C /* tetattds */ = {
+			isa = PBXGroup;
+			children = (
+				28FE2A2F0BAAA83E0048D645 /* resources */,
+				28AC9D880BA959E000673C7C /* network */,
+				28AC9D1F0BA959B900673C7C /* common */,
+				28AC9D0C0BA9594B00673C7C /* sdl */,
+			);
+			name = tetattds;
+			sourceTree = "<group>";
+		};
+		28AC9D9D0BA95C8600673C7C /* fwgui */ = {
+			isa = PBXGroup;
+			children = (
+				2862A6A20BA9699400C4C204 /* data */,
+				28AC9DAA0BA95D1300673C7C /* common */,
+				28AC9DA70BA95CE000673C7C /* sdl */,
+			);
+			name = fwgui;
+			sourceTree = "<group>";
+		};
+		28AC9DA70BA95CE000673C7C /* sdl */ = {
+			isa = PBXGroup;
+			children = (
+				28AC9DA80BA95CE000673C7C /* driver.cpp */,
+			);
+			name = sdl;
+			path = fwgui/sdl/source;
+			sourceTree = SOURCE_ROOT;
+		};
+		28AC9DAA0BA95D1300673C7C /* common */ = {
+			isa = PBXGroup;
+			children = (
+				28AC9DAB0BA95D1300673C7C /* button.cpp */,
+				28AC9DAC0BA95D1300673C7C /* control.cpp */,
+				28AC9DAD0BA95D1300673C7C /* dialog.cpp */,
+				28AC9DAE0BA95D1300673C7C /* editbox.cpp */,
+				28AC9DAF0BA95D1300673C7C /* font.cpp */,
+				28AC9DB00BA95D1300673C7C /* graphics.cpp */,
+				28AC9DB10BA95D1300673C7C /* imagebutton.cpp */,
+				28AC9DB20BA95D1300673C7C /* label.cpp */,
+				28AC9DB30BA95D1300673C7C /* textentrydialog.cpp */,
+				28AC9DB40BA95D1300673C7C /* theme.cpp */,
+			);
+			name = common;
+			path = fwgui/source;
+			sourceTree = SOURCE_ROOT;
+		};
+		28FE2A2F0BAAA83E0048D645 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				28EDCC830BE646BF000A6937 /* Info.plist */,
+				28BBD1930BE4AFEE009E47F1 /* icon.icns */,
+				28FE2A300BAAA8790048D645 /* images */,
+				28FE2A530BAAA8790048D645 /* music */,
+				28FE2A560BAAA8790048D645 /* sound */,
+			);
+			name = resources;
+			sourceTree = "<group>";
+		};
+		C6859E8C029090F304C91782 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Documentation;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		2862A71A0BA97EA400C4C204 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		2862A71D0BA97EA400C4C204 /* fwgui */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2862A7230BA97EAB00C4C204 /* Build configuration list for PBXNativeTarget "fwgui" */;
+			buildPhases = (
+				2862A71A0BA97EA400C4C204 /* Headers */,
+				2862A71B0BA97EA400C4C204 /* Sources */,
+				2862A71C0BA97EA400C4C204 /* Frameworks */,
+			);
+			buildRules = (
+				2862A7260BA97ED500C4C204 /* PBXBuildRule */,
+			);
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = libfwgui.a;
+				ZERO_LINK = YES;
+			};
+			dependencies = (
+			);
+			name = fwgui;
+			productName = libfwgui.a;
+			productReference = 2862A71E0BA97EA400C4C204 /* libfwgui.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+		28BBD0560BE49233009E47F1 /* tetattds */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 28BBD05A0BE49233009E47F1 /* Build configuration list for PBXNativeTarget "tetattds" */;
+			buildPhases = (
+				28BBD0530BE49233009E47F1 /* Resources */,
+				28BBD0540BE49233009E47F1 /* Sources */,
+				28BBD0550BE49233009E47F1 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			buildSettings = {
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "$(SYSTEM_LIBRARY_DIR)/Frameworks/AppKit.framework/Headers/AppKit.h";
+				INFOPLIST_FILE = xcode/Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = tetattds;
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = YES;
+			};
+			dependencies = (
+			);
+			name = tetattds;
+			productName = tetattds;
+			productReference = 28BBD0570BE49233009E47F1 /* tetattds.app */;
+			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>English</string>
+	<key>CFBundleExecutable</key>
+	<string>${EXECUTABLE_NAME}</string>
+	<key>CFBundleIdentifier</key>
+	<string>com.yourcompany.tetattds</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>NSMainNibFile</key>
+	<string>MainMenu</string>
+	<key>NSPrincipalClass</key>
+	<string>NSApplication</string>
+</dict>
+</plist>
+";
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		08FB7793FE84155DC02AAC07 /* Project object */ = {
+			isa = PBXProject;
+			buildConfigurationList = 1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "nds" */;
+			buildSettings = {
+			};
+			buildStyles = (
+				014CEA460018CE2711CA2923 /* Debug */,
+				014CEA470018CE2711CA2923 /* Release */,
+			);
+			hasScannedForEncodings = 1;
+			mainGroup = 08FB7794FE84155DC02AAC07 /* tetattsdl */;
+			projectDirPath = "";
+			targets = (
+				28BBD0560BE49233009E47F1 /* tetattds */,
+				2862A71D0BA97EA400C4C204 /* fwgui */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		28BBD0530BE49233009E47F1 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28BBD1940BE4AFEE009E47F1 /* icon.icns in Resources */,
+				283606860D3A977A0043A0F8 /* images in Resources */,
+				28BBD0650BE49486009E47F1 /* music in Resources */,
+				28BBD0660BE49486009E47F1 /* sound in Resources */,
+				28EDCC840BE646BF000A6937 /* Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2862A71B0BA97EA400C4C204 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2862A72C0BA97F5400C4C204 /* backspace.bin in Sources */,
+				2862A72D0BA97F5400C4C204 /* close.bin in Sources */,
+				2862A72E0BA97F5400C4C204 /* down.bin in Sources */,
+				2862A72F0BA97F5400C4C204 /* shift.bin in Sources */,
+				2862A7300BA97F5400C4C204 /* up.bin in Sources */,
+				2862A7310BA97F5400C4C204 /* gunship_12.bin in Sources */,
+				2862A7320BA97F5400C4C204 /* vera_11.bin in Sources */,
+				2862A7330BA97F6200C4C204 /* button.cpp in Sources */,
+				2862A7340BA97F6200C4C204 /* control.cpp in Sources */,
+				2862A7350BA97F6200C4C204 /* dialog.cpp in Sources */,
+				2862A7360BA97F6200C4C204 /* editbox.cpp in Sources */,
+				2862A7370BA97F6200C4C204 /* font.cpp in Sources */,
+				2862A7380BA97F6200C4C204 /* graphics.cpp in Sources */,
+				2862A7390BA97F6200C4C204 /* imagebutton.cpp in Sources */,
+				2862A73A0BA97F6200C4C204 /* label.cpp in Sources */,
+				2862A73B0BA97F6200C4C204 /* textentrydialog.cpp in Sources */,
+				2862A73C0BA97F6200C4C204 /* theme.cpp in Sources */,
+				2862A73D0BA97F6D00C4C204 /* driver.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		28BBD0540BE49233009E47F1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				28BBD0680BE49495009E47F1 /* main.cpp in Sources */,
+				28BBD0690BE49495009E47F1 /* sound.cpp in Sources */,
+				28BBD06A0BE49495009E47F1 /* sprite.cpp in Sources */,
+				28BBD06B0BE49495009E47F1 /* anim.cpp in Sources */,
+				28BBD06C0BE49495009E47F1 /* baseblock.cpp in Sources */,
+				28BBD06D0BE49495009E47F1 /* block.cpp in Sources */,
+				28BBD06E0BE49495009E47F1 /* effcombo.cpp in Sources */,
+				28BBD06F0BE49495009E47F1 /* effecthandler.cpp in Sources */,
+				28BBD0700BE49495009E47F1 /* effmoveblock.cpp in Sources */,
+				28BBD0710BE49495009E47F1 /* effpop.cpp in Sources */,
+				28BBD0720BE49495009E47F1 /* effready.cpp in Sources */,
+				28BBD0730BE49495009E47F1 /* game.cpp in Sources */,
+				28BBD0740BE49495009E47F1 /* garbage.cpp in Sources */,
+				28BBD0750BE49495009E47F1 /* garbageblock.cpp in Sources */,
+				28BBD0760BE49495009E47F1 /* garbagehandler.cpp in Sources */,
+				28BBD0770BE49495009E47F1 /* leveldialog.cpp in Sources */,
+				28BBD0780BE49495009E47F1 /* mainmenudialog.cpp in Sources */,
+				28BBD0790BE49495009E47F1 /* playfield.cpp in Sources */,
+				28BBD07A0BE49495009E47F1 /* popper.cpp in Sources */,
+				28BBD07B0BE49495009E47F1 /* serverconnection.cpp in Sources */,
+				28BBD07C0BE49495009E47F1 /* settings.cpp in Sources */,
+				28BBD07D0BE49495009E47F1 /* statusdialog.cpp in Sources */,
+				28BBD07E0BE49495009E47F1 /* tetattds.cpp in Sources */,
+				28BBD07F0BE49495009E47F1 /* util.cpp in Sources */,
+				28BBD0800BE49495009E47F1 /* wifimenudialog.cpp in Sources */,
+				28BBD0830BE49495009E47F1 /* udpsocket.cpp in Sources */,
+				28BBD0840BE49495009E47F1 /* SDLMain.m in Sources */,
+				28EDCC8F0BE69171000A6937 /* platformgraphics.cpp in Sources */,
+				28EDCC920BE69189000A6937 /* fieldgraphics.cpp in Sources */,
+				283606230D3A82B70043A0F8 /* loopbackconnection.cpp in Sources */,
+				283606240D3A82B70043A0F8 /* messagebuffer.cpp in Sources */,
+				283606250D3A82B70043A0F8 /* servergame.cpp in Sources */,
+				283606260D3A82B70043A0F8 /* udpconnection.cpp in Sources */,
+				283606270D3A82B70043A0F8 /* udpconnectionmanager.cpp in Sources */,
+				2836062A0D3A82D50043A0F8 /* wifitypemenudialog.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		1DEB923608733DC60010E9CD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/SDL.framework/Headers,
+					/Library/Frameworks/mikmod.framework/Headers,
+					/opt/local/include,
+					fwgui/include,
+				);
+				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Debug;
+		};
+		1DEB923708733DC60010E9CD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_EFFECTIVE_CPLUSPLUS_VIOLATIONS = NO;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				HEADER_SEARCH_PATHS = (
+					/Library/Frameworks/SDL.framework/Headers,
+					/Library/Frameworks/mikmod.framework/Headers,
+					/opt/local/include,
+					fwgui/include,
+				);
+				PREBINDING = NO;
+				SCAN_ALL_SOURCE_FILES_FOR_INCLUDES = YES;
+				SDKROOT = /Developer/SDKs/MacOSX10.4u.sdk;
+			};
+			name = Release;
+		};
+		2862A7240BA97EAB00C4C204 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_MODEL_TUNING = G5;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = fwgui;
+				ZERO_LINK = NO;
+			};
+			name = Debug;
+		};
+		2862A7250BA97EAB00C4C204 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_MODEL_TUNING = G5;
+				INSTALL_PATH = /usr/local/lib;
+				PREBINDING = NO;
+				PRODUCT_NAME = fwgui;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+		28BBD05B0BE49233009E47F1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = /Library/Frameworks;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_FIX_AND_CONTINUE = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"VERSION_STRING=\"Tetattds 2.0\"",
+					"ABOUT_STRING=\"http://blog.dev-scene.com/flatware/\"",
+					"SDL_malloc=malloc",
+					"SDL_free=free",
+					"SDL_strlen=strlen",
+					"SDL_strlcpy=strlcpy",
+				);
+				INFOPLIST_FILE = xcode/Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(LIBRARY_SEARCH_PATHS)",
+					"$(SRCROOT)/build/Debug",
+					/opt/local/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = tetattds;
+				USER_HEADER_SEARCH_PATHS = "tetattds/source tetattds/sdl/source tetattds/network/include fwgui/include";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Debug;
+		};
+		28BBD05C0BE49233009E47F1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = /Library/Frameworks;
+				GCC_ENABLE_FIX_AND_CONTINUE = NO;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(GCC_PREPROCESSOR_DEFINITIONS)",
+					"VERSION_STRING=\"Tetattds 2.0\"",
+					"ABOUT_STRING=\"http://blog.dev-scene.com/flatware/\"",
+					"SDL_malloc=malloc",
+					"SDL_free=free",
+					"SDL_strlen=strlen",
+					"SDL_strlcpy=strlcpy",
+				);
+				INFOPLIST_FILE = xcode/Info.plist;
+				INSTALL_PATH = "$(HOME)/Applications";
+				LIBRARY_SEARCH_PATHS = (
+					"$(LIBRARY_SEARCH_PATHS)",
+					"$(SRCROOT)/build/Debug",
+					/opt/local/lib,
+				);
+				OTHER_LDFLAGS = (
+					"-framework",
+					Foundation,
+					"-framework",
+					AppKit,
+				);
+				PREBINDING = NO;
+				PRODUCT_NAME = tetattds;
+				USER_HEADER_SEARCH_PATHS = "tetattds/source tetattds/sdl/source tetattds/network/include fwgui/include";
+				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		1DEB923508733DC60010E9CD /* Build configuration list for PBXProject "nds" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1DEB923608733DC60010E9CD /* Debug */,
+				1DEB923708733DC60010E9CD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		2862A7230BA97EAB00C4C204 /* Build configuration list for PBXNativeTarget "fwgui" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2862A7240BA97EAB00C4C204 /* Debug */,
+				2862A7250BA97EAB00C4C204 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		28BBD05A0BE49233009E47F1 /* Build configuration list for PBXNativeTarget "tetattds" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				28BBD05B0BE49233009E47F1 /* Debug */,
+				28BBD05C0BE49233009E47F1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 08FB7793FE84155DC02AAC07 /* Project object */;
+}

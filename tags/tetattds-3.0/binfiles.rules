@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VisualStudioToolFile
+	Name="Bin-files"
+	Version="8,00"
+	>
+	<Rules>
+		<CustomBuildRule
+			Name="bin2c"
+			DisplayName="bin2c"
+			CommandLine="$(ProjectDir)tools\bin2c.exe -h $(InputName)_bin &gt; $(ProjectDir)build\$(InputName)_bin.h&#x0D;&#x0A;$(ProjectDir)tools\bin2c.exe $(InputName)_bin &lt; [inputs] &gt; $(ProjectDir)build\$(InputFileName).c"
+			Outputs="$(ProjectDir)build\$(InputName)_bin.h;$(ProjectDir)build\$(InputFileName).c"
+			FileExtensions="*.bin"
+			>
+			<Properties>
+			</Properties>
+		</CustomBuildRule>
+	</Rules>
+</VisualStudioToolFile>
