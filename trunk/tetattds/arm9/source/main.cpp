@@ -30,6 +30,13 @@ static bool supportsFat = false;
 char name[10];
 Settings* settings = NULL;
 
+void *operator new (size_t size) {
+	return safe_malloc(size);
+}
+void operator delete (void* ptr) {
+	return safe_free(ptr);
+}
+
 // used in network lib
 unsigned int GetTime()
 {
@@ -116,14 +123,6 @@ void GetName()
 	*dest = '\0';
 }
 
-void myExceptionHandler()
-{
-	for(int i = 0; i < 16; i++)
-		printf("r%02i: 0x%08lx\n", i, exceptionRegisters[i]);
-
-	for(;;);
-}
-
 void InitConsole()
 {
 	BLEND_CR = BLEND_FADE_WHITE | BLEND_SRC_ALL;
@@ -165,7 +164,7 @@ void InitGui();
 
 int main(void)
 {
-	setExceptionHandler(myExceptionHandler);
+	defaultExceptionHandler();
 	irqInit();
 	irqSet(IRQ_VBLANK, VBlankHandler);
 	irqEnable(IRQ_VBLANK); // needed by swiWaitForVBlank()

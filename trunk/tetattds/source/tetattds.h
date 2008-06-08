@@ -54,3 +54,8 @@ extern void PrintStatus(const char* format, ...);
 // Determine the number of elements in an array
 #define COUNT_OF(array) sizeof(array)/sizeof(array[0])
 
+#ifdef ARM9
+#include <safe_malloc.h>
+#define malloc(x) safe_malloc(x)
+#define free(x) safe_free(x)
+#endif
