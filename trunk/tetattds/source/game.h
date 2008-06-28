@@ -25,7 +25,8 @@ public:
 	Game(
 		int level,
 		bool sendToSelf,
-		ServerConnection* connection);
+		ServerConnection* connection,
+		ConnectionManager* connectionManager);
 	~Game();
 
 	void ReceiveGarbage(int num, int player, GarbageType type);
@@ -56,6 +57,7 @@ public:
 	
 private:
 	ServerConnection* connection;
+	ConnectionManager* connectionManager;
 	bool running;
 	int touchedArea;
 	int level;

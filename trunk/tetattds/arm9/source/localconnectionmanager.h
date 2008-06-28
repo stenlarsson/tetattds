@@ -1,22 +1,29 @@
 #pragma once
 
+#include "connectionmanager.h"
 #include <lobby.h>
 #include "localconnection.h"
 #include "messagebuffer.h"
 
 struct ConnectionInfo;
 
-class LocalConnectionManager
+class LocalConnectionManager : public ConnectionManager
 {
 public:
 	LocalConnectionManager(int maxConnections, MessageReciever* reciever);
-	~LocalConnectionManager();
+	virtual ~LocalConnectionManager();
 
 	bool HostGame();
 	LocalConnection* JoinGame();
 	void JoinLoopback(MessageReciever* client);
 
-	void Tick();
+	virtual void Tick();
+
+	virtual void BroadcastMessageImpl(
+		unsigned char packetType,
+		unsigned char messageId,
+		const void* message,
+		size_t length);
 	
 	void OnUserInfo(LPLOBBY_USER user, unsigned long reason);
 	void OnPacket(unsigned char *data, int length, LPLOBBY_USER from);

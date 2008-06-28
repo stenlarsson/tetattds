@@ -45,9 +45,31 @@ void UdpConnectionManager::Tick()
 		int size = socket->Recieve(buffer, sizeof(buffer), &fromAddress);
 		if(size < 0) { break; }
 
-		UdpConnection* connection = FindConnection(fromAddress);
+		MessageHeader* header = (MessageHeader*)buffer;
+		UdpConnection* connection = FindConnection(fromAddress);	
+			
+		if(header->packetType == PACKET_TYPE_BROADCAST && numConnections > 1) {
+			// this packet was intended to be broadcasted to all clients
+			for(int i = 0; i < numConnections; i++) {
+				if(connections[i].connection != connection) {
+					connections[i].connection->SendMessageImpl(
+						PACKET_TYPE_UNRELIABLE,
+						header->messageId,
+						buffer + sizeof(MessageHeader),
+						size - sizeof(MessageHeader));
+				}
+			}
+
+			if(broadcastExtraConnection != NULL) {
+				broadcastExtraConnection->SendMessageImpl(
+					PACKET_TYPE_UNRELIABLE,
+					header->messageId,
+					buffer + sizeof(MessageHeader),
+					size - sizeof(MessageHeader));
+			}
+		}
+
 		if(connection == NULL) {
-			MessageHeader* header = (MessageHeader*)buffer;
 			if(header->sequence != 0) {
 				// stray packet?
 				continue;
@@ -59,10 +81,10 @@ void UdpConnectionManager::Tick()
 				socket->Send(&reject, sizeof(reject), fromAddress);
 				continue;
 			}
-
+			
 			connection = CreateConnection(fromAddress);
 		}
-
+			
 		connection->PacketIn(buffer, size);
 	}
 
@@ -82,6 +104,21 @@ void UdpConnectionManager::Tick()
 				i--;
 			}
 		}
+	}
+}
+
+void UdpConnectionManager::BroadcastMessageImpl(
+	unsigned char packetType,
+	unsigned char messageId,
+	const void* message,
+	size_t length)
+{
+	for(int i = 0; i < numConnections; i++) {
+		connections[i].connection->SendMessageImpl(
+			PACKET_TYPE_BROADCAST,
+			messageId,
+			message,
+			length);
 	}
 }
 

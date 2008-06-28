@@ -1,6 +1,7 @@
 #pragma once
 
 #include "connection.h"
+#include "connectionmanager.h"
 
 #include "fieldgraphics.h"
 

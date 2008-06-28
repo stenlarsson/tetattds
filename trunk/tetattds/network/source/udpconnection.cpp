@@ -1,5 +1,6 @@
 #include "network.h"
 #include "udpconnection.h"
+#include "packet.h"
 #include <string.h>
 #ifdef _WIN32
 typedef unsigned int uint32_t;
@@ -151,22 +152,6 @@ bool UdpConnection::SendMessageImpl(
 	const void* message,
 	size_t length)
 {
-	struct Packet {
-		Packet(
-			unsigned char packetType,
-			unsigned char messageId,
-			unsigned int sequence,
-			const void* message,
-			size_t length)
-		:	header(packetType, messageId, sequence)
-		{
-			memcpy(this->message, message, length);
-		}
-
-		MessageHeader header;
-		char message[MAX_PACKET_SIZE];
-	};
-	
 	if(length > MAX_PACKET_SIZE) {
 		return false;
 	}

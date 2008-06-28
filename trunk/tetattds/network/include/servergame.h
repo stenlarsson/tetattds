@@ -5,7 +5,7 @@
 
 #define MAX_PLAYERS 5
 
-#define VERSION 2000
+#define VERSION 3100
 
 #define DEAD_RETURN_TO_MENU_TIME 180
 
@@ -31,13 +31,13 @@ public:
 	void SendChat(const char* text);
 
 	template<typename T>
-	void BroadcastMessage(T& message)
+	void SendMessageToAll(T& message)
 	{
-		BroadcastMessage(message, -1);
+		SendMessageToAll(message, -1);
 	}
 
 	template<typename T>
-	void BroadcastMessage( T& message , int excludePlayer)
+	void SendMessageToAll(T& message , int excludePlayer)
 	{
 		for(int i = 0; i < MAX_PLAYERS; i++) {
 			if(players[i] != 0 && i != excludePlayer && players[i]->state != PLAYERSTATE_DISCONNECTED)
