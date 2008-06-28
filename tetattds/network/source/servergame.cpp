@@ -106,11 +106,11 @@ void ServerGame::Tick()
 		{
 			PlayerDisconnectedMessage message;
 			message.playerNum = i;
-			BroadcastMessage(message, i);
+			SendMessageToAll(message, i);
 			
 			ChatMessage chat;
 			sprintf(chat.text, "* %s disconnected.", players[i]->name);
-			BroadcastMessage(chat, i);
+			SendMessageToAll(chat, i);
 			
 			PrintStatus("player %i disconnected", i);
 			delete players[i];
@@ -155,11 +155,11 @@ void ServerGame::Tick()
 			nextPlace = numPlayers;
 
 			GameStartMessage message;
-			BroadcastMessage(message);
+			SendMessageToAll(message);
 
 			ChatMessage chat;
 			sprintf(chat.text, "* Game started!");
-			BroadcastMessage(chat);
+			SendMessageToAll(chat);
 
 			for(int i = 0; i < MAX_PLAYERS; i++)
 			{
@@ -182,13 +182,13 @@ void ServerGame::Tick()
 				lastPlayerAlive->wins++;
 				PlayerInfoMessage pimessage;
 				lastPlayerAlive->FillPlayerInfoMessage(pimessage);
-				BroadcastMessage(pimessage);
+				SendMessageToAll(pimessage);
 
 				message.winner = lastPlayerAlive->playerNum;
 				PrintStatus("game over, winner is %s", lastPlayerAlive->name);
 				ChatMessage chat;
 				sprintf(chat.text, "* %s wins!", lastPlayerAlive->name);
-				BroadcastMessage(chat);
+				SendMessageToAll(chat);
 			}
 			else
 			{
@@ -199,15 +199,15 @@ void ServerGame::Tick()
 					sprintf(chat.text, "* Game Over.");
 				else
 					sprintf(chat.text, "* It's a tie!");
-				BroadcastMessage(chat);
+				SendMessageToAll(chat);
 			}
 
 			int gameTime = time(NULL) - startTime - 3; // subtract countdown
 			ChatMessage chat;
 			sprintf(chat.text, "* The game lasted %i:%02i", gameTime/60, gameTime%60);
-			BroadcastMessage(chat);
+			SendMessageToAll(chat);
 
-			BroadcastMessage( message );
+			SendMessageToAll( message );
 			for( int i = 0; i < MAX_PLAYERS; i++ )
 			{
 				if( players[i] != NULL  && players[i]->state != PLAYERSTATE_READY)
@@ -225,7 +225,7 @@ void ServerGame::SendChat(const char* text)
 	ChatMessage chat;
 	snprintf(chat.text, sizeof(chat.text), "Server: %s", text);
 	chat.text[sizeof(chat.text)-1] = '\0';
-	BroadcastMessage(chat);
+	SendMessageToAll(chat);
 }
 
 void ServerGame::mPing(Connection* from, PingMessage* ping)
@@ -242,9 +242,6 @@ void ServerGame::mGarbage(Connection* from, GarbageMessage* garbage)
 
 void ServerGame::mFieldState(Connection* from, FieldStateMessage* fieldState)
 {
-	Player* player = GetPlayer(from);
-	fieldState->playerNum = player->playerNum;
-	BroadcastMessage(*fieldState, fieldState->playerNum);
 }
 
 void ServerGame::mChat(Connection* from, ChatMessage* chat)
@@ -255,7 +252,7 @@ void ServerGame::mChat(Connection* from, ChatMessage* chat)
 	strncpy(chat->text, buffer, sizeof(chat->text));
 	chat->text[sizeof(chat->text)-1] = '\0';
 	PrintStatus("%s", chat->text);
-	BroadcastMessage(*chat);
+	SendMessageToAll(*chat);
 }
 
 void ServerGame::mConnect(Connection* from, ConnectMessage* connect)
@@ -293,11 +290,11 @@ void ServerGame::mConnect(Connection* from, ConnectMessage* connect)
 
 	PlayerInfoMessage pimessage;
 	player->FillPlayerInfoMessage(pimessage);
-	BroadcastMessage(pimessage);
+	SendMessageToAll(pimessage);
 
 	ChatMessage chat;
 	sprintf(chat.text, "* %s joined", player->name);
-	BroadcastMessage(chat, player->playerNum);
+	SendMessageToAll(chat, player->playerNum);
 
 	// gather info about the other players
 	for(int i = 0; i < MAX_PLAYERS; i++)
@@ -334,7 +331,7 @@ void ServerGame::mDied(Connection* from, DiedMessage* died)
 	message.playerNum = player->playerNum;
 	message.place = place;
 
-	BroadcastMessage(message, player->playerNum);
+	SendMessageToAll(message, player->playerNum);
 }
 
 void ServerGame::mSetInfo(Connection* from, SetInfoMessage* setInfo)
@@ -345,19 +342,19 @@ void ServerGame::mSetInfo(Connection* from, SetInfoMessage* setInfo)
 	{
 		ChatMessage chat;
 		sprintf(chat.text, "* %s is ready!", player->name);
-		BroadcastMessage(chat, player->playerNum);
+		SendMessageToAll(chat, player->playerNum);
 	}
 	if(player->state == PLAYERSTATE_READY && !setInfo->ready)
 	{
 		ChatMessage chat;
 		sprintf(chat.text, "* %s is not ready", player->name);
-		BroadcastMessage(chat, player->playerNum);
+		SendMessageToAll(chat, player->playerNum);
 	}
 	if(player->level != setInfo->level)
 	{
 		ChatMessage chat;
 		sprintf(chat.text, "* %s selected level %i", player->name, setInfo->level+1);
-		BroadcastMessage(chat, player->playerNum);
+		SendMessageToAll(chat, player->playerNum);
 	}
 
 	player->level = setInfo->level;
@@ -366,7 +363,7 @@ void ServerGame::mSetInfo(Connection* from, SetInfoMessage* setInfo)
 
 	PlayerInfoMessage pimessage;
 	player->FillPlayerInfoMessage(pimessage);
-	BroadcastMessage(pimessage);
+	SendMessageToAll(pimessage);
 }
 
 Player* ServerGame::GetPlayer(Connection* connection)

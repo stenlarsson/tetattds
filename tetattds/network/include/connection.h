@@ -68,12 +68,12 @@ public:
 			sizeof(message));
 	}
 
-protected:
 	virtual bool SendMessageImpl(
 		unsigned char packetType,
 		unsigned char messageId,
 		const void* message,
 		size_t length) = 0;
 
+protected:
 	ConnectionState state;
 };

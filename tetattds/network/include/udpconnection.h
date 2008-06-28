@@ -42,13 +42,13 @@ public:
 
 	virtual void Tick();
 
-private:
 	virtual bool SendMessageImpl(
 		unsigned char packetType,
 		unsigned char messageId,
 		const void* message,
 		size_t length);
 	
+private:
 	MessageReciever* reciever;
 	UdpSocket* socket;
 	IpAddress address;

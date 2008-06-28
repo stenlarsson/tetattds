@@ -1,5 +1,6 @@
 #include "tetattds.h"
 #include "localconnectionmanager.h"
+#include "packet.h"
 #include <nds.h>
 #include "tetattds.h"
 #include "ds.h"
@@ -92,23 +93,48 @@ void LocalConnectionManager::Tick()
 	size_t length;
 	void* from;
 	while(buffer.Get(data, &length, &from)) {
-		Connection* connection = FindConnection((LPLOBBY_USER)from);
-		if(connection == NULL) {
-			connection = CreateConnection((LPLOBBY_USER)from);
-		}
-		
 		/* Copy the message to avoid unaligned memory */
 		char packet[MAX_PACKET_SIZE];
 		memcpy(packet, data, length);
 		
 		MessageHeader* header = (MessageHeader*)packet;
-		
+		Connection* connection = FindConnection((LPLOBBY_USER)from);
+
+		if(header->packetType == PACKET_TYPE_BROADCAST) {
+			if(broadcastExtraConnection != NULL) {
+				broadcastExtraConnection->SendMessageImpl(
+					PACKET_TYPE_UNRELIABLE,
+					header->messageId,
+					packet + sizeof(MessageHeader),
+					length - sizeof(MessageHeader));
+			}
+		} else {
+			if(connection == NULL) {
+				connection = CreateConnection((LPLOBBY_USER)from);
+			}
+		}
+			
 		reciever->MessageIn(
 			connection,
 			header->messageId,
 			packet + sizeof(MessageHeader),
 			length - sizeof(MessageHeader));
 	}
+}
+
+void LocalConnectionManager::BroadcastMessageImpl(
+	unsigned char packetType,
+	unsigned char messageId,
+	const void* message,
+	size_t length)
+{
+	if(length > MAX_PACKET_SIZE) {
+		return;
+	}
+
+	Packet packet(PACKET_TYPE_BROADCAST, messageId, 0, message, length);
+
+	LOBBY_Broadcast(0x8001, (unsigned char*)&packet, sizeof(MessageHeader) + length);
 }
 
 LocalConnection* LocalConnectionManager::CreateConnection(LPLOBBY_USER user)

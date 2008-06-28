@@ -44,6 +44,7 @@ void* GetMenuBackground();
 static bool hasSetupWifi = false;
 static bool hasSetupLocalWifi = false;
 static ServerConnection* connection = NULL;
+static ConnectionManager* connectionManager = NULL;
 
 static bool hostGame = false;
 
@@ -421,7 +422,7 @@ public:
 	}
 	virtual void Enter() {
 		GameState::Enter();
-		g_game = new Game(level, false, NULL);
+		g_game = new Game(level, false, NULL, NULL);
 		g_game->Start();
 		gui->SetListener(g_game);
 	}
@@ -438,7 +439,7 @@ public:
 	}
 	virtual void Enter() {
 		GameState::Enter();
-		g_game = new Game(level, true, NULL);
+		g_game = new Game(level, true, NULL, NULL);
 		g_game->Start();
 		gui->SetListener(g_game);
 	}
@@ -456,7 +457,7 @@ public:
 	virtual void Enter() {
 		GameState::Enter();
 		sendFieldStateTimer = SEND_FIELDSTATE_INTERVAL;
-		g_game = new Game(level, true, connection);
+		g_game = new Game(level, true, connection, connectionManager);
 		g_game->Start();
 		gui->SetListener(g_game);
 	}
@@ -594,12 +595,15 @@ class WifiState : public State {
 			LoopbackConnection* a = new LoopbackConnection(serverGame);
 			LoopbackConnection* b = new LoopbackConnection(connection);
 			a->Connect(b);
+			connectionManager->SetBroadcastExtraConnection(a);
 		} else {
 			serverGame = NULL;
 			connection = new ServerConnection(name);
-			connectionManager = new UdpConnectionManager(1, new UdpSocket(), connection);
+			UdpConnectionManager* udpConnectionManager =
+				new UdpConnectionManager(1, new UdpSocket(), connection);
+			connectionManager = udpConnectionManager;
 			Connection* result =
-				connectionManager->CreateConnection(settings->GetServerAddress(), 13687);
+				udpConnectionManager->CreateConnection(settings->GetServerAddress(), 13687);
 			if (result == NULL) {
 				nextState = mainMenuState;
 				return;
@@ -649,7 +653,6 @@ class WifiState : public State {
 	}
 private:
 	State * currentSubState;
-	UdpConnectionManager* connectionManager;
 	ServerGame* serverGame;
 };
 
@@ -665,8 +668,10 @@ class LocalWifiState : public State {
 		
 		if(hostGame) {
 			serverGame = new ServerGame();
-			connectionManager = new LocalConnectionManager(MAX_PLAYERS, serverGame);
-			if(!connectionManager->HostGame()) {
+			LocalConnectionManager* localConnectionManager =
+				new LocalConnectionManager(MAX_PLAYERS, serverGame);
+			connectionManager = localConnectionManager;
+			if(!localConnectionManager->HostGame()) {
 				nextState = mainMenuState;
 				return;
 			}
@@ -674,11 +679,14 @@ class LocalWifiState : public State {
 			LoopbackConnection* a = new LoopbackConnection(serverGame);
 			LoopbackConnection* b = new LoopbackConnection(connection);
 			a->Connect(b);
+			connectionManager->SetBroadcastExtraConnection(a);
 		} else {
 			serverGame = NULL;
 			connection = new ServerConnection(name);
-			connectionManager = new LocalConnectionManager(1, connection);
-			if(connectionManager->JoinGame() == NULL) {
+			LocalConnectionManager* localConnectionManager =
+				new LocalConnectionManager(1, connection);
+			connectionManager = localConnectionManager;
+			if(localConnectionManager->JoinGame() == NULL) {
 				nextState = mainMenuState;
 				return;
 			}
@@ -729,7 +737,6 @@ class LocalWifiState : public State {
 	}
 private:
 	State * currentSubState;
-	LocalConnectionManager* connectionManager;
 	ServerGame* serverGame;
 };
 

@@ -43,11 +43,13 @@ const LevelData* Game::GetLevelData()
 }
 
 Game::Game(int level,
-		bool sendToSelf,
-		ServerConnection* connection)
+		   bool sendToSelf,
+		   ServerConnection* connection,
+		   ConnectionManager* connectionManager)
 :	paused(false),
 	field(new PlayField(g_fieldGraphics->GetEffectHandler())),
 	connection(connection),
+	connectionManager(connectionManager),
 	running(false),
 	touchedArea(0),
 	level(level),
@@ -234,7 +236,8 @@ void Game::SendFieldState()
 {
 	FieldStateMessage message;
 	field->GetFieldState(message.field);
-	connection->SendMessage(message);
+	message.playerNum = connection->GetMyPlayerNum();
+	connectionManager->BroadcastMessage(message);
 }
 
 enum BlockType Game::GetRandomBlockType(bool grayBlock)

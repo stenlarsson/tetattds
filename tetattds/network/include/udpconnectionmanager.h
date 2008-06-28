@@ -1,20 +1,27 @@
 #pragma once
 
+#include "connectionmanager.h"
 #include "udpconnection.h"
 #include "ipaddress.h"
 #include "udpsocket.h"
 
 struct ConnectionInfo;
 
-class UdpConnectionManager
+class UdpConnectionManager : public ConnectionManager
 {
 public:
 	UdpConnectionManager(int maxConnections, UdpSocket* socket, MessageReciever* reciever);
-	~UdpConnectionManager();
+	virtual ~UdpConnectionManager();
 
 	UdpConnection* CreateConnection(const char* address, int port);
 
-	void Tick();
+	virtual void Tick();
+
+	virtual void BroadcastMessageImpl(
+		unsigned char packetType,
+		unsigned char messageId,
+		const void* message,
+		size_t length);
 
 private:
 	UdpConnection* CreateConnection(IpAddress address);

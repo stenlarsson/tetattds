@@ -22,4 +22,5 @@ private:
 
 	MessageReciever* reciever;
 	LoopbackConnection* otherEnd;
+	Connection* broadcastConnection;
 };
