@@ -1,10 +1,10 @@
 #pragma once
 
-#include "connection.h"
+#include "connectionmanager.h"
 
 struct ConnectionInfo;
 
-class LocalConnectionManager
+class LocalConnectionManager : public ConnectionManager
 {
 public:
 	LocalConnectionManager(int maxConnections, MessageReciever* reciever) {}
@@ -13,5 +13,12 @@ public:
 	bool HostGame() { return false; }
 	Connection* JoinGame() { return NULL; }
 
-	void Tick() {}
+	virtual void Tick() {}
+
+	virtual void BroadcastMessageImpl(
+		unsigned char packetType,
+		unsigned char messageId,
+		const void* message,
+		size_t length) {}
+
 };
