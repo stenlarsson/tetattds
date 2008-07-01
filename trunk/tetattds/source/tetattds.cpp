@@ -472,7 +472,8 @@ public:
 		if(sendFieldStateTimer-- == 0)
 		{
 			g_game->SendFieldState();
-			sendFieldStateTimer = SEND_FIELDSTATE_INTERVAL;
+			sendFieldStateTimer =
+				SEND_FIELDSTATE_INTERVAL * connection->GetAlivePlayersCount();
 		}
 	}
 private:

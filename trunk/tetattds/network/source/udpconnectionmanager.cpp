@@ -48,7 +48,7 @@ void UdpConnectionManager::Tick()
 		MessageHeader* header = (MessageHeader*)buffer;
 		UdpConnection* connection = FindConnection(fromAddress);	
 			
-		if(header->packetType == PACKET_TYPE_BROADCAST && numConnections > 1) {
+		if(header->packetType == PACKET_TYPE_BROADCAST) {
 			// this packet was intended to be broadcasted to all clients
 			for(int i = 0; i < numConnections; i++) {
 				if(connections[i].connection != connection) {
@@ -115,7 +115,7 @@ void UdpConnectionManager::BroadcastMessageImpl(
 {
 	for(int i = 0; i < numConnections; i++) {
 		connections[i].connection->SendMessageImpl(
-			PACKET_TYPE_BROADCAST,
+			(maxConnections == 1) ? PACKET_TYPE_BROADCAST : packetType,
 			messageId,
 			message,
 			length);

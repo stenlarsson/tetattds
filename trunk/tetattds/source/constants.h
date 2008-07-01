@@ -8,7 +8,7 @@
 #define VERSION 3100
 
 #define MAX_PLAYERS 5
-#define SEND_FIELDSTATE_INTERVAL 60
+#define SEND_FIELDSTATE_INTERVAL 10
 #define SEND_PING_INTERVAL 60
 
 // max squared distance in pixels two consecutive touch reads
