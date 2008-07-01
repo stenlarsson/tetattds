@@ -26,6 +26,17 @@ ServerConnection::~ServerConnection()
 	free(name);
 }
 
+int ServerConnection::GetAlivePlayersCount()
+{
+	int count = 0;
+	for(int i = 0; i < MAX_PLAYERS; i++) {
+		if(players[i].connected && !players[i].dead) {
+			count++;
+		}
+	}
+	return count;
+}
+
 void ServerConnection::ConnectionCreated(Connection* connection)
 {
 	ASSERT(connection != NULL);

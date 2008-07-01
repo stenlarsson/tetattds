@@ -34,6 +34,8 @@ public:
 	int GetWins() { return wins; }
 	int GetMyPlayerNum() { return myPlayerNum; }
 
+	int GetAlivePlayersCount();
+
 	template<typename T>
 	void SendMessage(const T& message)
 	{
