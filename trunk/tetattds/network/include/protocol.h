@@ -56,12 +56,14 @@ struct PingMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_UNRELIABLE;
 	static const uint8_t messageId = MESSAGE_PING;
+	size_t size() const { return sizeof(PingMessage); }
 };
 
 struct GarbageMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_GARBAGE;
+	size_t size() const { return sizeof(GarbageMessage); }
 	uint8_t num;
 	uint8_t player;
 	uint8_t type;
@@ -71,6 +73,7 @@ struct FieldStateMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_UNRELIABLE;
 	static const uint8_t messageId = MESSAGE_FIELDSTATE;
+	size_t size() const { return sizeof(FieldStateMessage); }
 	uint8_t playerNum;
 	uint8_t field[12*6];
 };
@@ -79,6 +82,7 @@ struct FieldStateDeltaMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_UNRELIABLE;
 	static const uint8_t messageId = MESSAGE_FIELDSTATE_DELTA;
+	size_t size() const { return length + 2; }
 	uint8_t playerNum;
 	uint8_t length;
 	uint8_t delta[12*6];
@@ -88,6 +92,7 @@ struct ChatMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_CHAT;
+	size_t size() const { return strnlen(text, 128+1) + 1; }
 	char text[128+1];
 };
 
@@ -95,6 +100,7 @@ struct ConnectMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_CONNECT;
+	size_t size() const { return strnlen(name, 64) + 1 + 1; }
 	uint8_t version;
 	char name[64];
 };
@@ -103,18 +109,21 @@ struct QuitMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_QUIT;
+	size_t size() const { return sizeof(QuitMessage); }
 };
 
 struct DiedMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_DIED;
+	size_t size() const { return sizeof(DiedMessage); }
 };
 
 struct SetInfoMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_SET_INFO;
+	size_t size() const { return sizeof(SetInfoMessage); }
 	uint8_t level;
 	uint8_t ready;
 	uint8_t typing;
@@ -124,6 +133,7 @@ struct AcceptedMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_ACCEPTED;
+	size_t size() const { return sizeof(AcceptedMessage); }
 	uint8_t playerNum;
 };
 
@@ -131,6 +141,7 @@ struct DisconnectMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_DISCONNECT;
+	size_t size() const { return strnlen(message, 128+1) + 1; }
 	char message[128+1];
 };
 
@@ -138,12 +149,14 @@ struct GameStartMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_GAMESTART;
+	size_t size() const { return sizeof(GameStartMessage); }
 };
 
 struct GameEndMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_GAMEEND;
+	size_t size() const { return sizeof(GameEndMessage); }
 	uint8_t winner;
 };
 
@@ -151,18 +164,20 @@ struct PlayerInfoMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_PLAYER_INFO;
+	size_t size() const { return strnlen(name, 64) + 1 + 5; }
 	uint8_t playerNum;
-	char name[64];
 	uint8_t level;
 	uint8_t wins;
 	uint8_t ready;
 	uint8_t typing;
+	char name[64];
 };
 
 struct PlayerDiedMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_PLAYER_DIED;
+	size_t size() const { return sizeof(PlayerDiedMessage); }
 	uint8_t playerNum;
 	uint8_t place;
 };
@@ -171,6 +186,7 @@ struct PlayerDisconnectedMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_PLAYER_DISCONNECTED;
+	size_t size() const { return sizeof(PlayerDisconnectedMessage); }
 	uint8_t playerNum;
 };
 
