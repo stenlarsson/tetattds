@@ -8,7 +8,7 @@
 #define HANDLE_MESSAGE(name)\
 	case name##Message::messageId:\
 		{\
-			ASSERT(size == sizeof(name##Message));\
+			ASSERT(size == ((name##Message*)data)->size());\
 			m##name(from, (name##Message*)data);\
 		}\
 		break;
@@ -65,7 +65,7 @@ public:
 			MessageT::packetType,
 			MessageT::messageId,
 			&message,
-			sizeof(message));
+			message.size());
 	}
 
 	virtual bool SendMessageImpl(

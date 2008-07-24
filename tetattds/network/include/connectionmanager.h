@@ -24,7 +24,7 @@ public:
 			MessageT::packetType,
 			MessageT::messageId,
 			&message,
-			sizeof(message));
+			message.size());
 	}
 
 	virtual void BroadcastMessageImpl(
