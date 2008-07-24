@@ -51,6 +51,7 @@ public:
 	void mPing(Connection* from, PingMessage* ping);
 	void mGarbage(Connection* from, GarbageMessage* garbage);
 	void mFieldState(Connection* from, FieldStateMessage* fieldState);
+	void mFieldStateDelta(Connection* from, FieldStateDeltaMessage* fieldStateDelta);
 	void mChat(Connection* from, ChatMessage* chat );
 
 	void mAccepted(Connection* from, AcceptedMessage* ping);
@@ -69,4 +70,5 @@ private:
 	int wins;
 	int pingTimer;
 	char* name;
+	char lastFieldState[12*6];
 };

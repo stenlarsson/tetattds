@@ -2,9 +2,9 @@
 
 enum GarbageType
 {
-	GARBAGE_COMBO = 0x10000,
-	GARBAGE_CHAIN = 0x20000,
-	GARBAGE_EVIL = 0x40000
+	GARBAGE_COMBO,
+	GARBAGE_CHAIN,
+	GARBAGE_EVIL
 };
 
 #include "baseblock.h"

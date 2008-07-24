@@ -40,8 +40,7 @@ void UdpConnection::Tick()
 	unsigned int now = GetTime();
 
 	for(std::vector<CachedPacket>::iterator i = futurePackets.begin();
-		i != futurePackets.end();
-		i++) {
+		i != futurePackets.end();) {
 
 		CachedPacket& cachedPacket = *i;
 		if(cachedPacket.sequence == incomingSequence) {
@@ -56,8 +55,9 @@ void UdpConnection::Tick()
 
 		if(cachedPacket.sequence < incomingSequence) {
 			::operator delete(cachedPacket.packet);
-			futurePackets.erase(i);
-			i--;
+			i = futurePackets.erase(i);
+		} else {
+			i++;
 		}
 	}
 
@@ -116,7 +116,7 @@ void UdpConnection::PacketIn(void* data, size_t size)
 			socket->Send(&ack, sizeof(ack), address);
 
 			if(header->sequence < incomingSequence) {
-				// duplicate or out of order packet
+				// duplicate
 				break;
 			} else if(header->sequence > incomingSequence) {
 				// wrong order

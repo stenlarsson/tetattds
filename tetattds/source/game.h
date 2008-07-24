@@ -54,6 +54,7 @@ public:
 	void Tick();
 	void Draw();
 	void SendFieldState();
+	void SendFieldStateDelta();
 	
 private:
 	ServerConnection* connection;
@@ -67,6 +68,9 @@ private:
 	int heldKeysDelay[FWGUI_NUM_KEYS];
 	int col;
 	int row;
+	int sendFieldStateTimer;
+	int sendFieldStateDeltaTimer;
+	char lastFieldState[12*6];
 };
 
 extern Game* g_game;

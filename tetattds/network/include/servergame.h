@@ -5,7 +5,7 @@
 
 #define MAX_PLAYERS 5
 
-#define VERSION 3100
+#define VERSION 31
 
 #define DEAD_RETURN_TO_MENU_TIME 180
 

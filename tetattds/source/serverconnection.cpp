@@ -59,6 +59,7 @@ void ServerConnection::MessageIn(Connection* from, unsigned char id, const void*
 	HANDLE_MESSAGE(Ping)
 	HANDLE_MESSAGE(Garbage)
 	HANDLE_MESSAGE(FieldState)
+	HANDLE_MESSAGE(FieldStateDelta)
 	HANDLE_MESSAGE(Chat)
 	HANDLE_MESSAGE(Accepted)
 	HANDLE_MESSAGE(Disconnect)
@@ -123,10 +124,29 @@ void ServerConnection::mFieldState(Connection* from, FieldStateMessage* fieldSta
 	ASSERT(fieldState->playerNum < MAX_PLAYERS);
 	DEBUGVERBOSE("ServerConn: mFieldState %d, %d\n", fieldState->playerNum, players[fieldState->playerNum].fieldNum);
 	
+	memcpy(lastFieldState, fieldState->field, sizeof(lastFieldState));
+
 	PlayerInfo& player = players[fieldState->playerNum];
 	g_fieldGraphics->DrawSmallField(
 		player.fieldNum,
-		fieldState->field,
+		lastFieldState,
+		player.dead);
+}
+
+void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage* fieldStateDelta)
+{
+	ASSERT(fieldStateDelta->playerNum >= 0);
+	ASSERT(fieldStateDelta->playerNum < MAX_PLAYERS);
+	DEBUGVERBOSE("ServerConn: mFieldStateDelta %d, %d\n", fieldStateDelta->playerNum, players[fieldStateDelta->playerNum].fieldNum);
+
+	for(int i = 0; i < fieldStateDelta->length; i += 2) {
+		lastFieldState[fieldStateDelta->delta[i]] = fieldStateDelta->delta[i+1];
+	}
+
+	PlayerInfo& player = players[fieldStateDelta->playerNum];
+	g_fieldGraphics->DrawSmallField(
+		player.fieldNum,
+		lastFieldState,
 		player.dead);
 }
 
@@ -215,9 +235,9 @@ void ServerConnection::mPlayerInfo(Connection* from, PlayerInfoMessage* playerIn
 	}
 	player.level = playerInfo->level;
 	player.wins = playerInfo->wins;
-	player.ready = playerInfo->ready;
+	player.ready = playerInfo->ready != 0;
 	player.connected = true;
-	player.typing = playerInfo->typing;
+	player.typing = playerInfo->typing != 0;
 	
 	if(playerInfo->playerNum != myPlayerNum)
 	{
