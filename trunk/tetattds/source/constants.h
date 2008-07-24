@@ -5,10 +5,11 @@
 #define DEBUGVERBOSE(...)
 #endif
 
-#define VERSION 3100
+#define VERSION 31
 
 #define MAX_PLAYERS 5
 #define SEND_FIELDSTATE_INTERVAL 10
+#define SEND_FIELDSTATE_DELTA_INTERVAL 5
 #define SEND_PING_INTERVAL 60
 
 // max squared distance in pixels two consecutive touch reads

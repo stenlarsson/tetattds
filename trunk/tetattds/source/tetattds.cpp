@@ -456,7 +456,6 @@ public:
 	}
 	virtual void Enter() {
 		GameState::Enter();
-		sendFieldStateTimer = SEND_FIELDSTATE_INTERVAL;
 		g_game = new Game(level, true, connection, connectionManager);
 		g_game->Start();
 		gui->SetListener(g_game);
@@ -468,16 +467,7 @@ public:
 		{
 			g_game->field->SetState(PFS_DEAD);
 		}
-
-		if(sendFieldStateTimer-- == 0)
-		{
-			g_game->SendFieldState();
-			sendFieldStateTimer =
-				SEND_FIELDSTATE_INTERVAL * connection->GetAlivePlayersCount();
-		}
 	}
-private:
-	int sendFieldStateTimer;
 };
 
 class WaitForServerState : public State {

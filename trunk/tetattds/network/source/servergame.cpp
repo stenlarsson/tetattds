@@ -359,7 +359,7 @@ void ServerGame::mSetInfo(Connection* from, SetInfoMessage* setInfo)
 
 	player->level = setInfo->level;
 	player->state = setInfo->ready ? PLAYERSTATE_READY : PLAYERSTATE_CONNECTED;
-	player->typing = setInfo->typing;
+	player->typing = setInfo->typing != 0;
 
 	PlayerInfoMessage pimessage;
 	player->FillPlayerInfoMessage(pimessage);

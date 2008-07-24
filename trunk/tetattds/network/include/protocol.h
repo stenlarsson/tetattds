@@ -1,5 +1,6 @@
 #pragma once
 
+#include <stdint.h>
 #include "netval.h"
 
 #define MAX_PACKET_SIZE 512
@@ -18,6 +19,7 @@
 #define MESSAGE_GARBAGE 001
 #define MESSAGE_FIELDSTATE 002
 #define MESSAGE_CHAT 003
+#define MESSAGE_FIELDSTATE_DELTA 004
 #define MESSAGE_CONNECT 100
 #define MESSAGE_QUIT 101
 #define MESSAGE_DIED 102
@@ -30,129 +32,150 @@
 #define MESSAGE_PLAYER_DIED 205
 #define MESSAGE_PLAYER_DISCONNECTED 206
 
+#ifdef WIN32
+#pragma pack(push, 1)
+#else
+#pragma pack(1)
+#endif
+
 struct MessageHeader
 {
-	MessageHeader(unsigned char packetType, unsigned char messageId, unsigned int sequence)
-	:	packetType(packetType),
-		messageId(messageId),
-		sequence(sequence)
+	MessageHeader(uint8_t packetType, uint8_t messageId, uint16_t sequence)
+	:	sequence(sequence),
+		packetType(packetType),
+		messageId(messageId)
 	{
 	}
 
-	unsigned char packetType;
-	unsigned char messageId;
-	netval<unsigned int> sequence;
+	netval<uint16_t> sequence;
+	uint8_t packetType;
+	uint8_t messageId;
 };
 
 struct PingMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_UNRELIABLE;
-	static const unsigned char messageId = MESSAGE_PING;
+	static const uint8_t packetType = PACKET_TYPE_UNRELIABLE;
+	static const uint8_t messageId = MESSAGE_PING;
 };
 
 struct GarbageMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_GARBAGE;
-	netval<int> num;
-	netval<int> player;
-	netval<int> type;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_GARBAGE;
+	uint8_t num;
+	uint8_t player;
+	uint8_t type;
 };
 
 struct FieldStateMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_UNRELIABLE;
-	static const unsigned char messageId = MESSAGE_FIELDSTATE;
-	netval<int> playerNum;
-	char field[12*6];
+	static const uint8_t packetType = PACKET_TYPE_UNRELIABLE;
+	static const uint8_t messageId = MESSAGE_FIELDSTATE;
+	uint8_t playerNum;
+	uint8_t field[12*6];
+};
+
+struct FieldStateDeltaMessage
+{
+	static const uint8_t packetType = PACKET_TYPE_UNRELIABLE;
+	static const uint8_t messageId = MESSAGE_FIELDSTATE_DELTA;
+	uint8_t playerNum;
+	uint8_t length;
+	uint8_t delta[12*6];
 };
 
 struct ChatMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_CHAT;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_CHAT;
 	char text[128+1];
 };
 
 struct ConnectMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_CONNECT;
-	netval<int> version;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_CONNECT;
+	uint8_t version;
 	char name[64];
 };
 
 struct QuitMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_QUIT;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_QUIT;
 };
 
 struct DiedMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_DIED;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_DIED;
 };
 
 struct SetInfoMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_SET_INFO;
-	netval<int> level;
-	netval<bool> ready;
-	netval<bool> typing;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_SET_INFO;
+	uint8_t level;
+	uint8_t ready;
+	uint8_t typing;
 };
 
 struct AcceptedMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_ACCEPTED;
-	netval<int> playerNum;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_ACCEPTED;
+	uint8_t playerNum;
 };
 
 struct DisconnectMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_DISCONNECT;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_DISCONNECT;
 	char message[128+1];
 };
 
 struct GameStartMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_GAMESTART;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_GAMESTART;
 };
 
 struct GameEndMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_GAMEEND;
-	netval<int> winner;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_GAMEEND;
+	uint8_t winner;
 };
 
 struct PlayerInfoMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_PLAYER_INFO;
-	netval<int> playerNum;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_PLAYER_INFO;
+	uint8_t playerNum;
 	char name[64];
-	netval<int> level;
-	netval<int> wins;
-	netval<bool> ready;
-	netval<bool> typing;
+	uint8_t level;
+	uint8_t wins;
+	uint8_t ready;
+	uint8_t typing;
 };
 
 struct PlayerDiedMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_PLAYER_DIED;
-	netval<int> playerNum;
-	netval<int> place;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_PLAYER_DIED;
+	uint8_t playerNum;
+	uint8_t place;
 };
 
 struct PlayerDisconnectedMessage
 {
-	static const unsigned char packetType = PACKET_TYPE_ORDERED;
-	static const unsigned char messageId = MESSAGE_PLAYER_DISCONNECTED;
-	netval<int> playerNum;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
+	static const uint8_t messageId = MESSAGE_PLAYER_DISCONNECTED;
+	uint8_t playerNum;
 };
+
+#ifdef WIN32
+#pragma pack(pop)
+#else
+#pragma pack(0)
+#endif

@@ -53,3 +53,13 @@ private:
 	short val;
 };
  
+template <>
+struct netval<unsigned short> {
+	netval() {}
+  	netval(unsigned short i) : val(htons(i)) {}
+	void operator =(unsigned short i) { val = htons(i); }
+  	operator unsigned short() const { return ntohs(val); }
+private:
+	unsigned short val;
+};
+ 

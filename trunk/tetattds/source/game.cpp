@@ -56,7 +56,9 @@ Game::Game(int level,
 	sendToSelf(sendToSelf),
 	scrollSpeed(levelData[level].scrollSpeed),
 	col(0),
-	row(0)
+	row(0),
+	sendFieldStateTimer(0),
+	sendFieldStateDeltaTimer(0)
 {
 	std::fill_n(heldKeys, FWGUI_NUM_KEYS, false);
 }
@@ -193,6 +195,21 @@ void Game::Tick()
 
 	DEBUGVERBOSE("Game: field->Tick\n");
 	field->Tick();
+
+	if(sendFieldStateDeltaTimer-- <= 0)
+	{
+		if(sendFieldStateTimer-- <= 0) {
+			SendFieldState();
+			sendFieldStateTimer =
+				SEND_FIELDSTATE_INTERVAL;
+		} else {
+			SendFieldStateDelta();
+		}
+
+		sendFieldStateDeltaTimer =
+			SEND_FIELDSTATE_DELTA_INTERVAL *
+			connection->GetAlivePlayersCount();
+	}
 }
 
 void Game::Draw()
@@ -234,9 +251,44 @@ void Game::PlayerDied()
 
 void Game::SendFieldState()
 {
+	field->GetFieldState(lastFieldState);
+
 	FieldStateMessage message;
-	field->GetFieldState(message.field);
+	memcpy(message.field, lastFieldState, 12*6);
 	message.playerNum = connection->GetMyPlayerNum();
+	connectionManager->BroadcastMessage(message);
+}
+
+void Game::SendFieldStateDelta()
+{
+	char newFieldState[12*6];
+	field->GetFieldState(newFieldState);
+
+	char delta[12*6];
+	int length = 0;
+
+	for(unsigned int i = 0; i < sizeof(newFieldState); i++) {
+		if(newFieldState[i] != lastFieldState[i]) {
+			delta[length++] = i;
+			delta[length++] = newFieldState[i];
+			lastFieldState[i] = newFieldState[i];
+		}
+		
+		if(length == sizeof(delta)) {
+			// better to send the whole field
+			SendFieldState();
+			return;
+		}
+	}
+
+	if(length == 0) {
+		return;
+	}
+
+	FieldStateDeltaMessage message;
+	message.playerNum = connection->GetMyPlayerNum();
+	message.length = length;
+	memcpy(message.delta, delta, length);
 	connectionManager->BroadcastMessage(message);
 }
 
