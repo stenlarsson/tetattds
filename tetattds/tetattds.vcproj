@@ -452,6 +452,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\network\source\messagebuffer.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\network\source\network.h"
 					>
 				</File>
@@ -484,6 +488,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\network\include\connectionmanager.h"
+					>
+				</File>
+				<File
 					RelativePath=".\network\include\ipaddress.h"
 					>
 				</File>
@@ -492,7 +500,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\network\include\messagebuffer.h"
+					>
+				</File>
+				<File
 					RelativePath=".\network\include\netval.h"
+					>
+				</File>
+				<File
+					RelativePath=".\network\include\packet.h"
+					>
+				</File>
+				<File
+					RelativePath=".\network\include\player.h"
 					>
 				</File>
 				<File
@@ -513,6 +533,10 @@
 				</File>
 				<File
 					RelativePath=".\network\include\udpsocket.h"
+					>
+				</File>
+				<File
+					RelativePath=".\network\include\wrapping.h"
 					>
 				</File>
 			</Filter>

@@ -7,12 +7,13 @@
 #include "ipaddress.h"
 #include "connection.h"
 #include "udpconnection.h"
+#include "wrapping.h"
 
 extern unsigned int GetTime();
 
 struct CachedPacket
 {
-	CachedPacket(unsigned int lastSendTime, unsigned int sequence, void* packet, size_t packetsize)
+	CachedPacket(unsigned int lastSendTime, uint16_t sequence, void* packet, size_t packetsize)
 	:	lastSendTime(lastSendTime),
 		sequence(sequence),
 		packet(::operator new(packetsize)),
@@ -27,7 +28,7 @@ struct CachedPacket
 	}
 		
 	unsigned int lastSendTime;
-	unsigned int sequence;
+	uint16_t sequence;
 	void* packet;
 	size_t packetsize;
 };
@@ -52,8 +53,8 @@ private:
 	MessageReciever* reciever;
 	UdpSocket* socket;
 	IpAddress address;
-	unsigned int incomingSequence;
-	unsigned int outgoingSequence;
+	wrapping incomingSequence;
+	wrapping outgoingSequence;
 	std::vector<CachedPacket> futurePackets;
 	std::vector<CachedPacket> nonAckedPackets;
 	unsigned int lastSendTime;

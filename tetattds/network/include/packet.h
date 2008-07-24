@@ -6,7 +6,7 @@ struct Packet {
 	Packet(
 		unsigned char packetType,
 		unsigned char messageId,
-		unsigned int sequence,
+		uint16_t sequence,
 		const void* message,
 		size_t length)
 		:	header(packetType, messageId, sequence)
