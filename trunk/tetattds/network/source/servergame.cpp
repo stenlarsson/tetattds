@@ -133,7 +133,7 @@ void ServerGame::Tick()
 			if(++players[i]->deadTime > DEAD_RETURN_TO_MENU_TIME)
 			{
 				GameEndMessage message;
-				message.winner = -1;
+				message.winner = 255;
 				players[i]->connection->SendMessage(message);
 				players[i]->state = PLAYERSTATE_CONNECTED;
 			}
@@ -192,7 +192,7 @@ void ServerGame::Tick()
 			}
 			else
 			{
-				message.winner = -1;
+				message.winner = 255;
 				PrintStatus( "game over, no winner" );
 				ChatMessage chat;
 				if(activePlayers == 1)

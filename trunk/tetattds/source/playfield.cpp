@@ -562,7 +562,7 @@ void PlayField::DropBlocks()
 		{
 			if(field[i]->CheckDrop())	//if it's time to really drop the block
 			{
-				ASSERT(field[Below(i)] == NULL)
+				ASSERT(field[Below(i)] == NULL);
 				std::swap(field[i], field[Below(i)]);
 			}
 		}

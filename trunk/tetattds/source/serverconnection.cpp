@@ -120,33 +120,31 @@ void ServerConnection::mGarbage(Connection* from, GarbageMessage* garbage)
 
 void ServerConnection::mFieldState(Connection* from, FieldStateMessage* fieldState)
 {
-	ASSERT(fieldState->playerNum >= 0);
 	ASSERT(fieldState->playerNum < MAX_PLAYERS);
 	DEBUGVERBOSE("ServerConn: mFieldState %d, %d\n", fieldState->playerNum, players[fieldState->playerNum].fieldNum);
 	
-	memcpy(lastFieldState, fieldState->field, sizeof(lastFieldState));
-
 	PlayerInfo& player = players[fieldState->playerNum];
+	memcpy(player.lastFieldState, fieldState->field, sizeof(player.lastFieldState));
+
 	g_fieldGraphics->DrawSmallField(
 		player.fieldNum,
-		lastFieldState,
+		player.lastFieldState,
 		player.dead);
 }
 
 void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage* fieldStateDelta)
 {
-	ASSERT(fieldStateDelta->playerNum >= 0);
 	ASSERT(fieldStateDelta->playerNum < MAX_PLAYERS);
 	DEBUGVERBOSE("ServerConn: mFieldStateDelta %d, %d\n", fieldStateDelta->playerNum, players[fieldStateDelta->playerNum].fieldNum);
+	PlayerInfo& player = players[fieldStateDelta->playerNum];
 
 	for(int i = 0; i < fieldStateDelta->length; i += 2) {
-		lastFieldState[fieldStateDelta->delta[i]] = fieldStateDelta->delta[i+1];
+		player.lastFieldState[fieldStateDelta->delta[i]] = fieldStateDelta->delta[i+1];
 	}
 
-	PlayerInfo& player = players[fieldStateDelta->playerNum];
 	g_fieldGraphics->DrawSmallField(
 		player.fieldNum,
-		lastFieldState,
+		player.lastFieldState,
 		player.dead);
 }
 
@@ -162,7 +160,6 @@ void ServerConnection::mChat(Connection* from, ChatMessage* chat)
 void ServerConnection::mAccepted(Connection* from, AcceptedMessage* accepted)
 {
 	DEBUGVERBOSE("ServerConn: mAccepted\n");
-	ASSERT(accepted->playerNum >= 0);
 	ASSERT(accepted->playerNum < MAX_PLAYERS);
 	
 	myPlayerNum = accepted->playerNum;
@@ -200,10 +197,9 @@ void ServerConnection::mGameStart(Connection* from, GameStartMessage* gameStart)
 void ServerConnection::mGameEnd(Connection* from, GameEndMessage* gameEnd)
 {
 	DEBUGVERBOSE("ServerConn: mGameEnd\n");
-	ASSERT(gameEnd->winner >= -1);
-	ASSERT(gameEnd->winner < MAX_PLAYERS);
+	ASSERT(gameEnd->winner < MAX_PLAYERS || gameEnd->winner == 255);
 	
-	if(gameEnd->winner != -1)
+	if(gameEnd->winner != 255)
 	{
 		if(gameEnd->winner != myPlayerNum)
 		{
@@ -223,7 +219,6 @@ void ServerConnection::mGameEnd(Connection* from, GameEndMessage* gameEnd)
 void ServerConnection::mPlayerInfo(Connection* from, PlayerInfoMessage* playerInfo)
 {
 	DEBUGVERBOSE("ServerConn: mPlayerInfo\n");
-	ASSERT(playerInfo->playerNum >= 0);
 	ASSERT(playerInfo->playerNum < MAX_PLAYERS);
 	
 	PlayerInfo& player = players[playerInfo->playerNum];
@@ -248,7 +243,6 @@ void ServerConnection::mPlayerInfo(Connection* from, PlayerInfoMessage* playerIn
 void ServerConnection::mPlayerDied(Connection* from, PlayerDiedMessage* playerDied)
 {
 	DEBUGVERBOSE("ServerConn: mPlayerDied\n");
-	ASSERT(playerDied->playerNum >= 0);
 	ASSERT(playerDied->playerNum < MAX_PLAYERS);
 	
 	PlayerInfo& player = players[playerDied->playerNum];
@@ -261,7 +255,6 @@ void ServerConnection::mPlayerDied(Connection* from, PlayerDiedMessage* playerDi
 void ServerConnection::mPlayerDisconnected(Connection* from, PlayerDisconnectedMessage* playerDisconnected)
 {
 	DEBUGVERBOSE("ServerConn: mPlayerDisconnected\n");
-	ASSERT(playerDisconnected->playerNum >= 0);
 	ASSERT(playerDisconnected->playerNum < MAX_PLAYERS);
 	
 	PlayerInfo& player = players[playerDisconnected->playerNum];

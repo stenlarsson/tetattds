@@ -196,7 +196,7 @@ void Game::Tick()
 	DEBUGVERBOSE("Game: field->Tick\n");
 	field->Tick();
 
-	if(sendFieldStateDeltaTimer-- <= 0)
+	if(connection != NULL && sendFieldStateDeltaTimer-- <= 0)
 	{
 		if(sendFieldStateTimer-- <= 0) {
 			SendFieldState();

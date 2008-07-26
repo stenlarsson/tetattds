@@ -11,7 +11,7 @@
 class wrapping
 {
 public:
-	wrapping(uint16_t number) : number(number) {}
+	explicit wrapping(uint16_t number) : number(number) {}
 
 	/**
 	 * Returns < 0, == 0, or > 0, if right is less, equal, or
@@ -35,15 +35,15 @@ private:
 	uint16_t number;
 };
 
-static bool operator != (uint16_t left, wrapping right)
+inline bool operator != (uint16_t left, wrapping right)
 { return right.compare(left) != 0; }
-static bool operator <  (uint16_t left, wrapping right)
+inline bool operator <  (uint16_t left, wrapping right)
 { return right.compare(left) >  0; }
-static bool operator <= (uint16_t left, wrapping right)
+inline bool operator <= (uint16_t left, wrapping right)
 { return right.compare(left) >= 0; }
-static bool operator >  (uint16_t left, wrapping right)
+inline bool operator >  (uint16_t left, wrapping right)
 { return right.compare(left) <  0; }
-static bool operator >= (uint16_t left, wrapping right)
+inline bool operator >= (uint16_t left, wrapping right)
 { return right.compare(left) <= 0; }
-static bool operator == (uint16_t left, wrapping right)
+inline bool operator == (uint16_t left, wrapping right)
 { return right.compare(left) == 0; }
