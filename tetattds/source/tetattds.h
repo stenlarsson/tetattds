@@ -20,10 +20,15 @@
 
 #define DEBUGMONGO printf("%s\n", __PRETTY_FUNCTION__)
 
+#ifdef ARM9
 #define ASSERT(x) if(!(x)) {\
 	printf("assertion failed %s:%i\n", __FILE__, __LINE__);\
 	for(;;);\
 }
+#else
+#include <assert.h>
+#define ASSERT assert
+#endif
 
 extern void PrintStatus(const char* format, ...);
 

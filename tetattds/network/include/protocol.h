@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <string.h>
 #include "netval.h"
 
 #define MAX_PACKET_SIZE 512

@@ -35,6 +35,7 @@ struct PlayerInfo
 	bool ready;
 	bool connected;
 	bool typing;
+	char lastFieldState[12*6];
 };
 
 class FieldGraphics

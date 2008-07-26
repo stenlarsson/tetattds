@@ -70,5 +70,4 @@ private:
 	int wins;
 	int pingTimer;
 	char* name;
-	char lastFieldState[12*6];
 };
