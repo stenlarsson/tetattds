@@ -49,6 +49,7 @@ private:
 	void mPing(Connection* from, PingMessage* ping);
 	void mGarbage(Connection* from, GarbageMessage* garbage);
 	void mFieldState(Connection* from, FieldStateMessage* fieldState);
+	void mFieldStateDelta(Connection* from, FieldStateDeltaMessage* fieldStateDelta);
 	void mChat(Connection* from, ChatMessage* chat);
 
 	void mConnect(Connection* from, ConnectMessage* connect);

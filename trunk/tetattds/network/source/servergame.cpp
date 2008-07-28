@@ -62,6 +62,7 @@ void ServerGame::MessageIn(Connection* from, unsigned char id, const void* data,
 	HANDLE_MESSAGE(Ping)
 	HANDLE_MESSAGE(Garbage)
 	HANDLE_MESSAGE(FieldState)
+	HANDLE_MESSAGE(FieldStateDelta)
 	HANDLE_MESSAGE(Chat)
 	HANDLE_MESSAGE(Connect)
 	HANDLE_MESSAGE(Quit)
@@ -241,6 +242,10 @@ void ServerGame::mGarbage(Connection* from, GarbageMessage* garbage)
 }
 
 void ServerGame::mFieldState(Connection* from, FieldStateMessage* fieldState)
+{
+}
+
+void ServerGame::mFieldStateDelta(Connection* from, FieldStateDeltaMessage* fieldStateDelta)
 {
 }
 

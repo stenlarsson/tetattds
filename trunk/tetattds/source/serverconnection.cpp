@@ -51,7 +51,6 @@ void ServerConnection::ConnectionCreated(Connection* connection)
 
 void ServerConnection::MessageIn(Connection* from, unsigned char id, const void* data, size_t size)
 {
-	ASSERT(from != NULL);
 	ASSERT(data != NULL);
 	ASSERT(size > 0);
 
