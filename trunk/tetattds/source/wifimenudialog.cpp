@@ -1,5 +1,6 @@
 #include "tetattds.h"
 #include "wifimenudialog.h"
+#include "fieldgraphics.h"
 #include <button.h>
 #include <label.h>
 #include <imagebutton.h>
@@ -70,5 +71,19 @@ void WifiMenuDialog::ControlClicked(Control* control)
 	else if(control == closeButton)
 	{
 		selection = WMSEL_QUIT;
+	}
+}
+
+void WifiMenuDialog::KeyDown(FwGui::Key key)
+{
+	FwGui::Dialog::KeyDown(key);
+
+	switch(key) {
+	case FwGui::FWKEY_X:
+		g_fieldGraphics->TogglePlayerOffset();
+		break;
+
+	default:
+		break;
 	}
 }

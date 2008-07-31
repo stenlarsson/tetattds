@@ -31,6 +31,7 @@
 #define LEVEL_TEXT_OFFSET (10*TEXTMAP_STRIDE)
 #define READY_TEXT_OFFSET (14*TEXTMAP_STRIDE + 1)
 #define PLACE_TEXT_OFFSET (15*TEXTMAP_STRIDE + 2)
+#define PLAYER_OFFSET_TEXT_OFFSET (23*TEXTMAP_STRIDE + 20)
 
 #define MAX_CHAT_LENGTH 128
 #define MAX_CHAT_LINES 6
@@ -55,15 +56,16 @@ public:
 	}
 
 	void DrawSmallField(int fieldNum, char* field, bool shaded);
-	void PrintPlayerInfo(PlayerInfo* player);
-	void ClearPlayer(PlayerInfo* player);
-	void ClearSmallField(int fieldNum);
+	void PrintPlayerInfo(int playerNum, PlayerInfo* player);
+	void ClearPlayer(int playerNum);
 
 	void Draw(PlayField *pf);
 	void DrawField(PlayField *pf, int x, int y, int tile, bool shaded);
 	void DrawSubScreen();
 	virtual void AddChat(char* text);
 	void ClearChat();
+
+	void TogglePlayerOffset();
 
 private:
 	void PrintSmall(uint32_t offset, const char* text);

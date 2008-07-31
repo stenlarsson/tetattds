@@ -32,6 +32,7 @@ public:
 	WifiMenuSelection selection;
 
 private:
+	virtual void KeyDown(FwGui::Key key);
 	bool ready;
 	FwGui::Label* infoLabel;
 	FwGui::Button* readyButton;

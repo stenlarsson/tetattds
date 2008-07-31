@@ -30,6 +30,7 @@
 #ifdef __GNUC__
 #define HAVE_STDINT_H	1
 #elif defined(_MSC_VER)
+/*
 typedef signed __int8		int8_t;
 typedef unsigned __int8		uint8_t;
 typedef signed __int16		int16_t;
@@ -46,6 +47,8 @@ typedef unsigned int   uintptr_t;
 #endif
 #define _UINTPTR_T_DEFINED
 #endif
+*/
+#define HAVE_STDINT_H 1
 #else	/* !__GNUC__ && !_MSC_VER */
 typedef signed char int8_t;
 typedef unsigned char uint8_t;

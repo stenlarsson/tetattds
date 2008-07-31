@@ -99,7 +99,7 @@ int UdpSocket::Recieve(void *data, size_t size, IpAddress* address)
 			return -2;
 		}
 
-		NET_ERROR("recvfrom");
+		//NET_ERROR("recvfrom");
 		return -1;
 	}
 
