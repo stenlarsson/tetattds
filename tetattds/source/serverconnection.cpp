@@ -11,6 +11,12 @@ ServerConnection::ServerConnection(const char* name)
 	ASSERT(g_fieldGraphics != NULL);
 	ASSERT(name != NULL);
 	memset(players, 0, sizeof(players));
+	for(int i = 0; i < MAX_PLAYERS; i++) {
+		PlayerInfo& player = players[i];
+		for(int j = 0; j < 12*6; j++) {
+			player.fieldState[j] = TILE_BLANK;
+		}
+	}
 }
 
 ServerConnection::~ServerConnection()
@@ -19,7 +25,7 @@ ServerConnection::~ServerConnection()
 	for(int i = 0; i < MAX_PLAYERS; i++) {
 		if(players[i].connected) {
 			players[i].connected = false;
-			g_fieldGraphics->ClearPlayer(&players[i]);
+			g_fieldGraphics->ClearPlayer(i);
 		}
 	}
 
@@ -123,12 +129,9 @@ void ServerConnection::mFieldState(Connection* from, FieldStateMessage* fieldSta
 	DEBUGVERBOSE("ServerConn: mFieldState %d, %d\n", fieldState->playerNum, players[fieldState->playerNum].fieldNum);
 	
 	PlayerInfo& player = players[fieldState->playerNum];
-	memcpy(player.lastFieldState, fieldState->field, sizeof(player.lastFieldState));
+	memcpy(player.fieldState, fieldState->field, sizeof(player.fieldState));
 
-	g_fieldGraphics->DrawSmallField(
-		player.fieldNum,
-		player.lastFieldState,
-		player.dead);
+	g_fieldGraphics->PrintPlayerInfo(fieldState->playerNum, &player);
 }
 
 void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage* fieldStateDelta)
@@ -138,13 +141,10 @@ void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage
 	PlayerInfo& player = players[fieldStateDelta->playerNum];
 
 	for(int i = 0; i < fieldStateDelta->length; i += 2) {
-		player.lastFieldState[fieldStateDelta->delta[i]] = fieldStateDelta->delta[i+1];
+		player.fieldState[fieldStateDelta->delta[i]] = fieldStateDelta->delta[i+1];
 	}
 
-	g_fieldGraphics->DrawSmallField(
-		player.fieldNum,
-		player.lastFieldState,
-		player.dead);
+	g_fieldGraphics->PrintPlayerInfo(fieldStateDelta->playerNum, &player);
 }
 
 void ServerConnection::mChat(Connection* from, ChatMessage* chat)
@@ -186,10 +186,7 @@ void ServerConnection::mGameStart(Connection* from, GameStartMessage* gameStart)
 		players[i].place = 0;
 		players[i].ready = false;
 		players[i].typing = false;
-		if(i != myPlayerNum)
-		{
-			g_fieldGraphics->PrintPlayerInfo(&players[i]);
-		}
+		g_fieldGraphics->PrintPlayerInfo(i, &players[i]);
 	}
 }
 
@@ -200,16 +197,13 @@ void ServerConnection::mGameEnd(Connection* from, GameEndMessage* gameEnd)
 	
 	if(gameEnd->winner != 255)
 	{
-		if(gameEnd->winner != myPlayerNum)
-		{
-			PlayerInfo& player = players[gameEnd->winner];
-			player.place = 1;
-			g_fieldGraphics->PrintPlayerInfo(&player);
-		}
-		else
+		if(gameEnd->winner == myPlayerNum)
 		{
 			wins++;
 		}
+		PlayerInfo& player = players[gameEnd->winner];
+		player.place = 1;
+		g_fieldGraphics->PrintPlayerInfo(gameEnd->winner, &player);
 	}
 	
 	state = SERVERSTATE_GAME_ENDED;
@@ -222,21 +216,12 @@ void ServerConnection::mPlayerInfo(Connection* from, PlayerInfoMessage* playerIn
 	
 	PlayerInfo& player = players[playerInfo->playerNum];
 	strncpy(player.name, playerInfo->name, sizeof(player.name));
-	player.fieldNum = playerInfo->playerNum;
-	if(player.fieldNum > myPlayerNum)
-	{
-		player.fieldNum--;
-	}
 	player.level = playerInfo->level;
 	player.wins = playerInfo->wins;
 	player.ready = playerInfo->ready != 0;
 	player.connected = true;
 	player.typing = playerInfo->typing != 0;
-	
-	if(playerInfo->playerNum != myPlayerNum)
-	{
-		g_fieldGraphics->PrintPlayerInfo(&player);
-	}
+	g_fieldGraphics->PrintPlayerInfo(playerInfo->playerNum, &player);
 }
 
 void ServerConnection::mPlayerDied(Connection* from, PlayerDiedMessage* playerDied)
@@ -248,7 +233,7 @@ void ServerConnection::mPlayerDied(Connection* from, PlayerDiedMessage* playerDi
 	player.dead = true;
 	player.place = playerDied->place;
 	
-	g_fieldGraphics->PrintPlayerInfo(&player);
+	g_fieldGraphics->PrintPlayerInfo(playerDied->playerNum, &player);
 }
 
 void ServerConnection::mPlayerDisconnected(Connection* from, PlayerDisconnectedMessage* playerDisconnected)
@@ -258,5 +243,5 @@ void ServerConnection::mPlayerDisconnected(Connection* from, PlayerDisconnectedM
 	
 	PlayerInfo& player = players[playerDisconnected->playerNum];
 	player.connected = false;
-	g_fieldGraphics->ClearPlayer(&player);
+	g_fieldGraphics->ClearPlayer(playerDisconnected->playerNum);
 }

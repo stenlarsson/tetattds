@@ -3,7 +3,7 @@
 #include "protocol.h"
 #include "player.h"
 
-#define MAX_PLAYERS 5
+#define MAX_PLAYERS 8
 
 #define VERSION 31
 
@@ -33,14 +33,8 @@ public:
 	template<typename T>
 	void SendMessageToAll(T& message)
 	{
-		SendMessageToAll(message, -1);
-	}
-
-	template<typename T>
-	void SendMessageToAll(T& message , int excludePlayer)
-	{
 		for(int i = 0; i < MAX_PLAYERS; i++) {
-			if(players[i] != 0 && i != excludePlayer && players[i]->state != PLAYERSTATE_DISCONNECTED)
+			if(players[i] != 0 && players[i]->state != PLAYERSTATE_DISCONNECTED)
 				players[i]->connection->SendMessage(message);
 		}
 	}

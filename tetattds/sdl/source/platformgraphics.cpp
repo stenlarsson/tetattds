@@ -50,11 +50,6 @@ PlatformGraphics::PlatformGraphics()
 		fprintf(stderr, "CreateRGBSurface failed: %s\n", SDL_GetError());
 		exit(1);
 	}
-  
-	for(int i = 0; i < 4; i++) {
-		ClearSmallField(i);
-		smallFields[i].player = NULL;
-	}
 }
 
 PlatformGraphics::~PlatformGraphics()
@@ -99,34 +94,31 @@ void PlatformGraphics::Draw(PlayField *pf)
 void PlatformGraphics::DrawSubScreen()
 {
 	SDL_BlitSurface(subbackground, NULL, framebuffer, NULL);
+	if(subbackground == wifibackground) {
+		PrintPlayerOffset();
+	}
 	PrintChat();
 	for(int i = 0; i < 4; i++) {
-		ReallyDrawSmallField(i);
-		ReallyPrintPlayerInfo(smallFields[i].player);
+		PlayerInfo* player = players[i + playerOffset];
+		if(player != NULL) {
+			ReallyDrawSmallField(i, player);
+			ReallyPrintPlayerInfo(i, player);
+		}
 	}
 
 	SDL_Rect rect = {0, 0, 256, 192};
 	SDL_BlitSurface(framebuffer, &rect, SDL_GetVideoSurface(), &rect);
 }
 
-void PlatformGraphics::DrawSmallField(int fieldNum, char* field, bool shaded)
-{
-	ASSERT(fieldNum >= 0);
-	ASSERT(fieldNum < 4);
-	ASSERT(field != NULL);
-	memcpy(smallFields[fieldNum].field, field, 12*6);
-	smallFields[fieldNum].shaded = shaded;
-}
-
-void PlatformGraphics::ReallyDrawSmallField(int fieldNum)
+void PlatformGraphics::ReallyDrawSmallField(int fieldNum, PlayerInfo* player)
 {
 	SDL_Rect tilerect, destrect;
 	tilerect.w = destrect.w = tilerect.h = destrect.h = 8;
 	uint32_t cell = SMALL_FIELD_OFFSET + fieldNum * 8;
 	for(int i = 0; i < 12*6; i++)
 	{
-		uint32_t tile = smallFields[fieldNum].field[i];
-		//if(smallFields[fieldNum].shaded)
+		uint32_t tile = player->fieldState[i];
+		//if(player->dead)
 		//	tile |= (1 << 12);
 		destrect.x = (cell % BLOCKMAP_STRIDE) * 8;
 		destrect.y = (cell / BLOCKMAP_STRIDE) * 8;
@@ -141,26 +133,19 @@ void PlatformGraphics::ReallyDrawSmallField(int fieldNum)
 	}
 }
 
-void PlatformGraphics::ClearSmallField(int fieldNum)
+void PlatformGraphics::PrintPlayerInfo(int playerNum, PlayerInfo* player)
 {
-	memset(smallFields[fieldNum].field, TILE_BLANK, 12*6);
-	smallFields[fieldNum].shaded = false;
+	ASSERT(playerNum >= 0);
+	ASSERT(playerNum < MAX_PLAYERS);
+	ASSERT(player != NULL);
+	players[playerNum] = player;
 }
 
-void PlatformGraphics::PrintPlayerInfo(PlayerInfo* player)
+void PlatformGraphics::ClearPlayer(int playerNum)
 {
-	ASSERT(player != NULL);
-	smallFields[player->fieldNum].player = player;
-}
-
-void PlatformGraphics::ClearPlayer(PlayerInfo* player)
-{
-	ASSERT(player != NULL);
-
-	smallFields[player->fieldNum].player = NULL;
-	// smallfield
-	ClearSmallField(player->fieldNum);
-	memset(player, 0, sizeof(PlayerInfo));
+	ASSERT(playerNum >= 0);
+	ASSERT(playerNum < MAX_PLAYERS);
+	players[playerNum] = NULL;
 }
 
 void PlatformGraphics::PrintLarge(uint32_t cell, const char* text, bool subScreen)

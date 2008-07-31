@@ -261,10 +261,31 @@ void PlatformGraphics::DrawSmallField(int fieldNum, char* field, bool shaded)
 	}
 }
 
-void PlatformGraphics::ClearSmallField(int fieldNum)
+void PlatformGraphics::PrintPlayerInfo(int playerNum, PlayerInfo* player)
 {
-	ASSERT(fieldNum >= 0);
-	ASSERT(fieldNum < 4);
+	players[playerNum] = player;
+	ReallyPrintPlayerInfo(playerNum - playerOffset, player);
+	DrawSmallField(playerNum - playerOffset, player->fieldState, player->dead);
+}
+
+void PlatformGraphics::ClearPlayer(int playerNum)
+{
+	ASSERT(playerNum >= 0);
+	ASSERT(playerNum < MAX_PLAYERS);
+	int fieldNum = playerNum - playerOffset;
+	
+	// name
+	ClearText(subTextMap + NAME_TEXT_OFFSET + fieldNum * 8, 8);
+	// wins
+	ClearText(subTextMap + WINS_TEXT_OFFSET + fieldNum * 8, 8);
+	// level
+	ClearText(subTextMap + LEVEL_TEXT_OFFSET + fieldNum * 8, 8);
+	// ready
+	ClearText(subTextMap + READY_TEXT_OFFSET + fieldNum * 8, 8);
+	// place
+	PrintLarge(PLACE_TEXT_OFFSET + fieldNum * 8," ", true);
+	ClearText(subTextMap + PLACE_TEXT_OFFSET + fieldNum * 8 + TEXTMAP_STRIDE + 1, 2);
+	// smallfield
 	u16* cell = subBlockMap + SMALL_FIELD_OFFSET + fieldNum * 8;
 	for(int i = 0; i < 12*6; i++)
 	{
@@ -275,31 +296,7 @@ void PlatformGraphics::ClearSmallField(int fieldNum)
 			cell += BLOCKMAP_STRIDE - 6;
 		}
 	}
-}
-
-void PlatformGraphics::PrintPlayerInfo(PlayerInfo* player)
-{
-	ReallyPrintPlayerInfo(player);
-}
-
-void PlatformGraphics::ClearPlayer(PlayerInfo* player)
-{
-	ASSERT(player != NULL);
-	
-	// name
-	ClearText(subTextMap + NAME_TEXT_OFFSET + player->fieldNum * 8, 8);
-	// wins
-	ClearText(subTextMap + WINS_TEXT_OFFSET + player->fieldNum * 8, 8);
-	// level
-	ClearText(subTextMap + LEVEL_TEXT_OFFSET + player->fieldNum * 8, 8);
-	// ready
-	ClearText(subTextMap + READY_TEXT_OFFSET + player->fieldNum * 8, 8);
-	// place
-	PrintLarge(PLACE_TEXT_OFFSET + player->fieldNum * 8," ", true);
-	ClearText(subTextMap + PLACE_TEXT_OFFSET + player->fieldNum * 8 + TEXTMAP_STRIDE + 1, 2);
-	// smallfield
-	ClearSmallField(player->fieldNum);
-	memset(player, 0, sizeof(PlayerInfo));
+	players[playerNum] = NULL;
 }
 
 void PlatformGraphics::PrintLarge(uint32_t cell, const char* text, bool subScreen)
@@ -373,4 +370,10 @@ void PlatformGraphics::ClearChat()
 	memset(chatBuffer, 0, sizeof(chatBuffer));
 	lastChatLine = -1;
 	PrintChat();
+}
+
+void PlatformGraphics::TogglePlayerOffset()
+{
+	playerOffset ^= 4;
+	PrintPlayerOffset();
 }

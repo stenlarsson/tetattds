@@ -27,7 +27,6 @@ class PlayField;
 struct PlayerInfo
 {
 	char name[64];
-	int fieldNum;
 	bool dead;
 	int place;
 	int level;
@@ -35,7 +34,7 @@ struct PlayerInfo
 	bool ready;
 	bool connected;
 	bool typing;
-	char lastFieldState[12*6];
+	char fieldState[12*6];
 };
 
 class FieldGraphics
@@ -52,10 +51,8 @@ public:
 		return (fieldNum / 6 - PF_FIRST_VISIBLE_ROW) * BLOCKSIZE + scroll;
 	}
 
-	virtual void DrawSmallField(int fieldNum, char* field, bool shaded) = 0;
-	virtual void PrintPlayerInfo(PlayerInfo* player) = 0;
-	virtual void ClearPlayer(PlayerInfo* player) = 0;
-	virtual void ClearSmallField(int fieldNum) = 0;
+	virtual void PrintPlayerInfo(int playerNum, PlayerInfo* player) = 0;
+	virtual void ClearPlayer(int playerNum) = 0;
 
 	virtual void Draw(PlayField *pf) = 0;
 	void DrawFields(PlayField *pf);
@@ -66,8 +63,11 @@ public:
 	void PrintCountdown(int count);
 	virtual void AddChat(char* text);
 	virtual void ClearChat() = 0;
+	void PrintPlayerOffset();
 
 	EffectHandler *GetEffectHandler() { return &effects; }
+
+	virtual void TogglePlayerOffset() = 0;
 
 protected:
 	void PrintScore(int score);
@@ -80,7 +80,7 @@ protected:
 	int LargeCharTile(char c);
 	int SmallCharTile(char c);
 
- 	void ReallyPrintPlayerInfo(PlayerInfo* player);
+ 	void ReallyPrintPlayerInfo(int fieldNum, PlayerInfo* player);
 
 	EffectHandler effects;
 	Sprite* marker;
@@ -89,6 +89,8 @@ protected:
 	char chatBuffer[MAX_CHAT_LINES][32+1];
 	int lastChatLine;
 	int scrollOffset;
+	PlayerInfo* players[MAX_PLAYERS];
+	int playerOffset;
 };
 
 extern FieldGraphics* g_fieldGraphics;

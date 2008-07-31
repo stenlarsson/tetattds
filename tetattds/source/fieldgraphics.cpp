@@ -10,9 +10,15 @@ FieldGraphics::FieldGraphics()
 :	effects(),
 	marker(GetMarker(true)),
 	touchMarker(GetMarker(false)),
-	lastChatLine(-1)
+	lastChatLine(-1),
+	scrollOffset(0),
+	playerOffset(0)
 {
 	memset(chatBuffer,0,sizeof(chatBuffer));
+
+	for(int i = 0; i < MAX_PLAYERS; i++) {
+		players[i] = NULL;
+	}
 }
 
 FieldGraphics::~FieldGraphics()
@@ -74,7 +80,7 @@ void FieldGraphics::DrawMarkers(PlayField *pf)
 	}
 }
 
-void FieldGraphics::ReallyPrintPlayerInfo(PlayerInfo* player)
+void FieldGraphics::ReallyPrintPlayerInfo(int fieldNum, PlayerInfo* player)
 {
 	if(player == NULL)
 		return;
@@ -82,32 +88,32 @@ void FieldGraphics::ReallyPrintPlayerInfo(PlayerInfo* player)
 	// name
 	char name[8+1];
 	snprintf(name, sizeof(name), "%-8.8s", player->name);
-	PrintSmall(NAME_TEXT_OFFSET + player->fieldNum * 8, name);
+	PrintSmall(NAME_TEXT_OFFSET + fieldNum * 8, name);
 	
 	// wins
 	char wins[8+1];
 	snprintf(wins, sizeof(wins), "%02i wins", player->wins);
-	PrintSmall(WINS_TEXT_OFFSET + player->fieldNum * 8, wins);
+	PrintSmall(WINS_TEXT_OFFSET + fieldNum * 8, wins);
 
 	// level
 	char level[8+1];
 	snprintf(level, sizeof(level), "lv %02i", player->level+1);
-	PrintSmall(LEVEL_TEXT_OFFSET + player->fieldNum * 8, level);
+	PrintSmall(LEVEL_TEXT_OFFSET + fieldNum * 8, level);
 
 	// ready/typing
 	char ready[8+1];
 	snprintf(ready, sizeof(ready), (player->ready ? "READY" : (player->typing ? "typing" : "      ")));
-	PrintSmall(READY_TEXT_OFFSET + player->fieldNum * 8, ready);
+	PrintSmall(READY_TEXT_OFFSET + fieldNum * 8, ready);
 
 	// place
-	const char* digit[] = {" ", "1", "2", "3", "4", "5"};
-	const char* suffix[] = {"  ", "ST", "ND", "RD", "TH", "TH"};
+	const char* digit[] = {" ", "1", "2", "3", "4", "5", "6", "7", "8"};
+	const char* suffix[] = {"  ", "ST", "ND", "RD", "TH", "TH", "TH", "TH", "TH"};
 	PrintLarge(
-		PLACE_TEXT_OFFSET + player->fieldNum * 8,
+		PLACE_TEXT_OFFSET + fieldNum * 8,
 		digit[player->place],
 		true);
 	PrintSmall(
-		PLACE_TEXT_OFFSET + player->fieldNum * 8 + TEXTMAP_STRIDE + 1,
+		PLACE_TEXT_OFFSET + fieldNum * 8 + TEXTMAP_STRIDE + 1,
 		suffix[player->place]);
 }
 
@@ -222,4 +228,14 @@ void FieldGraphics::AddChat(char* text)
 			lastChatLine = 0;
 		strcpy(chatBuffer[lastChatLine], text);
 	}
+}
+
+void FieldGraphics::PrintPlayerOffset()
+{
+	char str[12+1];
+	snprintf(str, 12, "X:Show P%i-P%i",
+		(playerOffset^4)+1,
+		(playerOffset^4)+4);
+	str[12] = '\0';
+	PrintSmall(PLAYER_OFFSET_TEXT_OFFSET, str);
 }

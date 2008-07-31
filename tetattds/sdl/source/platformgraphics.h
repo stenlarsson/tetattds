@@ -18,6 +18,7 @@
 #define LEVEL_TEXT_OFFSET (10*TEXTMAP_STRIDE)
 #define READY_TEXT_OFFSET (14*TEXTMAP_STRIDE + 1)
 #define PLACE_TEXT_OFFSET (15*TEXTMAP_STRIDE + 2)
+#define PLAYER_OFFSET_TEXT_OFFSET (23*TEXTMAP_STRIDE + 20)
 
 #define MAX_CHAT_LENGTH 128
 #define MAX_CHAT_LINES 6
@@ -42,29 +43,24 @@ public:
 		return PLAYFIELD_OFFSET_Y + FieldGraphics::GetFieldY(fieldNum, scrolled);
 	}
 
-	void DrawSmallField(int fieldNum, char* field, bool shaded);
-	void PrintPlayerInfo(PlayerInfo* player);
-	void ClearPlayer(PlayerInfo* player);
+	void PrintPlayerInfo(int playerNum, PlayerInfo* player);
+	void ClearPlayer(int playerNum);
 	void ClearSmallField(int fieldNum);
 
 	void Draw(PlayField *pf);
 	void DrawField(PlayField *pf, int x, int y, int tile, bool shaded);
 	void DrawSubScreen();
 	void ClearChat();
+
+	void TogglePlayerOffset() { playerOffset ^= 4; }
 	
 	SDL_Surface *framebuffer;
 private:
-	void ReallyDrawSmallField(int fieldNum);
+	void ReallyDrawSmallField(int fieldNum, PlayerInfo* player);
 
 	void PrintSmall(uint32_t offset, const char* text);
 	void PrintLarge(uint32_t offset, const char* text, bool subScreen);
 	void PrintChat();
-	
-	struct {
-		char field[12*6];
-		bool shaded;
-		PlayerInfo* player;
-	} smallFields[4];
 };
 
 extern PlatformGraphics* g_PlatformGraphics;

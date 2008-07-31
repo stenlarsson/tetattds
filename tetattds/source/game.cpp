@@ -106,10 +106,13 @@ void Game::KeyDown(FwGui::Key key)
 
 		case FwGui::FWKEY_A:
 		case FwGui::FWKEY_B:
-		case FwGui::FWKEY_X:
-		case FwGui::FWKEY_Y:
 			field->KeyInput(INPUT_SWAP);
 			break;
+
+		case FwGui::FWKEY_X:
+			g_fieldGraphics->TogglePlayerOffset();
+			break;
+
 		default:
 			break;
 		}
@@ -196,19 +199,26 @@ void Game::Tick()
 	DEBUGVERBOSE("Game: field->Tick\n");
 	field->Tick();
 
-	if(connection != NULL && sendFieldStateDeltaTimer-- <= 0)
+	if(connection != NULL)
 	{
-		if(sendFieldStateTimer-- <= 0) {
-			SendFieldState();
-			sendFieldStateTimer =
-				SEND_FIELDSTATE_INTERVAL;
-		} else {
-			SendFieldStateDelta();
-		}
+		int myPlayerNum = connection->GetMyPlayerNum();
+		PlayerInfo* me = connection->GetPlayerInfo(myPlayerNum);
+		field->GetFieldState(me->fieldState);
+		g_fieldGraphics->PrintPlayerInfo(myPlayerNum, me);
 
-		sendFieldStateDeltaTimer =
-			SEND_FIELDSTATE_DELTA_INTERVAL *
-			connection->GetAlivePlayersCount();
+		if(sendFieldStateDeltaTimer-- <= 0) {
+			if(sendFieldStateTimer-- <= 0) {
+				SendFieldState();
+				sendFieldStateTimer =
+					SEND_FIELDSTATE_INTERVAL;
+			} else {
+				SendFieldStateDelta();
+			}
+
+			sendFieldStateDeltaTimer =
+				SEND_FIELDSTATE_DELTA_INTERVAL *
+				connection->GetAlivePlayersCount();
+		}
 	}
 }
 

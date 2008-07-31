@@ -107,11 +107,11 @@ void ServerGame::Tick()
 		{
 			PlayerDisconnectedMessage message;
 			message.playerNum = i;
-			SendMessageToAll(message, i);
+			SendMessageToAll(message);
 			
 			ChatMessage chat;
 			sprintf(chat.text, "* %s disconnected.", players[i]->name);
-			SendMessageToAll(chat, i);
+			SendMessageToAll(chat);
 			
 			PrintStatus("player %i disconnected", i);
 			delete players[i];
@@ -299,7 +299,7 @@ void ServerGame::mConnect(Connection* from, ConnectMessage* connect)
 
 	ChatMessage chat;
 	sprintf(chat.text, "* %s joined", player->name);
-	SendMessageToAll(chat, player->playerNum);
+	SendMessageToAll(chat);
 
 	// gather info about the other players
 	for(int i = 0; i < MAX_PLAYERS; i++)
@@ -336,7 +336,7 @@ void ServerGame::mDied(Connection* from, DiedMessage* died)
 	message.playerNum = player->playerNum;
 	message.place = place;
 
-	SendMessageToAll(message, player->playerNum);
+	SendMessageToAll(message);
 }
 
 void ServerGame::mSetInfo(Connection* from, SetInfoMessage* setInfo)
@@ -347,19 +347,19 @@ void ServerGame::mSetInfo(Connection* from, SetInfoMessage* setInfo)
 	{
 		ChatMessage chat;
 		sprintf(chat.text, "* %s is ready!", player->name);
-		SendMessageToAll(chat, player->playerNum);
+		SendMessageToAll(chat);
 	}
 	if(player->state == PLAYERSTATE_READY && !setInfo->ready)
 	{
 		ChatMessage chat;
 		sprintf(chat.text, "* %s is not ready", player->name);
-		SendMessageToAll(chat, player->playerNum);
+		SendMessageToAll(chat);
 	}
 	if(player->level != setInfo->level)
 	{
 		ChatMessage chat;
 		sprintf(chat.text, "* %s selected level %i", player->name, setInfo->level+1);
-		SendMessageToAll(chat, player->playerNum);
+		SendMessageToAll(chat);
 	}
 
 	player->level = setInfo->level;

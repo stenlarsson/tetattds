@@ -506,6 +506,7 @@ public:
 	virtual void Enter() {
 		PlatformGraphics::InitSubScreen(true);
 		g_fieldGraphics->ClearChat();
+		g_fieldGraphics->PrintPlayerOffset();
 
 		dialog = new StatusDialog("PLEASE WAIT");
 		gui->SetActiveDialog(dialog);
