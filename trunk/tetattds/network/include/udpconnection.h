@@ -55,6 +55,8 @@ private:
 	IpAddress address;
 	wrapping incomingSequence;
 	wrapping outgoingSequence;
+	wrapping incomingUnreliableSequence;
+	wrapping outgoingUnreliableSequence;
 	std::vector<CachedPacket> futurePackets;
 	std::vector<CachedPacket> nonAckedPackets;
 	unsigned int lastSendTime;

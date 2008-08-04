@@ -22,6 +22,8 @@ UdpConnection::UdpConnection(UdpSocket* socket, IpAddress address, MessageReciev
 	address(address),
 	incomingSequence(0),
 	outgoingSequence(0),
+	incomingUnreliableSequence(0xffff),
+	outgoingUnreliableSequence(0),
 	futurePackets(),
 	nonAckedPackets(),
 	lastSendTime(GetTime()),
@@ -129,9 +131,21 @@ void UdpConnection::PacketIn(void* data, size_t size)
 			}
 			incomingSequence++;
 		}
-		// fall through
+
+		// Hate fall through ...
+		reciever->MessageIn(
+			this,
+			header->messageId,
+			(char*)data + sizeof(MessageHeader),
+			size - sizeof(MessageHeader));
+		break;
 
 	case PACKET_TYPE_UNRELIABLE:
+		if(incomingUnreliableSequence != (uint16_t)(((uint16_t)header->sequence) - 1)) {
+			printf("Previous %i, got %i\n", (uint16_t)incomingUnreliableSequence, (uint16_t)header->sequence);
+		}
+		incomingUnreliableSequence = wrapping(header->sequence);
+	
 		reciever->MessageIn(
 			this,
 			header->messageId,
@@ -156,7 +170,12 @@ bool UdpConnection::SendMessageImpl(
 		return false;
 	}
 
-	Packet packet(packetType, messageId, outgoingSequence, message, length);
+	Packet packet(
+		packetType,
+		messageId,
+		(packetType == PACKET_TYPE_UNRELIABLE) ? outgoingUnreliableSequence : outgoingSequence,
+		message,
+		length);
 
 	if(!socket->Send(&packet, sizeof(MessageHeader) + length, address)) {
 		return false;
@@ -164,6 +183,7 @@ bool UdpConnection::SendMessageImpl(
 
 	switch(packetType) {
 	case PACKET_TYPE_UNRELIABLE:
+		outgoingUnreliableSequence++;
 		break;
 
 	case PACKET_TYPE_ORDERED:
