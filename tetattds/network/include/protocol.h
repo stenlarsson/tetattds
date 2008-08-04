@@ -2,6 +2,16 @@
 
 #include <stdint.h>
 #include <string.h>
+#ifdef __APPLE__
+// Implementation of strnlen, copied from:
+// http://insanecoding.blogspot.com/2007/03/methods-for-safe-string-handling.html
+inline size_t strnlen(const char *s, size_t n)
+{
+  const char *p = (const char *)memchr(s, 0, n);
+  return(p ? p-s : n);
+}
+#endif
+
 #include "netval.h"
 
 #define MAX_PACKET_SIZE 512
