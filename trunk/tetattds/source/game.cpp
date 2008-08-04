@@ -61,6 +61,13 @@ Game::Game(int level,
 	sendFieldStateDeltaTimer(0)
 {
 	std::fill_n(heldKeys, FWGUI_NUM_KEYS, false);
+
+	if(connection != NULL) {
+		// try to spread out sending of the first field state
+		sendFieldStateDeltaTimer =
+			connection->GetMyPlayerNum() *
+			SEND_FIELDSTATE_DELTA_INTERVAL;
+	}
 }
 
 Game::~Game()
@@ -209,8 +216,6 @@ void Game::Tick()
 		if(sendFieldStateDeltaTimer-- <= 0) {
 			if(sendFieldStateTimer-- <= 0) {
 				SendFieldState();
-				sendFieldStateTimer =
-					SEND_FIELDSTATE_INTERVAL;
 			} else {
 				SendFieldStateDelta();
 			}
@@ -267,6 +272,7 @@ void Game::SendFieldState()
 	memcpy(message.field, lastFieldState, 12*6);
 	message.playerNum = connection->GetMyPlayerNum();
 	connectionManager->BroadcastMessage(message);
+	sendFieldStateTimer = SEND_FIELDSTATE_INTERVAL;
 }
 
 void Game::SendFieldStateDelta()
@@ -281,7 +287,6 @@ void Game::SendFieldStateDelta()
 		if(newFieldState[i] != lastFieldState[i]) {
 			delta[length++] = i;
 			delta[length++] = newFieldState[i];
-			lastFieldState[i] = newFieldState[i];
 		}
 		
 		if(length == sizeof(delta)) {
