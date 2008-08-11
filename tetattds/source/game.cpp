@@ -4,6 +4,7 @@
 #include "platformgraphics.h"
 #include "serverconnection.h"
 #include "sound.h"
+#include "wrapping.h"
 
 Game* g_game = NULL;
 
@@ -57,10 +58,12 @@ Game::Game(int level,
 	scrollSpeed(levelData[level].scrollSpeed),
 	col(0),
 	row(0),
-	sendFieldStateTimer(0),
-	sendFieldStateDeltaTimer(0)
+	sendFieldStateDeltaTimer(0),
+	fieldState(0),
+	deltaStoreEnd(0)
 {
 	std::fill_n(heldKeys, FWGUI_NUM_KEYS, false);
+	memset(deltaStoreBegins, 0, sizeof(deltaStoreBegins));
 
 	if(connection != NULL) {
 		// try to spread out sending of the first field state
@@ -214,11 +217,7 @@ void Game::Tick()
 		g_fieldGraphics->PrintPlayerInfo(myPlayerNum, me);
 
 		if(sendFieldStateDeltaTimer-- <= 0) {
-			if(sendFieldStateTimer-- <= 0) {
-				SendFieldState();
-			} else {
-				SendFieldStateDelta();
-			}
+			SendFieldStateDelta();
 
 			sendFieldStateDeltaTimer =
 				SEND_FIELDSTATE_DELTA_INTERVAL *
@@ -272,7 +271,6 @@ void Game::SendFieldState()
 	memcpy(message.field, lastFieldState, 12*6);
 	message.playerNum = connection->GetMyPlayerNum();
 	connectionManager->BroadcastMessage(message);
-	sendFieldStateTimer = SEND_FIELDSTATE_INTERVAL;
 }
 
 void Game::SendFieldStateDelta()
@@ -280,28 +278,92 @@ void Game::SendFieldStateDelta()
 	char newFieldState[12*6];
 	field->GetFieldState(newFieldState);
 
-	char delta[12*6];
-	int length = 0;
-
+	// Compute where we must base our state
+	wrapping8 baseState(fieldState);
+	for(unsigned int i = 0; i < MAX_PLAYERS; i++) {
+		uint8_t ackedState = connection->GetPlayerInfo(i)->ackedFieldState;
+		if (ackedState < baseState)
+			baseState = ackedState;
+	}
+	
+	// Move read position into place
+	uint8_t deltaStoreBegin = deltaStoreBegins[baseState];
+	uint8_t deltaStoreOriginalEnd = deltaStoreEnd;
+	
+	// Compute new delta items from current field state
+	uint8_t delta[12*6];
+	unsigned int length = 0;
 	for(unsigned int i = 0; i < sizeof(newFieldState); i++) {
 		if(newFieldState[i] != lastFieldState[i]) {
-			delta[length++] = i;
-			delta[length++] = newFieldState[i];
+			delta[length++] = deltaStore[deltaStoreEnd++] = i;
+			delta[length++] = deltaStore[deltaStoreEnd++] = newFieldState[i];
+
+			// Not needed thanks to deltaStore size and deltaStoreEnd datatype
+			// if (deltaStoreEnd == sizeof(deltaStore))
+			// 	deltaStoreEnd = 0;
+
+			if (deltaStoreBegin == deltaStoreEnd || length == sizeof(delta)) {
+				length = sizeof(delta);
+				break;
+			}
+		}
+	}
+	memcpy(lastFieldState, newFieldState, sizeof(lastFieldState));
+	
+	if (length == sizeof(delta)) {
+		// Clear delta store...
+		deltaStoreBegin = deltaStoreEnd = 0;
+		
+		// Insert a missing delta marker
+		deltaStore[deltaStoreEnd++] = 0;
+		deltaStore[deltaStoreEnd++] = 255;
+		
+		// Every state now requires a full update
+		memset(deltaStoreBegins, sizeof(deltaStoreBegins), 0);
+	}
+	else if (deltaStore[deltaStoreBegin+1] == 255) {
+		// We have orders to send full state...
+		length = sizeof(delta);
+	}
+	else {
+		// Add the new start point (unless empty delta)
+		if (length != 0) {
+			deltaStoreBegins[++fieldState] = deltaStoreEnd;
 		}
 		
-		if(length == sizeof(delta)) {
-			// better to send the whole field
-			SendFieldState();
-			return;
+		// Compose new delta with existing deltas for sending
+		uint8_t pos = deltaStoreBegin;
+		while (pos != deltaStoreOriginalEnd) {
+			// Send only data that is still valid...
+			if (newFieldState[deltaStore[pos]] == deltaStore[pos+1]) {
+				delta[length++] = deltaStore[pos];
+				delta[length++] = deltaStore[pos+1];
+
+				if(length == sizeof(delta)) {
+					break;
+				}
+			}
+			
+			pos += 2;
+			// Not needed thanks to deltaStore size and deltaStoreEnd datatype
+			// if (pos == sizeof(deltaStore))
+			// 	pos = 0;
 		}
 	}
-
-	if(length == 0) {
-		return;
+	
+	if (length == sizeof(delta)) {
+		// Send full state instead of delta...
+		memcpy(delta, newFieldState, sizeof(delta));
 	}
-
+	
+	// Note that we should send the message even when length == 0,
+	// since the other players want to see our ack numbers...
 	FieldStateDeltaMessage message;
 	message.playerNum = connection->GetMyPlayerNum();
+	for(unsigned int i = 0; i < MAX_PLAYERS; i++) {
+		message.acks[i] = connection->GetPlayerInfo(i)->seenFieldState;
+	}
+	message.acks[message.playerNum] = fieldState;
 	message.length = length;
 	memcpy(message.delta, delta, length);
 	connectionManager->BroadcastMessage(message);

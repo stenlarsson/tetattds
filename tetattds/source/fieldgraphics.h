@@ -35,6 +35,8 @@ struct PlayerInfo
 	bool connected;
 	bool typing;
 	char fieldState[12*6];
+	uint8_t seenFieldState;
+	uint8_t ackedFieldState;
 };
 
 class FieldGraphics

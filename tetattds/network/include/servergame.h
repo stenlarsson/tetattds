@@ -3,8 +3,6 @@
 #include "protocol.h"
 #include "player.h"
 
-#define MAX_PLAYERS 8
-
 #define VERSION 31
 
 #define DEAD_RETURN_TO_MENU_TIME 180
