@@ -139,9 +139,19 @@ void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage
 	ASSERT(fieldStateDelta->playerNum < MAX_PLAYERS);
 	DEBUGVERBOSE("ServerConn: mFieldStateDelta %d, %d\n", fieldStateDelta->playerNum, players[fieldStateDelta->playerNum].fieldNum);
 	PlayerInfo& player = players[fieldStateDelta->playerNum];
+	
+	// Record the seen state num, so that we can ack correctly
+	player.seenFieldState = fieldStateDelta->acks[fieldStateDelta->playerNum];
+	player.ackedFieldState = fieldStateDelta->acks[myPlayerNum];
 
-	for(int i = 0; i < fieldStateDelta->length; i += 2) {
-		player.fieldState[fieldStateDelta->delta[i]] = fieldStateDelta->delta[i+1];
+	if (fieldStateDelta->length < sizeof(player.fieldState)) {
+		for(int i = 0; i < fieldStateDelta->length; i += 2) {
+			player.fieldState[fieldStateDelta->delta[i]] = fieldStateDelta->delta[i+1];
+		}
+	}
+	else {
+		// We got the full package...
+		memcpy(player.fieldState, fieldStateDelta->delta, sizeof(player.fieldState));
 	}
 
 	g_fieldGraphics->PrintPlayerInfo(fieldStateDelta->playerNum, &player);

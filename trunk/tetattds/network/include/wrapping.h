@@ -8,42 +8,58 @@
  * than half of the maximum value. This way we can know if the
  * values have wrapped or not.
  */
-class wrapping
+template <typename T>
+class wrapping_base
 {
+	static const T LIMIT = (T)(0x7fffffff >> (8 * (4 - sizeof(T))));
+
 public:
-	explicit wrapping(uint16_t number) : number(number) {}
+	explicit wrapping_base(T number) : number(number) {}
 
 	/**
 	 * Returns < 0, == 0, or > 0, if right is less, equal, or
 	 * greater than this. Right must not be farther than 
 	 * 0x7fff from this value in wrapped space.
 	 */
-	int compare(uint16_t right) {
+	int compare(T right) {
 		int diff = number - right;
-		if(abs(diff) > 0x7fff) {
+		if(abs(diff) > LIMIT) {
 			// one of the values have wrapped
 			diff = -diff;
 		}
 		return diff;
 	}
 
-	wrapping& operator ++ () { ++number; return *this; }
-	wrapping operator ++ (int) { wrapping t = *this; number++; return t; }
-	operator uint16_t () { return number; }
+	wrapping_base<T>& operator ++ () { ++number; return *this; }
+	wrapping_base<T> operator ++ (int) { wrapping_base<T> t = *this; number++; return t; }
+	operator T () { return number; }
 
 private:
-	uint16_t number;
+	T number;
 };
 
-inline bool operator != (uint16_t left, wrapping right)
+template <typename T>
+inline bool operator != (T left, wrapping_base<T> right)
 { return right.compare(left) != 0; }
-inline bool operator <  (uint16_t left, wrapping right)
+template <typename T>
+inline bool operator <  (T left, wrapping_base<T> right)
 { return right.compare(left) >  0; }
-inline bool operator <= (uint16_t left, wrapping right)
+template <typename T>
+inline bool operator <= (T left, wrapping_base<T> right)
 { return right.compare(left) >= 0; }
-inline bool operator >  (uint16_t left, wrapping right)
+template <typename T>
+inline bool operator >  (T left, wrapping_base<T> right)
 { return right.compare(left) <  0; }
-inline bool operator >= (uint16_t left, wrapping right)
+template <typename T>
+inline bool operator >= (T left, wrapping_base<T> right)
 { return right.compare(left) <= 0; }
-inline bool operator == (uint16_t left, wrapping right)
+template <typename T>
+inline bool operator == (T left, wrapping_base<T> right)
 { return right.compare(left) == 0; }
+
+struct wrapping : public wrapping_base <uint16_t> {
+	wrapping(uint16_t number) : wrapping_base<uint16_t>(number) {}
+};
+struct wrapping8 : public wrapping_base <uint8_t> {
+	wrapping8(uint8_t number) : wrapping_base<uint8_t>(number) {}
+};

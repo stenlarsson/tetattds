@@ -14,6 +14,9 @@ inline size_t strnlen(const char *s, size_t n)
 
 #include "netval.h"
 
+
+#define MAX_PLAYERS 8
+
 #define MAX_PACKET_SIZE 512
 #define CONNECTION_KEEPALIVE_TIME 2
 #define CONNECTION_TIMEOUT 10
@@ -82,19 +85,22 @@ struct GarbageMessage
 
 struct FieldStateMessage
 {
-	static const uint8_t packetType = PACKET_TYPE_UNRELIABLE;
+	static const uint8_t packetType = PACKET_TYPE_ORDERED;
 	static const uint8_t messageId = MESSAGE_FIELDSTATE;
 	size_t size() const { return sizeof(FieldStateMessage); }
 	uint8_t playerNum;
 	uint8_t field[12*6];
 };
 
+// NOTE: When length == sizeof(delta), delta contains the complete state
+// NOTE: acks[playerNum] contains the index-to-be-acked
 struct FieldStateDeltaMessage
 {
 	static const uint8_t packetType = PACKET_TYPE_UNRELIABLE;
 	static const uint8_t messageId = MESSAGE_FIELDSTATE_DELTA;
-	size_t size() const { return length + 2; }
+	size_t size() const { return length + 2 + MAX_PLAYERS; }
 	uint8_t playerNum;
+	uint8_t acks[MAX_PLAYERS];
 	uint8_t length;
 	uint8_t delta[12*6];
 };
