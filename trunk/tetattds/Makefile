@@ -10,9 +10,7 @@ include $(DEVKITARM)/ds_rules
 export TARGET		:=	$(shell basename $(CURDIR))
 export TOPDIR		:=	$(CURDIR)
 
-export VERSION_STRING :=  Tetattds 3.1dev
-export ABOUT_STRING   :=  http://blog.dev-scene.com/flatware/
-
+include version
 
 #---------------------------------------------------------------------------------
 # path to tools - this can be deleted if you set the path in windows

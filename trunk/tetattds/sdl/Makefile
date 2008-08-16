@@ -33,6 +33,8 @@ BIN2C       :=  bin2c
 # other stuff
 export PATH := $(CURDIR)/../../tools:$(CURDIR)/../../fwgui/tools:$(PATH)
 
+-include ../version
+
 #---------------------------------------------------------------------------------
 # options for code generation
 #---------------------------------------------------------------------------------
