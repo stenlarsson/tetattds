@@ -422,7 +422,7 @@ public:
 	}
 	virtual void Enter() {
 		GameState::Enter();
-		g_game = new Game(level, false, NULL, NULL);
+		g_game = new Game(level, false, NULL);
 		g_game->Start();
 		gui->SetListener(g_game);
 	}
@@ -439,7 +439,7 @@ public:
 	}
 	virtual void Enter() {
 		GameState::Enter();
-		g_game = new Game(level, true, NULL, NULL);
+		g_game = new Game(level, true, NULL);
 		g_game->Start();
 		gui->SetListener(g_game);
 	}
@@ -456,7 +456,7 @@ public:
 	}
 	virtual void Enter() {
 		GameState::Enter();
-		g_game = new Game(level, true, connection, connectionManager);
+		g_game = new Game(level, true, connection);
 		g_game->Start();
 		gui->SetListener(g_game);
 	}
@@ -584,6 +584,7 @@ class WifiState : public State {
 			serverGame = new ServerGame();
 			connectionManager = new UdpConnectionManager(MAX_PLAYERS, socket, serverGame);
 			connection = new ServerConnection(name);
+			connection->SetConnectionManager(connectionManager);
 			LoopbackConnection* a = new LoopbackConnection(serverGame);
 			LoopbackConnection* b = new LoopbackConnection(connection);
 			a->Connect(b);
@@ -594,6 +595,7 @@ class WifiState : public State {
 			UdpConnectionManager* udpConnectionManager =
 				new UdpConnectionManager(1, new UdpSocket(), connection);
 			connectionManager = udpConnectionManager;
+			connection->SetConnectionManager(connectionManager);
 			Connection* result =
 				udpConnectionManager->CreateConnection(settings->GetServerAddress(), 13687);
 			if (result == NULL) {
@@ -631,6 +633,8 @@ class WifiState : public State {
 		if(serverGame != NULL) {
 			serverGame->Tick();
 		}
+
+		connection->Tick();
 	}
 	
 	virtual void Exit() {
@@ -668,6 +672,7 @@ class LocalWifiState : public State {
 				return;
 			}
 			connection = new ServerConnection(name);
+			connection->SetConnectionManager(connectionManager);
 			LoopbackConnection* a = new LoopbackConnection(serverGame);
 			LoopbackConnection* b = new LoopbackConnection(connection);
 			a->Connect(b);
@@ -678,6 +683,7 @@ class LocalWifiState : public State {
 			LocalConnectionManager* localConnectionManager =
 				new LocalConnectionManager(1, connection);
 			connectionManager = localConnectionManager;
+			connection->SetConnectionManager(connectionManager);
 			if(localConnectionManager->JoinGame() == NULL) {
 				nextState = mainMenuState;
 				return;
@@ -713,6 +719,8 @@ class LocalWifiState : public State {
 		if(serverGame != NULL) {
 			serverGame->Tick();
 		}
+
+		connection->Tick();
 	}
 	
 	virtual void Exit() {

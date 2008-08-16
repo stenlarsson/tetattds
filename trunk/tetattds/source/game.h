@@ -25,8 +25,7 @@ public:
 	Game(
 		int level,
 		bool sendToSelf,
-		ServerConnection* connection,
-		ConnectionManager* connectionManager);
+		ServerConnection* connection);
 	~Game();
 
 	void ReceiveGarbage(int num, int player, GarbageType type);
@@ -53,12 +52,9 @@ public:
 	virtual void TouchDrag(int x, int y);
 	void Tick();
 	void Draw();
-	void SendFieldState();
-	void SendFieldStateDelta();
 	
 private:
 	ServerConnection* connection;
-	ConnectionManager* connectionManager;
 	bool running;
 	int touchedArea;
 	int level;
@@ -68,12 +64,6 @@ private:
 	int heldKeysDelay[FWGUI_NUM_KEYS];
 	int col;
 	int row;
-	int sendFieldStateDeltaTimer;
-	char lastFieldState[12*6];
-	uint8_t fieldState;
-	uint8_t deltaStore[256];
-	uint8_t deltaStoreBegins[256];
-	uint8_t deltaStoreEnd;
 };
 
 extern Game* g_game;

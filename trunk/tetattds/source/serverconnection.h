@@ -19,6 +19,11 @@ class ServerConnection : public MessageReciever
 public:
 	ServerConnection(const char* name);
 	virtual ~ServerConnection();
+	
+	void SetConnectionManager(ConnectionManager* connectionManager)
+	{ this->connectionManager = connectionManager; }
+
+	void Tick();
 
 	ServerState GetState() { return state; }
 	inline bool IsState(ServerState const & s) { return state == s; }
@@ -34,7 +39,7 @@ public:
 	int GetWins() { return wins; }
 	int GetMyPlayerNum() { return myPlayerNum; }
 
-	int GetAlivePlayersCount();
+	int GetConnectedPlayersCount();
 
 	template<typename T>
 	void SendMessage(const T& message)
@@ -63,6 +68,10 @@ public:
 	void mPlayerDisconnected(Connection* from, PlayerDisconnectedMessage* playerDisconnected);
 
 private:
+	void SendFieldStateDelta();
+	void ClearDeltaStore();
+
+	ConnectionManager* connectionManager;
 	Connection* connection;
 	ServerState state;
 	int myPlayerNum;
@@ -70,4 +79,10 @@ private:
 	int wins;
 	int pingTimer;
 	char* name;
+	int sendFieldStateDeltaTimer;
+	char lastFieldState[12*6];
+	uint8_t fieldState;
+	uint8_t deltaStore[256];
+	uint8_t deltaStoreBegins[256];
+	uint8_t deltaStoreEnd;
 };
