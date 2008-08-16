@@ -31,7 +31,6 @@ inline size_t strnlen(const char *s, size_t n)
 
 #define MESSAGE_PING 000
 #define MESSAGE_GARBAGE 001
-#define MESSAGE_FIELDSTATE 002
 #define MESSAGE_CHAT 003
 #define MESSAGE_FIELDSTATE_DELTA 004
 #define MESSAGE_CONNECT 100
@@ -81,15 +80,6 @@ struct GarbageMessage
 	uint8_t num;
 	uint8_t player;
 	uint8_t type;
-};
-
-struct FieldStateMessage
-{
-	static const uint8_t packetType = PACKET_TYPE_ORDERED;
-	static const uint8_t messageId = MESSAGE_FIELDSTATE;
-	size_t size() const { return sizeof(FieldStateMessage); }
-	uint8_t playerNum;
-	uint8_t field[12*6];
 };
 
 // NOTE: When length == sizeof(delta), delta contains the complete state
