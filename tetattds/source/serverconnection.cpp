@@ -81,7 +81,6 @@ void ServerConnection::MessageIn(Connection* from, unsigned char id, const void*
 	BEGIN_MESSAGE_HANDLER
 	HANDLE_MESSAGE(Ping)
 	HANDLE_MESSAGE(Garbage)
-	HANDLE_MESSAGE(FieldState)
 	HANDLE_MESSAGE(FieldStateDelta)
 	HANDLE_MESSAGE(Chat)
 	HANDLE_MESSAGE(Accepted)
@@ -141,17 +140,6 @@ void ServerConnection::mGarbage(Connection* from, GarbageMessage* garbage)
 		(GarbageType)(int)garbage->type);
 }
 
-void ServerConnection::mFieldState(Connection* from, FieldStateMessage* fieldState)
-{
-	ASSERT(fieldState->playerNum < MAX_PLAYERS);
-	DEBUGVERBOSE("ServerConn: mFieldState %d, %d\n", fieldState->playerNum, players[fieldState->playerNum].fieldNum);
-	
-	PlayerInfo& player = players[fieldState->playerNum];
-	memcpy(player.fieldState, fieldState->field, sizeof(player.fieldState));
-
-	g_fieldGraphics->PrintPlayerInfo(fieldState->playerNum, &player);
-}
-
 void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage* fieldStateDelta)
 {
 	ASSERT(fieldStateDelta->playerNum < MAX_PLAYERS);
@@ -185,6 +173,19 @@ void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage
 	}
 
 	g_fieldGraphics->PrintPlayerInfo(fieldStateDelta->playerNum, &player);
+
+	unsigned int playerOnMyLeft = myPlayerNum;
+	for(int i = 0; i < MAX_PLAYERS; i++) {
+		--playerOnMyLeft %= MAX_PLAYERS;
+		if(players[playerOnMyLeft].connected) {
+			break;
+		}
+	}
+
+	if(fieldStateDelta->playerNum == playerOnMyLeft) {
+		// it our turn to send. we can do it right now and not have collisions
+		sendFieldStateDeltaTimer = 0;
+	}
 }
 
 void ServerConnection::mChat(Connection* from, ChatMessage* chat)
