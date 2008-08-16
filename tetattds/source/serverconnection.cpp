@@ -1,22 +1,29 @@
 #include "tetattds.h"
 #include "serverconnection.h"
 #include "game.h"
+#include "wrapping.h"
 
 ServerConnection::ServerConnection(const char* name)
 :	connection(NULL),
 	state(SERVERSTATE_DISCONNECTED),
 	wins(0),
-	name(strdup(name))
+	name(strdup(name)),
+	fieldState(0)
 {
 	ASSERT(g_fieldGraphics != NULL);
 	ASSERT(name != NULL);
 	memset(players, 0, sizeof(players));
 	for(int i = 0; i < MAX_PLAYERS; i++) {
 		PlayerInfo& player = players[i];
-		for(int j = 0; j < 12*6; j++) {
-			player.fieldState[j] = TILE_BLANK;
-		}
+		memset(player.fieldState, TILE_BLANK, sizeof(player.fieldState));
 	}
+
+	ClearDeltaStore();
+
+	// try to spread out sending of the first field state
+	sendFieldStateDeltaTimer =
+		myPlayerNum *
+		SEND_FIELDSTATE_DELTA_INTERVAL;
 }
 
 ServerConnection::~ServerConnection()
@@ -32,11 +39,22 @@ ServerConnection::~ServerConnection()
 	free(name);
 }
 
-int ServerConnection::GetAlivePlayersCount()
+void ServerConnection::Tick()
+{
+	if(sendFieldStateDeltaTimer-- <= 0) {
+		SendFieldStateDelta();
+
+		sendFieldStateDeltaTimer =
+			SEND_FIELDSTATE_DELTA_INTERVAL *
+			GetConnectedPlayersCount();
+	}
+}
+
+int ServerConnection::GetConnectedPlayersCount()
 {
 	int count = 0;
 	for(int i = 0; i < MAX_PLAYERS; i++) {
-		if(players[i].connected && !players[i].dead) {
+		if(players[i].connected) {
 			count++;
 		}
 	}
@@ -138,10 +156,22 @@ void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage
 {
 	ASSERT(fieldStateDelta->playerNum < MAX_PLAYERS);
 	DEBUGVERBOSE("ServerConn: mFieldStateDelta %d, %d\n", fieldStateDelta->playerNum, players[fieldStateDelta->playerNum].fieldNum);
+	if(state == SERVERSTATE_CONNECTED) {
+		// not yet accepted, we need to know our playerNum firs
+		return;
+	}
+
+	wrapping8 fieldState(fieldStateDelta->acks[fieldStateDelta->playerNum]);
+
 	PlayerInfo& player = players[fieldStateDelta->playerNum];
 	
+	if(player.seenFieldState > fieldState) {
+		// out of order packet
+		return;
+	}
+
 	// Record the seen state num, so that we can ack correctly
-	player.seenFieldState = fieldStateDelta->acks[fieldStateDelta->playerNum];
+	player.seenFieldState = fieldState;
 	player.ackedFieldState = fieldStateDelta->acks[myPlayerNum];
 
 	if (fieldStateDelta->length < sizeof(player.fieldState)) {
@@ -229,8 +259,16 @@ void ServerConnection::mPlayerInfo(Connection* from, PlayerInfoMessage* playerIn
 	player.level = playerInfo->level;
 	player.wins = playerInfo->wins;
 	player.ready = playerInfo->ready != 0;
-	player.connected = true;
 	player.typing = playerInfo->typing != 0;
+
+	if(!player.connected) {
+		player.connected = true;
+		player.seenFieldState = 0;
+		player.ackedFieldState = 0;
+		memset(player.fieldState, TILE_BLANK, sizeof(player.fieldState));
+		ClearDeltaStore();
+	}
+
 	g_fieldGraphics->PrintPlayerInfo(playerInfo->playerNum, &player);
 }
 
@@ -254,4 +292,108 @@ void ServerConnection::mPlayerDisconnected(Connection* from, PlayerDisconnectedM
 	PlayerInfo& player = players[playerDisconnected->playerNum];
 	player.connected = false;
 	g_fieldGraphics->ClearPlayer(playerDisconnected->playerNum);
+}
+
+void ServerConnection::SendFieldStateDelta()
+{
+	PlayerInfo& me = players[myPlayerNum];
+
+	// Compute where we must base our state
+	wrapping8 baseState(fieldState);
+	for(unsigned int i = 0; i < MAX_PLAYERS; i++) {
+		PlayerInfo& player = players[i];
+		if (player.connected && player.ackedFieldState < baseState)
+			baseState = player.ackedFieldState;
+	}
+	
+	// Move read position into place
+	uint8_t deltaStoreBegin = deltaStoreBegins[baseState];
+	uint8_t deltaStoreOriginalEnd = deltaStoreEnd;
+	
+	// Compute new delta items from current field state
+	uint8_t delta[12*6];
+	unsigned int length = 0;
+	for(unsigned int i = 0; i < sizeof(me.fieldState); i++) {
+		if(me.fieldState[i] != lastFieldState[i]) {
+			delta[length++] = deltaStore[deltaStoreEnd++] = i;
+			delta[length++] = deltaStore[deltaStoreEnd++] = me.fieldState[i];
+
+			// Not needed thanks to deltaStore size and deltaStoreEnd datatype
+			// if (deltaStoreEnd == sizeof(deltaStore))
+			// 	deltaStoreEnd = 0;
+
+			if (deltaStoreBegin == deltaStoreEnd || length == sizeof(delta)) {
+				length = sizeof(delta);
+				break;
+			}
+		}
+	}
+	memcpy(lastFieldState, me.fieldState, sizeof(lastFieldState));
+	
+	if (length == sizeof(delta)) {
+		// Clear delta store...
+		deltaStoreBegin = 0;
+		ClearDeltaStore();
+	}
+	else if (deltaStoreBegin != deltaStoreEnd && deltaStore[deltaStoreBegin+1] == 255) {
+		// We have orders to send full state...
+		length = sizeof(delta);
+	}
+	else {
+		// Add the new start point (unless empty delta)
+		if (length != 0) {
+			deltaStoreBegins[++fieldState] = deltaStoreEnd;
+		}
+		
+		// Compose new delta with existing deltas for sending
+		uint8_t pos = deltaStoreBegin;
+		while (pos != deltaStoreOriginalEnd) {
+			// Send only data that is still valid...
+			if (me.fieldState[deltaStore[pos]] == deltaStore[pos+1]) {
+				delta[length++] = deltaStore[pos];
+				delta[length++] = deltaStore[pos+1];
+
+				if(length == sizeof(delta)) {
+					break;
+				}
+			}
+			
+			pos += 2;
+			// Not needed thanks to deltaStore size and deltaStoreEnd datatype
+			// if (pos == sizeof(deltaStore))
+			// 	pos = 0;
+		}
+	}
+	
+	if (length == sizeof(delta)) {
+		// Send full state instead of delta...
+		memcpy(delta, me.fieldState, sizeof(delta));
+	}
+	
+	// Note that we should send the message even when length == 0,
+	// since the other players want to see our ack numbers...
+	FieldStateDeltaMessage message;
+	message.playerNum = myPlayerNum;
+	me.ackedFieldState = fieldState;
+	me.seenFieldState = fieldState;
+	for(unsigned int i = 0; i < MAX_PLAYERS; i++) {
+		message.acks[i] = players[i].seenFieldState;
+	}
+	message.length = length;
+	memcpy(message.delta, delta, length);
+	connectionManager->BroadcastMessage(message);
+}
+
+void ServerConnection::ClearDeltaStore()
+{
+	deltaStoreEnd = 0;
+	
+	// Insert a missing delta marker
+	deltaStore[deltaStoreEnd++] = 0;
+	deltaStore[deltaStoreEnd++] = 255;
+	
+	// Every state now requires a full update
+	memset(deltaStoreBegins, 0, sizeof(deltaStoreBegins));
+	deltaStoreBegins[++fieldState] = deltaStoreEnd;
+
 }

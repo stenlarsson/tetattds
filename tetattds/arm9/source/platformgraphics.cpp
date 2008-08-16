@@ -263,9 +263,15 @@ void PlatformGraphics::DrawSmallField(int fieldNum, char* field, bool shaded)
 
 void PlatformGraphics::PrintPlayerInfo(int playerNum, PlayerInfo* player)
 {
+	ASSERT(playerNum >= 0);
+	ASSERT(playerNum < MAX_PLAYERS);
 	players[playerNum] = player;
-	ReallyPrintPlayerInfo(playerNum - playerOffset, player);
-	DrawSmallField(playerNum - playerOffset, player->fieldState, player->dead);
+	int fieldNum = playerNum - playerOffset;
+	if(fieldNum >= 0 && fieldNum < 4) {
+		// on screen
+		ReallyPrintPlayerInfo(fieldNum, player);
+		DrawSmallField(fieldNum, player->fieldState, player->dead);
+	}
 }
 
 void PlatformGraphics::ClearPlayer(int playerNum)
