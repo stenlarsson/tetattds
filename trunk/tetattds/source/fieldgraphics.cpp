@@ -5,12 +5,13 @@
 #include "util.h"
 #include "sprite.h"
 #include "marker.h"
+#include <stdarg.h>
 
 FieldGraphics::FieldGraphics()
 :	effects(),
 	marker(GetMarker(true)),
 	touchMarker(GetMarker(false)),
-	lastChatLine(-1),
+	lastChatLine(0),
 	scrollOffset(0),
 	playerOffset(0)
 {
@@ -230,12 +231,49 @@ void FieldGraphics::AddChat(char* text)
 	}
 }
 
+void FieldGraphics::AddLog(const char* format, ...)
+{
+	va_list args;
+	va_start(args, format);
+    
+	char str[1024];
+	vsnprintf(str, 1024, format, args);
+	va_end(args);
+
+	char* p = str;
+	while(*p != '\0') {
+		char* end = strchr(p, '\n');
+		size_t len = (end == NULL) ? strlen(p) : end - p;
+		len = (len > 32) ? 32 : len;
+		strncpy(chatBuffer[lastChatLine], p, len);
+		chatBuffer[lastChatLine][len] = '\0';
+
+		p += len;
+		if(*p == '\n') {
+			p++;
+		}
+
+		if(++lastChatLine == MAX_CHAT_LINES)
+			lastChatLine = 0;
+	}
+
+	PrintChat();
+}
+
 void FieldGraphics::PrintPlayerOffset()
 {
-	char str[12+1];
-	snprintf(str, 12, "X:Show P%i-P%i",
+	char str[13];
+	snprintf(str, 13, "X:Show P%i-P%i",
 		(playerOffset^4)+1,
 		(playerOffset^4)+4);
 	str[12] = '\0';
 	PrintSmall(PLAYER_OFFSET_TEXT_OFFSET, str);
 }
+
+void FieldGraphics::ClearChat()
+{
+	memset(chatBuffer, 0, sizeof(chatBuffer));
+	lastChatLine = 0;
+	PrintChat();
+}
+

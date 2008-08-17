@@ -23,7 +23,7 @@ run-sdl: tetatt-sdl
 	@(cd tetattds; sdl/tetattsdl)
 
 run-ds: tetatt-ds
-	@desmume/src/cli/desmume-cli tetattds/tetattds.ds.gba
+	@desmume-cli tetattds/tetattds.ds.gba
 
 debug-sdl: tetatt-sdl
 	@(cd tetattds; gdb sdl/tetattsdl)

@@ -34,6 +34,8 @@
 #include "loopbackconnection.h"
 #include <lobby.h>
 
+#define max(x, y) ((x>y)?(x):(y))
+
 // TODO: Put these prototypes someplace else
 void ShowSplashScreen();
 void HideSplashScreen();
@@ -87,16 +89,16 @@ public:
 		const char* name;
 		int score;
 	
-		PrintStatus("   Endless highscores\n");
+	    g_fieldGraphics->AddLog("   Endless highscores");
 		for(int i = 0; i < NUM_HIGHSCORES; i++) {
 			settings->GetHighscore(0, i, name, score);
-			PrintStatus("Lv %2i  %-10.10s %5i\n", i+1, name, score);
+			g_fieldGraphics->AddLog("Lv %2i  %.10s%.*s %5i", i+1, name, max(0, 10-strlen(name)), "..........", score);
 		}
 	
-		PrintStatus("\n   Vs Self highscores\n");
+		g_fieldGraphics->AddLog("\n   Vs Self highscores");
 		for(int i = 0; i < NUM_HIGHSCORES; i++) {
 			settings->GetHighscore(1, i, name, score);
-			PrintStatus("Lv %2i  %-10.10s %5i\n", i+1, name, score);
+			g_fieldGraphics->AddLog("Lv %2i  %.10s%.*s %5i", i+1, name, max(0, 10-strlen(name)), "..........", score);
 		}
 
 		nextState = mainMenuState;
@@ -113,7 +115,7 @@ public:
 		gui->SetActiveDialog(dialog);
 
 		settings->Save();
-		PlatformGraphics::InitSubScreen(false);
+		g_fieldGraphics->InitSubScreen(false);
 	}
 	virtual void Tick() {
 
@@ -142,6 +144,8 @@ public:
 		// to get a random field every time
 		SeedRandom();
 
+		g_fieldGraphics->ClearChat();
+
 		gui->SetActiveDialog(NULL);
 		delete dialog;
 		dialog = NULL;
@@ -153,7 +157,12 @@ private:
 class WifiTypeMenuState : public State {
 public:
 	virtual void Enter() {
-		dialog = new WifiTypeMenuDialog(!hasSetupLocalWifi, !hasSetupWifi);
+		dialog =
+#ifdef ARM9
+			new WifiTypeMenuDialog(!hasSetupLocalWifi, !hasSetupWifi);
+#else
+			new WifiTypeMenuDialog(true, false);
+#endif
 
 		gui->SetActiveDialog(dialog);
 	}
@@ -383,7 +392,7 @@ public:
 		: finishState(finishState) {
 	}
 	virtual void Enter() {
-		PlatformGraphics::InitMainScreen();
+		g_fieldGraphics->InitMainScreen();
 		gameEndTimer = GAME_END_DELAY;
 	}
 	virtual void Tick() {
@@ -504,8 +513,7 @@ public:
 		: dialog(NULL) {
 	}
 	virtual void Enter() {
-		PlatformGraphics::InitSubScreen(true);
-		g_fieldGraphics->ClearChat();
+		g_fieldGraphics->InitSubScreen(true);
 		g_fieldGraphics->PrintPlayerOffset();
 
 		dialog = new StatusDialog("PLEASE WAIT");
@@ -552,13 +560,11 @@ public:
 	virtual void Exit() {
 #ifdef ARM9
 		unsigned long ip = Wifi_GetIP();
-		char str[256];
-		snprintf(str, 256, "My IP: %lu.%lu.%lu.%lu",
+		g_fieldGraphics->AddLog("My IP: %lu.%lu.%lu.%lu",
 			(ip >>  0) & 0xFF,
 			(ip >>  8) & 0xFF,
 			(ip >> 16) & 0xFF,
 			(ip >> 24) & 0xFF);
-		g_fieldGraphics->AddChat(str);
 #endif
 
 		gui->SetActiveDialog(NULL);
@@ -654,7 +660,7 @@ private:
 
 class LocalWifiState : public State {
 	virtual void Enter() {
-		PlatformGraphics::InitSubScreen(true);
+		g_fieldGraphics->InitSubScreen(true);	
 		currentSubState = NULL;
 		
 		if(!hasSetupLocalWifi) {

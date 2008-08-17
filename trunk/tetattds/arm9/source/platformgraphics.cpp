@@ -191,6 +191,9 @@ void PlatformGraphics::InitSubScreen(bool wifi)
 	{
 		*ptr++ = 0;
 	}
+
+	numChatLines = wifi ? MAX_CHAT_LINES_WIFI : MAX_CHAT_LINES;
+	PrintChat();
 }
 
 void PlatformGraphics::CreateShadedPalette(u16* dest, u16* src)
@@ -203,7 +206,8 @@ PlatformGraphics::PlatformGraphics()
 :	mainBlockMap((u16*)BG_MAP_RAM(BLOCKS_MAP_BASE)),
 	subBlockMap((u16*)BG_MAP_RAM_SUB(BLOCKS_MAP_BASE)),
 	mainTextMap((u16*)BG_MAP_RAM(TEXT_MAP_BASE)),
-	subTextMap((u16*)BG_MAP_RAM_SUB(TEXT_MAP_BASE))
+	subTextMap((u16*)BG_MAP_RAM_SUB(TEXT_MAP_BASE)),
+	numChatLines(0)
 {
 	memset(chatBuffer,0,sizeof(chatBuffer));
 }
@@ -350,32 +354,22 @@ void PlatformGraphics::ClearText(u16* cell, int length)
 	}
 }
 
-void PlatformGraphics::AddChat(char* text)
-{
-	FieldGraphics::AddChat(text);
-	PrintChat();
-}
-
 void PlatformGraphics::PrintChat()
 {
 	uint32_t cursor = 0;
-	int curChatLine = lastChatLine + 1;
-	for(int i=0;i<MAX_CHAT_LINES;i++)
+	int curChatLine = lastChatLine - numChatLines + 1;
+	if(curChatLine < 0) {
+		curChatLine += MAX_CHAT_LINES;
+	}
+
+	for(int i=0;i<numChatLines;i++)
 	{
 		ClearTextLine(cursor);
-		if(curChatLine == MAX_CHAT_LINES)
-			curChatLine = 0;
 		PrintSmall(cursor, chatBuffer[curChatLine]);
 		cursor+=TEXTMAP_STRIDE;
-		curChatLine++;
+		if(++curChatLine == MAX_CHAT_LINES)
+			curChatLine = 0;
 	}
-}
-
-void PlatformGraphics::ClearChat()
-{
-	memset(chatBuffer, 0, sizeof(chatBuffer));
-	lastChatLine = -1;
-	PrintChat();
 }
 
 void PlatformGraphics::TogglePlayerOffset()

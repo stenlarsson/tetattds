@@ -4,7 +4,6 @@
 #include "playfield.h"
 #include "util.h"
 #include "sprite.h"
-#include <SDL.h>
 
 FieldGraphics* g_fieldGraphics = NULL;
 extern SDL_Surface
@@ -14,8 +13,6 @@ extern SDL_Surface
 	*sprites,
 	*font,
 	*smalltiles;
-static SDL_Surface *subbackground = NULL;
-SDL_Color sprites_pal[2][256];
 
 void PlatformGraphics::InitMainScreen()
 {
@@ -31,10 +28,13 @@ void PlatformGraphics::InitMainScreen()
 void PlatformGraphics::InitSubScreen(bool wifi)
 {
 	subbackground = wifi ? wifibackground : singlebackground;
+	numChatLines = wifi ? MAX_CHAT_LINES_WIFI : MAX_CHAT_LINES;
 }
 
 PlatformGraphics::PlatformGraphics()
-:	framebuffer(NULL)
+:	framebuffer(NULL),
+	subbackground(NULL),
+	numChatLines(0)
 {
 	framebuffer = SDL_CreateRGBSurface(
     SDL_SWSURFACE, //Uint32 flags
@@ -97,7 +97,7 @@ void PlatformGraphics::DrawSubScreen()
 	if(subbackground == wifibackground) {
 		PrintPlayerOffset();
 	}
-	PrintChat();
+	ReallyPrintChat();
 	for(int i = 0; i < 4; i++) {
 		PlayerInfo* player = players[i + playerOffset];
 		if(player != NULL) {
@@ -191,22 +191,19 @@ void PlatformGraphics::PrintSmall(uint32_t cell, const char* text)
 	}
 }
 
-void PlatformGraphics::PrintChat()
+void PlatformGraphics::ReallyPrintChat()
 {
 	int cursor = 0;
-	int curChatLine = lastChatLine + 1;
-	for(int i=0;i<MAX_CHAT_LINES;i++)
+	int curChatLine = lastChatLine - numChatLines + 1;
+	if(curChatLine < 0) {
+		curChatLine += MAX_CHAT_LINES;
+	}
+
+	for(int i=0;i<numChatLines;i++)
 	{
-		if(curChatLine == MAX_CHAT_LINES)
-			curChatLine = 0;
 		PrintSmall(cursor, chatBuffer[curChatLine]);
 		cursor+=TEXTMAP_STRIDE;
-		curChatLine++;
+		if(++curChatLine == MAX_CHAT_LINES)
+			curChatLine = 0;
 	}
-}
-
-void PlatformGraphics::ClearChat()
-{
-	memset(chatBuffer, 0, sizeof(chatBuffer));
-	lastChatLine = -1;
 }

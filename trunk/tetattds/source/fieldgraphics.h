@@ -16,7 +16,10 @@
 // #define PLACE_TEXT_OFFSET (15*TEXTMAP_STRIDE + 2)
 // 
 #define MAX_CHAT_LENGTH 128
-#define MAX_CHAT_LINES 6
+#define MAX_CHAT_LINES 24
+#define MAX_CHAT_LINES_WIFI 6
+
+
 
 // #define PLAYFIELD_OFFSET_X 88
 // #define PLAYFIELD_OFFSET_Y 0
@@ -45,6 +48,9 @@ public:
 	FieldGraphics();
 	virtual ~FieldGraphics();
 
+	virtual void InitMainScreen() = 0;
+	virtual void InitSubScreen(bool wifi) = 0;
+
 	virtual int GetFieldX(int fieldNum) const {
 		return (fieldNum % 6) * BLOCKSIZE;
 	}
@@ -63,8 +69,9 @@ public:
 	inline void DrawEffects() { effects.Draw(); };
 		
 	void PrintCountdown(int count);
-	virtual void AddChat(char* text);
-	virtual void ClearChat() = 0;
+	void AddChat(char* text);
+	void AddLog(const char* format, ...);
+	void ClearChat();
 	void PrintPlayerOffset();
 
 	EffectHandler *GetEffectHandler() { return &effects; }
@@ -75,6 +82,7 @@ protected:
 	void PrintScore(int score);
 	void PrintTime(int ticks);
 	void PrintStopTime(int ticks);
+	virtual void PrintChat() = 0;
 
 	virtual void PrintSmall(uint32_t offset, const char* text) = 0;
 	virtual void PrintLarge(uint32_t offset, const char* text, bool subScreen = false) = 0;
