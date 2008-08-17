@@ -7,6 +7,7 @@
 #include <MessageQueue.h>
 #include <802.11.h>
 #include <lobby.h>
+#include "fieldgraphics.h"
 
 #define ROOM_NAME "TETATTDS"
 #define GAME_CODE 13687
@@ -40,7 +41,7 @@ bool LocalConnectionManager::HostGame()
 {
 	room = LOBBY_GetRoomByGame(0, GAME_CODE);
 	if(room != NULL) {
-		printf("A game is already hosted\n");
+		g_fieldGraphics->AddLog("A game is already hosted\n");
 		return false;
 	}
 	
@@ -59,7 +60,7 @@ LocalConnection* LocalConnectionManager::JoinGame()
 	} while(room == NULL && i++ < 10*60);
 	
 	if(room == NULL) {
-		printf("can't find game\n");
+		g_fieldGraphics->AddLog("Can't find game\n");
 		return NULL;
 	}
 	

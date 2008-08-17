@@ -97,7 +97,7 @@ void ServerConnection::ConnectionRejected(Connection* connection)
 {
 	ASSERT(connection != NULL);
 	
-	PrintStatus("Server is full\n");
+	g_fieldGraphics->AddLog("Server is full\n");
 	state = SERVERSTATE_DISCONNECTED;
 	this->connection = NULL;
 }
@@ -106,7 +106,7 @@ void ServerConnection::ConnectionTimeout(Connection* connection)
 {
 	ASSERT(connection != NULL);
 	
-	PrintStatus("Connection timed out\n");
+	g_fieldGraphics->AddLog("Connection timed out\n");
 	state = SERVERSTATE_DISCONNECTED;
 	this->connection = NULL;
 }
@@ -145,7 +145,7 @@ void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage
 	ASSERT(fieldStateDelta->playerNum < MAX_PLAYERS);
 	DEBUGVERBOSE("ServerConn: mFieldStateDelta %d, %d\n", fieldStateDelta->playerNum, players[fieldStateDelta->playerNum].fieldNum);
 	if(state == SERVERSTATE_CONNECTED) {
-		// not yet accepted, we need to know our playerNum firs
+		// not yet accepted, we need to know our playerNum first
 		return;
 	}
 
@@ -209,8 +209,8 @@ void ServerConnection::mAccepted(Connection* from, AcceptedMessage* accepted)
 void ServerConnection::mDisconnect(Connection* from, DisconnectMessage* disconnect)
 {
 	DEBUGVERBOSE("ServerConn: mDisconnect\n");
-	PrintStatus("Disconnected!\n");
-	PrintStatus(disconnect->message);
+	g_fieldGraphics->AddLog("Disconnected!\n");
+	g_fieldGraphics->AddLog(disconnect->message);
 	state = SERVERSTATE_DISCONNECTED;
 }
 
@@ -297,13 +297,17 @@ void ServerConnection::mPlayerDisconnected(Connection* from, PlayerDisconnectedM
 
 void ServerConnection::SendFieldStateDelta()
 {
+	if(state == SERVERSTATE_CONNECTED) {
+		// not yet accepted, we need to know our playerNum first
+		return;
+	}
 	PlayerInfo& me = players[myPlayerNum];
 
 	// Compute where we must base our state
-	wrapping8 baseState(fieldState);
+	uint8_t baseState(fieldState);
 	for(unsigned int i = 0; i < MAX_PLAYERS; i++) {
 		PlayerInfo& player = players[i];
-		if (player.connected && player.ackedFieldState < baseState)
+		if (player.connected && (int)player.ackedFieldState - (player.ackedFieldState>fieldState)?256:0 < baseState)
 			baseState = player.ackedFieldState;
 	}
 	

@@ -3,6 +3,7 @@
 #include "fieldgraphics.h"
 #include "protocol.h"
 #include "effecthandler.h"
+#include <SDL.h>
 
 // map offsets etc
 #define BLOCKMAP_STRIDE 32
@@ -20,9 +21,6 @@
 #define PLACE_TEXT_OFFSET (15*TEXTMAP_STRIDE + 2)
 #define PLAYER_OFFSET_TEXT_OFFSET (23*TEXTMAP_STRIDE + 20)
 
-#define MAX_CHAT_LENGTH 128
-#define MAX_CHAT_LINES 6
-
 #define PLAYFIELD_OFFSET_X 88
 #define PLAYFIELD_OFFSET_Y 0
 
@@ -31,10 +29,11 @@ struct SDL_Surface;
 class PlatformGraphics : public FieldGraphics
 {
 public:
-	static void InitMainScreen();
-	static void InitSubScreen(bool wifi);
 	PlatformGraphics();
 	~PlatformGraphics();
+
+	virtual void InitMainScreen();
+	virtual void InitSubScreen(bool wifi);
 
 	virtual int GetFieldX(int fieldNum) const {
 		return PLAYFIELD_OFFSET_X + FieldGraphics::GetFieldX(fieldNum);
@@ -50,17 +49,22 @@ public:
 	void Draw(PlayField *pf);
 	void DrawField(PlayField *pf, int x, int y, int tile, bool shaded);
 	void DrawSubScreen();
-	void ClearChat();
+
+	virtual void PrintChat() {};
 
 	void TogglePlayerOffset() { playerOffset ^= 4; }
 	
 	SDL_Surface *framebuffer;
 private:
+	SDL_Surface *subbackground;
+	SDL_Color sprites_pal[2][256];
+	int numChatLines;
+
 	void ReallyDrawSmallField(int fieldNum, PlayerInfo* player);
 
 	void PrintSmall(uint32_t offset, const char* text);
 	void PrintLarge(uint32_t offset, const char* text, bool subScreen);
-	void PrintChat();
+	void ReallyPrintChat();
 };
 
 extern PlatformGraphics* g_PlatformGraphics;

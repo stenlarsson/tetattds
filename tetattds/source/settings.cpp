@@ -1,5 +1,6 @@
 #include "tetattds.h"
 #include "settings.h"
+#include "fieldgraphics.h"
 
 struct InternalSettings
 {
@@ -61,7 +62,7 @@ void FatSettings::Load()
 {
 	FILE* f = fopen("tetattds.dat", "rb");
 	if(f == NULL) {
-		printf("Failed to open tetattds.dat for reading.\n");
+		g_fieldGraphics->AddLog("Failed to open tetattds.dat for reading.\n");
 		return;
 	}
 	
@@ -73,7 +74,7 @@ void FatSettings::Save()
 {
 	FILE* f = fopen("tetattds.dat", "wb");
 	if(f == NULL) {
-		printf("Failed to open tetattds.dat for writing.\n");
+		g_fieldGraphics->AddLog("Failed to open tetattds.dat for writing.\n");
 		return;
 	}
 	
