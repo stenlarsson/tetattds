@@ -34,7 +34,7 @@ void SetupLocalWifi()
 	LOBBY_SetStreamHandler(0x8001, &PacketCallback);
 	LOBBY_SetUserInfoCallback(&UserInfoCallback);
 	
-	for(int i = 0; i < 3*60; i++) {
+	for(int i = 0; i < 60; i++) {
 		LOBBY_Update();
 		swiWaitForVBlank();
 	}

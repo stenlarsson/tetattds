@@ -136,6 +136,12 @@ void LocalConnectionManager::BroadcastMessageImpl(
 	Packet packet(PACKET_TYPE_BROADCAST, messageId, 0, message, length);
 
 	LOBBY_Broadcast(0x8001, (unsigned char*)&packet, sizeof(MessageHeader) + length);
+
+	if(maxConnections != 1) {
+		// if we are the server, we want to recieve broadcasts from our
+		// client
+		reciever->MessageIn(NULL, messageId, message, length);
+	}
 }
 
 LocalConnection* LocalConnectionManager::CreateConnection(LPLOBBY_USER user)

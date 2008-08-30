@@ -120,6 +120,12 @@ void UdpConnectionManager::BroadcastMessageImpl(
 			message,
 			length);
 	}
+
+	if(maxConnections != 1) {
+		// if we are the server, we want to recieve broadcasts from our
+		// client
+		reciever->MessageIn(NULL, messageId, message, length);
+	}
 }
 
 UdpConnection* UdpConnectionManager::CreateConnection(IpAddress address)

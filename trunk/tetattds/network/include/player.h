@@ -28,7 +28,8 @@ public:
 		level(4),
 		wins(0),
 		typing(false),
-		deadTime(0)
+		deadTime(0),
+		seenFieldState(0)
 	{
 	}
 
@@ -56,4 +57,5 @@ public:
 	int wins;
 	bool typing;
 	int deadTime;
+	uint8_t seenFieldState;
 };

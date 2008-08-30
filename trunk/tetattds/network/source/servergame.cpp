@@ -54,9 +54,7 @@ void ServerGame::ConnectionCreated(Connection* connection)
 
 void ServerGame::MessageIn(Connection* from, unsigned char id, const void* data, size_t size)
 {
-	ASSERT(from != NULL);
 	ASSERT(data != NULL);
-	ASSERT(size > 0);
 	
 	BEGIN_MESSAGE_HANDLER
 	HANDLE_MESSAGE(Ping)
@@ -242,6 +240,8 @@ void ServerGame::mGarbage(Connection* from, GarbageMessage* garbage)
 
 void ServerGame::mFieldStateDelta(Connection* from, FieldStateDeltaMessage* fieldStateDelta)
 {
+	Player* player = players[fieldStateDelta->playerNum];
+	player->seenFieldState = fieldStateDelta->acks[fieldStateDelta->playerNum];
 }
 
 void ServerGame::mChat(Connection* from, ChatMessage* chat)
@@ -286,6 +286,11 @@ void ServerGame::mConnect(Connection* from, ConnectMessage* connect)
 
 	AcceptedMessage am;
 	am.playerNum = player->playerNum;
+	for(int i = 0; i < MAX_PLAYERS; i++)
+	{
+		am.seenFieldStates[i] =
+			(players[i] != NULL) ? players[i]->seenFieldState : 0;
+	}
 	player->connection->SendMessage(am);
 
 	PlayerInfoMessage pimessage;
