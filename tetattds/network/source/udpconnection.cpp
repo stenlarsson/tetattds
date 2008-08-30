@@ -141,9 +141,7 @@ void UdpConnection::PacketIn(void* data, size_t size)
 		break;
 
 	case PACKET_TYPE_UNRELIABLE:
-		if(incomingUnreliableSequence != (uint16_t)(((uint16_t)header->sequence) - 1)) {
-			printf("Previous %i, got %i\n", (uint16_t)incomingUnreliableSequence, (uint16_t)header->sequence);
-		}
+	case PACKET_TYPE_BROADCAST:
 		incomingUnreliableSequence = wrapping(header->sequence);
 	
 		reciever->MessageIn(

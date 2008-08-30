@@ -229,6 +229,8 @@ void FieldGraphics::AddChat(char* text)
 			lastChatLine = 0;
 		strcpy(chatBuffer[lastChatLine], text);
 	}
+
+	PrintChat();
 }
 
 void FieldGraphics::AddLog(const char* format, ...)

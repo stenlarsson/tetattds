@@ -142,6 +142,7 @@ struct AcceptedMessage
 	static const uint8_t messageId = MESSAGE_ACCEPTED;
 	size_t size() const { return sizeof(AcceptedMessage); }
 	uint8_t playerNum;
+	uint8_t seenFieldStates[MAX_PLAYERS];
 };
 
 struct DisconnectMessage

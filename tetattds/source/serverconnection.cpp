@@ -2,12 +2,14 @@
 #include "serverconnection.h"
 #include "game.h"
 #include "wrapping.h"
+#include <limits.h>
 
 ServerConnection::ServerConnection(const char* name)
 :	connection(NULL),
 	state(SERVERSTATE_DISCONNECTED),
 	wins(0),
 	name(strdup(name)),
+	sendFieldStateDeltaTimer(INT_MAX),
 	fieldState(0)
 {
 	ASSERT(g_fieldGraphics != NULL);
@@ -19,11 +21,6 @@ ServerConnection::ServerConnection(const char* name)
 	}
 
 	ClearDeltaStore();
-
-	// try to spread out sending of the first field state
-	sendFieldStateDeltaTimer =
-		myPlayerNum *
-		SEND_FIELDSTATE_DELTA_INTERVAL;
 }
 
 ServerConnection::~ServerConnection()
@@ -158,6 +155,10 @@ void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage
 		return;
 	}
 
+	if(fieldState-1 > player.seenFieldState) {
+		printf("got: %hhu, seen: %hhu\n", (uint8_t)fieldState, player.seenFieldState);
+	}
+
 	// Record the seen state num, so that we can ack correctly
 	player.seenFieldState = fieldState;
 	player.ackedFieldState = fieldStateDelta->acks[myPlayerNum];
@@ -204,6 +205,16 @@ void ServerConnection::mAccepted(Connection* from, AcceptedMessage* accepted)
 	
 	myPlayerNum = accepted->playerNum;
 	state = SERVERSTATE_ACCEPTED;
+
+	for(int i = 0; i < MAX_PLAYERS; i++)
+	{
+		players[i].seenFieldState = accepted->seenFieldStates[i];
+	}
+
+	// try to spread out sending of the first field state
+	sendFieldStateDeltaTimer =
+		myPlayerNum *
+		SEND_FIELDSTATE_DELTA_INTERVAL;
 }
 
 void ServerConnection::mDisconnect(Connection* from, DisconnectMessage* disconnect)
@@ -264,8 +275,7 @@ void ServerConnection::mPlayerInfo(Connection* from, PlayerInfoMessage* playerIn
 
 	if(!player.connected) {
 		player.connected = true;
-		player.seenFieldState = 0;
-		player.ackedFieldState = 0;
+		player.ackedFieldState = fieldState;
 		memset(player.fieldState, TILE_BLANK, sizeof(player.fieldState));
 		ClearDeltaStore();
 	}
@@ -291,7 +301,7 @@ void ServerConnection::mPlayerDisconnected(Connection* from, PlayerDisconnectedM
 	ASSERT(playerDisconnected->playerNum < MAX_PLAYERS);
 	
 	PlayerInfo& player = players[playerDisconnected->playerNum];
-	player.connected = false;
+	memset(&player, 0, sizeof(player));
 	g_fieldGraphics->ClearPlayer(playerDisconnected->playerNum);
 }
 
