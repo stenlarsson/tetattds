@@ -155,10 +155,6 @@ void ServerConnection::mFieldStateDelta(Connection* from, FieldStateDeltaMessage
 		return;
 	}
 
-	if(fieldState-1 > player.seenFieldState) {
-		printf("got: %hhu, seen: %hhu\n", (uint8_t)fieldState, player.seenFieldState);
-	}
-
 	// Record the seen state num, so that we can ack correctly
 	player.seenFieldState = fieldState;
 	player.ackedFieldState = fieldStateDelta->acks[myPlayerNum];

@@ -4,7 +4,7 @@
            \ \__\ \_____\\__\ \__\__\\__\\ \__\ \____\_____\
             \/__/\/_____//__/\/__/__//__/ \/__/\/____/_____/
 
-                       TetattDS v3.0 by Flatware
+                       TetattDS v3.1 by Flatware
                   http://blog.dev-scene.com/flatware
 
 About
@@ -31,7 +31,7 @@ mode is intended as a practice for Wifi play.
 
 Wifi play
 ---------
-Play up to 4 opponents locally or over Internet. Chains and combos
+Play up to 8 players locally or over Internet. Chains and combos
 generate garbage which is dropped on one of your opponents and the
 last survivor is the winner.
 
@@ -52,6 +52,9 @@ directory.
 
 To play locally you don't need an accesspoint. One player hosts
 and the other players join.
+
+When playing more than 4 players use X to show the other players on the
+top screen.
 
 
 Known problems
@@ -94,6 +97,11 @@ Changelog
   * Host game on DS
   * SDL port for PC
   * Lots of changes in the code
+
+3.1 (20081012)
+  * Network protocol rewritten
+  * Support 8 players
+  * Fix displaying highscores
 
 Credits
 -------
