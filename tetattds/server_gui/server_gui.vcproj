@@ -41,8 +41,8 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="../network/include;../server/source"
-				PreprocessorDefinitions="WIN32;_DEBUG"
+				AdditionalIncludeDirectories="../network/include;../server/source;../../win32deps/include"
+				PreprocessorDefinitions="WIN32;_DEBUG;VERSION_STRING=\&quot;Tetattds 3.1\&quot;"
 				RuntimeLibrary="3"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -118,8 +118,8 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="../network/include;../server/source"
-				PreprocessorDefinitions="WIN32;NDEBUG;VERSION_STRING=\&quot;Tetattds 3.0\&quot;"
+				AdditionalIncludeDirectories="../network/include;../server/source;../../win32deps/include"
+				PreprocessorDefinitions="WIN32;NDEBUG;VERSION_STRING=\&quot;Tetattds 3.1\&quot;"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"

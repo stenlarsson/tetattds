@@ -41,7 +41,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="source;sdl\source;network\include;..\fwgui\include;..\win32deps\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;&quot;VERSION_STRING=\&quot;Tetattsdl 3.1dev\&quot;&quot;;&quot;ABOUT_STRING=\&quot;http://blog.dev-scene.com/flatware\&quot;&quot;"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;&quot;VERSION_STRING=\&quot;Tetattsdl 3.1\&quot;&quot;;&quot;ABOUT_STRING=\&quot;http://blog.dev-scene.com/flatware\&quot;&quot;"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="0"
@@ -120,7 +120,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="source;sdl\source;network\include;..\fwgui\include;..\win32deps\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;&quot;VERSION_STRING=\&quot;Tetattsdl 3.1dev\&quot;&quot;;&quot;ABOUT_STRING=\&quot;http://blog.dev-scene.com/flatware\&quot;&quot;"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;&quot;VERSION_STRING=\&quot;Tetattsdl 3.1\&quot;&quot;;&quot;ABOUT_STRING=\&quot;http://blog.dev-scene.com/flatware\&quot;&quot;"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
