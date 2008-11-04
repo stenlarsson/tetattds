@@ -3,6 +3,7 @@
 #include "udpsocket.h"
 #include <stdio.h>
 #include "ipaddress.h"
+#include <sys/fcntl.h>
 
 UdpSocket::UdpSocket()
 :	internal(new UdpSocketInternal)
@@ -10,8 +11,14 @@ UdpSocket::UdpSocket()
 	INTERNAL->socket = ::socket(PF_INET, SOCK_DGRAM, 0);
 	if(INTERNAL->socket == -1) { NET_ERROR("socket"); }
 
+#ifdef GEKKO
+	u32 flags = net_fcntl(INTERNAL->socket, F_GETFL, 0);
+	flags |= 4;
+	int result = net_fcntl(INTERNAL->socket, F_SETFL, flags);
+#else
 	unsigned long i = (unsigned long) -1;
 	int result = ::ioctl(INTERNAL->socket, FIONBIO, &i);
+#endif
 	if(result == -1) { NET_ERROR("ioctl"); }
 }
 

@@ -15,6 +15,20 @@ using namespace std;
 #define START_CHAR 32
 #define END_CHAR 126
 
+#define fix_endian(x) (fixendian ? swap_endian(x) : (x))
+
+template<typename T>
+T swap_endian(T x) {
+	T y;
+	char* a = (char*)&x;
+	char* b = (char*)&y;
+	b[0] = a[3];
+	b[1] = a[2];
+	b[2] = a[1];
+	b[3] = a[0];
+	return y;
+}
+
 void usage(char* base)
 {
 	cout << "Usage: " << base << " [options] input.ttf output.bin" << endl;
@@ -23,6 +37,7 @@ void usage(char* base)
 	cout << "\t--start char  First character to encode. (default 32)" << endl;
 	cout << "\t--end char    Last character to encode. (default 126)" << endl;
 	cout << "\t--auto        Force use of autohinter." << endl;
+	cout << "\t--fix-endian  Store with other endian." << endl;
 }
 
 int main(int argc, char *argv[])
@@ -35,6 +50,7 @@ int main(int argc, char *argv[])
 	int startChar = 32;
 	int endChar = 126;
 	bool autohinter = false;
+	bool fixendian = false;
 
 	int arg = 1;
 	while(arg < argc && argv[arg][0] == '-')
@@ -77,6 +93,10 @@ int main(int argc, char *argv[])
 		else if(strcmp(argv[arg], "--auto") == 0)
 		{
 			autohinter = true;
+		}
+		else if(strcmp(argv[arg], "--fix-endian") == 0)
+		{
+			fixendian = true;
 		}
 
 		arg++;
@@ -154,21 +174,21 @@ int main(int argc, char *argv[])
 			return 1;
 		}
 
-		currentGlyph->width = face->glyph->bitmap.width;
-		currentGlyph->height = face->glyph->bitmap.rows;
-		currentGlyph->left = face->glyph->bitmap_left;
-		currentGlyph->top = -face->glyph->bitmap_top;
-		currentGlyph->advancex = face->glyph->advance.x >> 6;
-		currentGlyph->advancey = face->glyph->advance.y >> 6;
-		currentGlyph->offset = (unsigned int)(dataEndPtr - data);
+		currentGlyph->width = fix_endian(face->glyph->bitmap.width);
+		currentGlyph->height = fix_endian(face->glyph->bitmap.rows);
+		currentGlyph->left = fix_endian(face->glyph->bitmap_left);
+		currentGlyph->top = fix_endian(-face->glyph->bitmap_top);
+		currentGlyph->advancex = fix_endian(face->glyph->advance.x >> 6);
+		currentGlyph->advancey = fix_endian(face->glyph->advance.y >> 6);
+		currentGlyph->offset = fix_endian((unsigned int)(dataEndPtr - data));
 		unsigned char* destptr = dataEndPtr;
-		for(unsigned int y = 0; y < currentGlyph->height; y++)
+		for(int y = 0; y < face->glyph->bitmap.rows; y++)
 		{
 			unsigned char* srcptr =
 				face->glyph->bitmap.buffer +
 				y * face->glyph->bitmap.pitch;
 
-			for(unsigned int x = 0; x < currentGlyph->width; x++)
+			for(int x = 0; x < face->glyph->bitmap.width; x++)
 			{
 				*destptr++ = *srcptr++;
 			}
@@ -179,11 +199,11 @@ int main(int argc, char *argv[])
 	}
 
 	// set up header
-	header->type = FONT_SIGNATURE;
-	header->filesize = (unsigned int)(dataEndPtr - data);
-	header->startChar = startChar;
-	header->endChar = endChar;
-	header->height = face->size->metrics.height >> 6;
+	header->type = fix_endian(FONT_SIGNATURE);
+	header->filesize = fix_endian((unsigned int)(dataEndPtr - data));
+	header->startChar = fix_endian(startChar);
+	header->endChar = fix_endian(endChar);
+	header->height = fix_endian(face->size->metrics.height >> 6);
 
 	FILE* rawFile = fopen(outfilename, "wb");
 	if(rawFile == NULL)
@@ -193,7 +213,7 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	int count = fwrite(data, header->filesize, 1, rawFile);
+	int count = fwrite(data, (unsigned int)(dataEndPtr - data), 1, rawFile);
 	if(count != 1)
 	{
 		cerr << "Failed to write font data." << endl;

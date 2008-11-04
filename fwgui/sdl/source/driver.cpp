@@ -1,6 +1,6 @@
 #include "fwgui.h"
 #include "driver.h"
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include <stdio.h>
 #include <string.h>
 #include "font.h"
@@ -87,6 +87,24 @@ namespace FwGui
 		}
 	}
 	
+	/**
+	 * Maps SDL joystick buttons to FWKEY_* constants.
+	 * Returns FWKEY_NONE for unrecognized buttons.
+	 */
+	static inline Key MapButton(int button) {
+		switch(button) {
+		case 0:  return FWKEY_A;
+		case 1:  return FWKEY_B;
+		case 4:  return FWKEY_SELECT;
+		case 7:  return FWKEY_START;
+		case 5:  return FWKEY_R;
+		case 6:  return FWKEY_L;
+		case 2:  return FWKEY_X;
+		case 3:  return FWKEY_Y;
+		default: return FWKEY_NONE;
+		}
+	}
+
 	bool Driver::Tick()
 	{
 		SDL_Event event;
@@ -119,6 +137,79 @@ namespace FwGui
 				if(listener != NULL && event.motion.state)
 					listener->TouchDrag(event.motion.x, event.motion.y-192);
 				break;
+				
+			case SDL_JOYAXISMOTION:
+				if(listener != NULL) {
+#define THRESHOLD 4096
+					if(event.jaxis.axis == 1) {
+						static int last = 0;
+						if(last < THRESHOLD && event.jaxis.value >= THRESHOLD) {
+							listener->KeyDown(FWKEY_UP);
+						}
+						if(last >= THRESHOLD && event.jaxis.value < THRESHOLD) {
+							listener->KeyUp(FWKEY_UP);
+						}
+						if(last > -THRESHOLD && event.jaxis.value <= -THRESHOLD) {
+							listener->KeyDown(FWKEY_DOWN);
+						}
+						if(last <= -THRESHOLD && event.jaxis.value > -THRESHOLD) {
+							listener->KeyUp(FWKEY_DOWN);
+						}
+						last = event.jaxis.value;
+					} else if(event.jaxis.axis == 0) {
+						static int last = 0;
+						if(last < THRESHOLD && event.jaxis.value >= THRESHOLD) {
+							listener->KeyDown(FWKEY_RIGHT);
+						}
+						if(last >= THRESHOLD && event.jaxis.value < THRESHOLD) {
+							listener->KeyUp(FWKEY_RIGHT);
+						}
+						if(last > -THRESHOLD && event.jaxis.value <= -THRESHOLD) {
+							listener->KeyDown(FWKEY_LEFT);
+						}
+						if(last <= -THRESHOLD && event.jaxis.value > -THRESHOLD) {
+							listener->KeyUp(FWKEY_LEFT);
+						}
+						last = event.jaxis.value;
+					}
+				}
+				break;
+
+			case SDL_JOYBUTTONDOWN:
+			case SDL_JOYBUTTONUP:
+				if(listener != NULL) {
+					Key key = MapButton(event.jbutton.button);
+					if(key != FWKEY_NONE) {
+						if(event.jbutton.state == 1)
+							listener->KeyDown(key);
+						else
+							listener->KeyUp(key);
+					}						
+				}
+				break;
+
+			case SDL_JOYHATMOTION:
+				static int joyhatstate = 0;
+				if(listener != NULL) {
+					int changes = joyhatstate ^ event.jhat.value;
+
+#define CHECK_HAT(x)											\
+					if(changes & SDL_HAT_##x) {					\
+						if(event.jhat.value & SDL_HAT_##x) {	\
+							listener->KeyDown(FWKEY_##x);		\
+						} else {								\
+							listener->KeyUp(FWKEY_##x);			\
+						}										\
+					}
+
+					CHECK_HAT(UP);
+					CHECK_HAT(RIGHT);
+					CHECK_HAT(DOWN);
+					CHECK_HAT(LEFT);
+				}
+				joyhatstate = event.jhat.value;
+				break;
+
 
 			case SDL_QUIT:
 				return false;

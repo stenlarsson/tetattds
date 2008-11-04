@@ -2,9 +2,6 @@
 
 struct Chain;
 
-#include <mikmod.h>
-struct MODULE;
-
 class Sound
 {
 public:
@@ -19,8 +16,6 @@ public:
 	static void PlayMusic(bool danger);
 	static void StopMusic();
 	static void UpdateMusic();
-	
-	static MODULE* song;
 private:
 	
 	static bool initialized;

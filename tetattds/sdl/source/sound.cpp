@@ -4,8 +4,10 @@
 
 #include "chain.h"
 
-MODULE* Sound::song = NULL;
-SAMPLE *chain, *fanfare1, *fanfare2, *menu1, *menu2, *pop1, *pop2, *pop3, *pop4;
+#include <SDL/SDL_mixer.h>
+
+Mix_Music *song = NULL;
+Mix_Chunk *chain, *fanfare1, *fanfare2, *menu1, *menu2, *pop1, *pop2, *pop3, *pop4;
 bool Sound::initialized = false;
 
 void Sound::InitMusic()
@@ -13,38 +15,33 @@ void Sound::InitMusic()
 	if(initialized)
 		return;
 
-	/* register all the drivers */
-	MikMod_RegisterAllDrivers();
-
-	/* register fasttracker module loader */
-	MikMod_RegisterLoader(&load_xm);
-
-	/* initialize the library */
-	if (MikMod_Init((char*)""))
-	{
-		fprintf(stderr, "Could not initialize sound, reason: %s\n",
-		        MikMod_strerror(MikMod_errno));
-		return;
+	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY,
+					 MIX_DEFAULT_FORMAT,
+					 2,
+					 1024) == -1) {
+		printf("Could not initialize sound, reason: %s\n", Mix_GetError());
+		exit(2);
 	}
-	
-  /* reserve 2 voices for sound effects */
-  MikMod_SetNumVoices(-1, 2);
+
+	Mix_AllocateChannels(32);
+
+	// TODO Mix_CloseAudio();
 
 	initialized = true;
 }
 
 void Sound::LoadMusic()
 {
-	song = Player_Load((char*)"music/tetattds.xm", 64, 0);
+	song = Mix_LoadMUS("music/tetattds.xm");
 	if (!song){
-		fprintf(stderr,"Failed to load music\n");
+		printf("Mix_LoadMUS(\"music/tetattds.xm\"): %s\n", Mix_GetError());
 		exit(1);
 	}
 
 #define LOAD_SAMPLE(n) \
-  n = Sample_Load((char*)"sound/" #n ".wav"); \
+	n = Mix_LoadWAV((char*)"sound/" #n ".wav"); \
 	if (!n) { \
-		fprintf(stderr, "Failed to load sample %s\n", "sound/" #n ".wav"); \
+		printf("Failed to load sample %s\n", "sound/" #n ".wav"); \
 		exit(1); \
 	} 
 	
@@ -63,32 +60,50 @@ void Sound::LoadMusic()
 
 void Sound::PlayMusic(bool danger)
 {
-	Player_Start(song);
-	Player_SetPosition(danger ? 0x2a : 0);
+	if(Mix_PlayMusic(song, -1) == -1) {
+		printf("Mix_PlayMusic: %s\n", Mix_GetError());
+		return;
+	}
+
+	if(Mix_SetMusicPosition(danger ? 0x2a : 0) == -1) {
+		printf("Mix_SetMusicPosition: %s\n", Mix_GetError());
+		return;
+	}
 }
 
 void Sound::StopMusic()
 {
-	Player_Stop();
+	Mix_HaltMusic();
 }
 
 void Sound::UnloadMusic()
 {
-	Player_Stop();
-	Player_Free(song);
+	Mix_FreeMusic(song);
 	song = NULL;
 }
 
 void Sound::UpdateMusic()
 {
-	if(getenv("TETATTDS_SILENT"))
-		MikMod_DisableOutput();
-	MikMod_Update();
+}
+
+void pitch_effect(int chan, void *stream, int len, void *udata)
+{
+	float ratio = (22050 + (int)udata) / 22050.0f;
+	short* samples = (short*)stream;
+	int i = 0;
+	for(float x = 0; x < len/2 - 1; x += ratio) {
+		float p = x - int(x);
+		samples[i++] = (1-p) * samples[int(x)] + p * samples[int(x) + 1];
+	}
+
+	for(; i < len/2; i++) {
+		samples[i] = 0;
+	}
 }
 
 void Sound::PlayPopEffect(Chain* chain)
 {
-	SAMPLE *sample;
+	Mix_Chunk *sample;
 	switch(chain->length)
 	{
 	case 1:
@@ -108,8 +123,19 @@ void Sound::PlayPopEffect(Chain* chain)
 		break;
 	}
 	
-	int voice = Sample_Play(sample, 0, 0);
-	Voice_SetFrequency(voice, sample->speed + (chain->popCount * 1000));
+	int channel = Mix_PlayChannel(-1, sample, 0);
+	if(channel == -1) {
+		printf("Mix_PlayChannel: %s\n", Mix_GetError());
+		return;
+	}
+
+	if(!Mix_RegisterEffect(channel,
+						   pitch_effect,
+						   NULL,
+						   (void*)(chain->popCount * 1000))) {
+		printf("Mix_RegisterEffect: %s\n", Mix_GetError());
+		return;
+	}
 
 	if(chain->popCount < 10)
 	{
@@ -119,12 +145,24 @@ void Sound::PlayPopEffect(Chain* chain)
 
 void Sound::PlayDieEffect()
 {
-	Player_SetPosition(64);
+	if(Mix_PlayMusic(song, 0) == -1) {
+		printf("Mix_PlayMusic: %s\n", Mix_GetError());
+		return;
+	}
+
+	if(Mix_SetMusicPosition(64) == -1) {
+		printf("Mix_SetMusicPosition: %s\n", Mix_GetError());
+		return;
+	}
 }
 
 void Sound::PlayChainStepEffect(Chain*)
 {
-	Sample_Play(chain, 0, 0);
+	int channel = Mix_PlayChannel(-1, chain, 0);
+	if(channel == -1) {
+		printf("Mix_PlayChannel: %s\n", Mix_GetError());
+		return;
+	}
 }
 
 void Sound::PlayChainEndEffect(Chain* chain)
@@ -132,5 +170,10 @@ void Sound::PlayChainEndEffect(Chain* chain)
 	if(chain->length < 4)
 		return;
 	
-	Sample_Play((chain->length == 4) ? fanfare1 : fanfare2, 0, 0);
+	Mix_Chunk *sample = (chain->length == 4) ? fanfare1 : fanfare2;
+	int channel = Mix_PlayChannel(-1, sample, 0);
+	if(channel == -1) {
+		printf("Mix_PlayChannel: %s\n", Mix_GetError());
+		return;
+	}
 }

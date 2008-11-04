@@ -1,7 +1,7 @@
 #pragma once
 
-#include <dialog.h>
-#include <editbox.h>
+#include "dialog.h"
+#include "editbox.h"
 
 namespace FwGui
 {
@@ -22,6 +22,7 @@ namespace FwGui
 		void SetText(const char* text) { editBox->SetText(text); Repaint(); }
 	
 	private:
+		void KeyDown(Key key);
 		void AddKeys(int x, int y, int count);
 		void SetKeys();
 	

@@ -24,6 +24,17 @@ static int close(int s)
 {
 	return closesocket(s);
 }
+#elif GEKKO
+#include <network.h>
+#include <errno.h>
+#define socket net_socket
+#define ioctl net_ioctl
+#define gethostbyname(x) net_gethostbyname((char*)(x))
+#define bind net_bind
+#define sendto net_sendto
+#define recvfrom net_recvfrom
+#define select net_select
+#define close net_close
 #else
 #include <sys/socket.h>
 #include <netinet/in.h>
