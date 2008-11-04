@@ -108,6 +108,20 @@ namespace FwGui
 			Repaint();
 		}
 	}
+
+	void TextEntryDialog::KeyDown(Key key)
+	{
+		if(key == FWKEY_B)
+		{
+			editBox->SetText("");
+			ok = true;
+		}
+		else
+		{
+			Dialog::KeyDown(key);
+		}
+	}
+
 	
 	void TextEntryDialog::AddKeys(int x, int y, int count)
 	{

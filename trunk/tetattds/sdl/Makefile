@@ -55,7 +55,7 @@ LDFLAGS  += $(shell libmikmod-config --libs)
 #---------------------------------------------------------------------------------
 # any extra libraries we wish to link with the project
 #---------------------------------------------------------------------------------
-LIBS     := -lfwgui_sdl
+LIBS     := -lfwgui_sdl -lSDL_mixer
 
 #---------------------------------------------------------------------------------
 # list of directories containing libraries, this must be the top level containing

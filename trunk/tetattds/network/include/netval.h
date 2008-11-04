@@ -6,6 +6,8 @@
 #include <sys/socket.h>
 #elif WIN32
 #include <winsock2.h>
+#elif GEKKO
+#include <network.h>
 #else
 #include <arpa/inet.h>
 #endif

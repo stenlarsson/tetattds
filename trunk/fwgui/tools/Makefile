@@ -1,6 +1,6 @@
 CC=gcc
 CXX=g++
-CFLAGS=-Wall -O2
+CFLAGS=-Wall -O2 -g
 ifneq (,$(findstring CYGWIN,$(shell uname)))
 CFLAGS+=-mno-cygwin
 endif

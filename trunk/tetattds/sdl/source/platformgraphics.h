@@ -3,7 +3,7 @@
 #include "fieldgraphics.h"
 #include "protocol.h"
 #include "effecthandler.h"
-#include <SDL.h>
+#include <SDL/SDL.h>
 
 // map offsets etc
 #define BLOCKMAP_STRIDE 32

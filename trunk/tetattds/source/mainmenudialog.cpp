@@ -50,3 +50,13 @@ void MainMenuDialog::ControlClicked(Control* control)
 		selection = MMSEL_HIGHSCORES;
 	}
 }
+
+void MainMenuDialog::KeyDown(Key key)
+{
+	if(key == FWKEY_B)
+	{
+		exit(0);
+	}
+
+	Dialog::KeyDown(key);
+}

@@ -5,7 +5,7 @@
 #ifndef WIN32
 #include <unistd.h>
 #endif
-#include <SDL.h>
+#include <SDL/SDL.h>
 #include <driver.h>
 #include <textentrydialog.h>
 
@@ -21,6 +21,11 @@
 #include "sound.h"
 #include "sprite.h"
 #include "udpsocket.h"
+
+#ifdef GEKKO
+#include <fat.h>
+#include <gccore.h>
+#endif
 
 char name[10];
 Settings* settings = NULL;
@@ -78,20 +83,37 @@ SDL_Surface
 
 int main(int,char **)
 {
-	if(SDL_Init(SDL_INIT_VIDEO) == -1) {
+#ifdef GEKKO
+	PAD_Init();
+#endif
+
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_JOYSTICK) == -1) {
 		fprintf(stderr, "Unable to init SDL: %s\n", SDL_GetError());
 		return EXIT_FAILURE;
 	}
 
+#ifdef GEKKO
+	printf("\x1b[2;0H");
+	fatInitDefault();
+	if(chdir("/data/tetattwii") == -1) {
+		perror("Cannot cd to /data/tetattwii");
+		return EXIT_FAILURE;
+	}
+#endif
+
 	SDL_WM_SetCaption(VERSION_STRING, VERSION_STRING);
 	SDL_Surface* icon = SDL_LoadBMP("images/icon.bmp");
+	if(icon == NULL) {
+		fprintf(stderr, "Failed to load icon: %s\n", SDL_GetError());
+		return EXIT_FAILURE;
+	}
 	SDL_SetColorKey(icon, SDL_SRCCOLORKEY, 15);
 	SDL_WM_SetIcon(icon, NULL);
 
 	SDL_Surface* surface = SDL_SetVideoMode(
 		256, //int width
 		384, //int height
-		0,   //int bitsperpixel
+		32,  //int bitsperpixel
 		0);  //Uint32 flags
 	if(surface == NULL) {
 		fprintf(stderr, "Failed to set SDL video mode: %s\n", SDL_GetError());
@@ -110,6 +132,8 @@ int main(int,char **)
 	SDL_SetColorKey(sprites, SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 	SDL_SetColorKey(font, SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
 	SDL_SetColorKey(smalltiles, SDL_SRCCOLORKEY | SDL_RLEACCEL, 0);
+
+	SDL_JoystickOpen(0);
 	
 	GetName();
 	

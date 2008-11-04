@@ -26,6 +26,8 @@ public:
 
 	virtual void ControlClicked(FwGui::Control* control);
 
+	virtual void KeyDown(FwGui::Key key);
+
 	MainMenuSelection selection;
 
 private:

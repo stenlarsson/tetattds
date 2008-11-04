@@ -32,7 +32,7 @@
 #include "localconnectionmanager.h"
 #include "servergame.h"
 #include "loopbackconnection.h"
-#include <lobby.h>
+#include "lobby.h"
 
 #define max(x, y) ((x>y)?(x):(y))
 
@@ -558,14 +558,12 @@ public:
 	}
 
 	virtual void Exit() {
-#ifdef ARM9
 		unsigned long ip = Wifi_GetIP();
 		g_fieldGraphics->AddLog("My IP: %lu.%lu.%lu.%lu",
 			(ip >>  0) & 0xFF,
 			(ip >>  8) & 0xFF,
 			(ip >> 16) & 0xFF,
 			(ip >> 24) & 0xFF);
-#endif
 
 		gui->SetActiveDialog(NULL);
 		delete dialog;
@@ -636,6 +634,7 @@ class WifiState : public State {
 		}
 
 		connectionManager->Tick();
+
 		if(serverGame != NULL) {
 			serverGame->Tick();
 		}
