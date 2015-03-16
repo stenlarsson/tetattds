@@ -1,0 +1,1 @@
+**Tetattds** is a game for Nintendo DS based on the game Tetris Attack by Nintendo / Intelligent Systems. The aim is to line up three or more panels in a stack to make them ‘pop’. The game is over when the stack reaches the top of the screen. If more than three blocks are removed it is called a ‘combo’. If pieces falling down lines up it is called a ‘chain’.
